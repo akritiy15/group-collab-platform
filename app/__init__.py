@@ -17,6 +17,8 @@ def create_app():
         return User.query.get(int(user_id))
     
     from .auth.routes import auth_bp
+    from .tasks.routes import tasks_bp
+    from .polls.routes import polls_bp
     app.register_blueprint(auth_bp)
     app.register_blueprint(tasks_bp)
     app.register_blueprint(polls_bp)
