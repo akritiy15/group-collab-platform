@@ -1,33 +1,37 @@
 from flask import Blueprint, render_template, request, redirect, url_for
-from flask_login import login_required
-from ..models import Task, User
-from ..extensions import db
+from flask_login import login_required, current_user
+from app.models import Task, Group
+from app.extensions import db
 
 tasks_bp = Blueprint("tasks", __name__, url_prefix="/tasks")
 
-@tasks_bp.route("/", methods=["GET", "POST"])
+
+@tasks_bp.route("/create/<int:group_id>", methods=["GET", "POST"])
 @login_required
-def tasks():
-    users = User.query.all()
+def create_task(group_id):
+    group = Group.query.get_or_404(group_id)
 
     if request.method == "POST":
         title = request.form["title"]
-        user_id = request.form["assigned_to"]
 
-        task = Task(title=title, assigned_to_id=user_id)
+        task = Task(
+            title=title,
+            status="Pending",
+            group_id=group.id
+        )
         db.session.add(task)
         db.session.commit()
 
-        return redirect(url_for("tasks.tasks"))
+        return redirect(url_for("groups.view_group", group_id=group.id))
 
-    all_tasks = Task.query.all()
-    return render_template("tasks/tasks.html", tasks=all_tasks, users=users)
+    return render_template("tasks/create_task.html", group=group)
 
 
 @tasks_bp.route("/status/<int:task_id>")
 @login_required
 def change_status(task_id):
-    task = Task.query.get(task_id)
-    task.status = "completed" if task.status == "pending" else "pending"
+    task = Task.query.get_or_404(task_id)
+    task.status = "Completed" if task.status == "Pending" else "Pending"
     db.session.commit()
-    return redirect(url_for("tasks.tasks"))
+
+    return redirect(url_for("groups.view_group", group_id=task.group_id))

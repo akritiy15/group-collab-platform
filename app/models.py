@@ -15,6 +15,8 @@ class Group(db.Model):
     name = db.Column(db.String(100), nullable=False)
     invite_code = db.Column(db.String(10), unique=True, nullable=False)
     created_by = db.Column(db.Integer, db.ForeignKey("user.id"))
+    tasks = db.relationship("Task", backref="group", lazy=True)
+    polls = db.relationship("Poll", backref="group", lazy=True)
 
 class GroupMember(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -24,16 +26,19 @@ class GroupMember(db.Model):
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200))
-    assigned_to = db.Column(db.Integer, db.ForeignKey("user.id"))
+    # assigned_to = db.Column(db.Integer, db.ForeignKey("user.id"))
     status = db.Column(db.String(50), default="pending")
+    group_id = db.Column(db.Integer, db.ForeignKey("group.id"))
 
 
 class Poll(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     question = db.Column(db.String(300))
+    group_id = db.Column(db.Integer, db.ForeignKey("group.id"))
 
 
 class PollOption(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(200))
     poll_id = db.Column(db.Integer, db.ForeignKey("poll.id"))
+    group_id = db.Column(db.Integer, db.ForeignKey("group.id"))

@@ -17,18 +17,15 @@ def create_app():
         return User.query.get(int(user_id))
     
     from .auth.routes import auth_bp
-    from .tasks.routes import tasks_bp
-    from .polls.routes import polls_bp
     app.register_blueprint(auth_bp)
+    from .groups.routes import groups_bp
+    app.register_blueprint(groups_bp)
+    from .tasks.routes import tasks_bp
     app.register_blueprint(tasks_bp)
+    from .polls.routes import polls_bp
     app.register_blueprint(polls_bp)
 
     with app.app_context():
         db.create_all()
 
     return app
-
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))

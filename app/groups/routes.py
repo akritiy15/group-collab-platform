@@ -59,3 +59,19 @@ def join_group():
         return redirect(url_for("auth.dashboard"))
 
     return render_template("join_group.html")
+
+@groups_bp.route("/<int:group_id>")
+@login_required
+def view_group(group_id):
+    group = Group.query.get_or_404(group_id)
+
+    # optional safety check
+    is_member = GroupMember.query.filter_by(
+        user_id=current_user.id,
+        group_id=group_id
+    ).first()
+
+    if not is_member:
+        return redirect(url_for("auth.dashboard"))
+
+    return render_template("group_detail.html", group=group)

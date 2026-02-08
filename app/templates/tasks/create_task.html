@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Task</title>
+</head>
+<body>
+    <h2>Create Task for {{ group.name }}</h2>
+
+    <form method="POST">
+        <label>Task Title:</label>
+        <input type="text" name="title" required>
+
+        <label>Assign To:</label>
+        <select name="assigned_to">
+            {% for user in users %}
+                <option value="{{ user.id }}">{{ user.username }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Create Task</button>
+    </form>
+
+    <br>
+    <a href="{{ url_for('groups.view_group', group_id=group.id) }}">
+        Back to Group
+    </a>
+</body>
+</html>

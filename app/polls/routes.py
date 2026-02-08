@@ -7,7 +7,7 @@ polls_bp = Blueprint("polls", __name__, url_prefix="/polls")
 
 @polls_bp.route("/", methods=["GET", "POST"])
 @login_required
-def polls():
+def create_poll():
     if request.method == "POST":
         question = request.form["question"]
         options = request.form.getlist("options")
