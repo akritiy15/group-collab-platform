@@ -9,9 +9,18 @@ def create_app():
 
     db.init_app(app)
     login_manager.init_app(app)
+    
+    from .location.routes import location_bp
+    app.register_blueprint(location_bp)
 
+
+    # register auth blueprint
     from .auth.routes import auth_bp
     app.register_blueprint(auth_bp)
+
+    # register expenses blueprint  ← MOVED HERE
+    from .expenses.routes import expenses_bp
+    app.register_blueprint(expenses_bp)
 
     with app.app_context():
         db.create_all()
@@ -22,3 +31,4 @@ def create_app():
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+

@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Live Group Locations</h2>
+
+<button onclick="startLiveTracking()">Start Live Location</button>
+
+<div id="map"></div>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<style>
+#map {
+    height: 500px;
+    width: 100%;
+}
+</style>
+
+<script>
+
+var map = L.map('map');
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+}).addTo(map);
+
+var markers = [];
+
+function startLiveTracking() {
+
+    navigator.geolocation.getCurrentPosition(function(position) {
+
+        fetch("/share-location", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            })
+        });
+
+    });
+}
+
+setInterval(startLiveTracking, 10000);
+
+function loadLocations() {
+
+    fetch("/api/locations")
+    .then(response => response.json())
+    .then(data => {
+
+        markers.forEach(m => map.removeLayer(m));
+        markers = [];
+
+        if (data.length === 0) {
+            map.setView([20.5937, 78.9629], 5);
+            return;
+        }
+
+        var bounds = [];
+
+        data.forEach(loc => {
+
+            var marker = L.marker([loc.latitude, loc.longitude])
+                .addTo(map)
+                .bindPopup(loc.user_id);
+
+            markers.push(marker);
+
+            bounds.push([loc.latitude, loc.longitude]);
+        });
+
+        // zoom map to fit all markers
+        map.fitBounds(bounds, { padding: [50, 50] });
+
+    });
+}
+
+
+loadLocations();
+setInterval(loadLocations, 5000);
+
+</script>
+
+{% endblock %}
+

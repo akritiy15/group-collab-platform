@@ -14,7 +14,7 @@ class Expense(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200))
     amount = db.Column(db.Float)
-    paid_by = db.Column(db.Integer)
+    paid_by = db.Column(db.String(100))
     group_id = db.Column(db.Integer)
 
 
@@ -22,7 +22,7 @@ class Expense(db.Model):
 class ExpenseSplit(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     expense_id = db.Column(db.Integer)
-    user_id = db.Column(db.Integer)
+    user_id = db.Column(db.String(100))
     share_amount = db.Column(db.Float)
 
 
