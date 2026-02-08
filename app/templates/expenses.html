@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Expenses</h2>
+
+<form method="POST">
+    <input name="title" placeholder="Expense title">
+    <input name="amount" placeholder="Amount">
+    <input name="paid_by" placeholder="Paid by">
+    <input name="members" placeholder="Members names">
+    <button type="submit">Add Expense</button>
+</form>
+
+<hr>
+
+{% for e in expenses %}
+<p>{{ e.title }} - ₹{{ e.amount }} - paid by {{ e.paid_by }}</p>
+{% endfor %}
+
+<hr>
+<h3>Balances</h3>
+
+{% for user, balance in balances.items() %}
+<p>User {{ user }} : ₹ {{ balance }}</p>
+{% endfor %}
+
+{% endblock %}
