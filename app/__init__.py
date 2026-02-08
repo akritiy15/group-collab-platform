@@ -1,5 +1,6 @@
 from flask import Flask
 from .extensions import db, login_manager
+from .models import User
 
 def create_app():
     app = Flask(__name__)
@@ -13,7 +14,11 @@ def create_app():
     app.register_blueprint(auth_bp)
 
     with app.app_context():
-        from . import models
         db.create_all()
 
     return app
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
