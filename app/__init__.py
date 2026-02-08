@@ -17,6 +17,8 @@ def create_app():
     # register auth blueprint
     from .auth.routes import auth_bp
     app.register_blueprint(auth_bp)
+    from .groups.routes import groups_bp
+    app.register_blueprint(groups_bp)
 
     # register expenses blueprint  ← MOVED HERE
     from .expenses.routes import expenses_bp
