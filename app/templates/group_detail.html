@@ -1,0 +1,39 @@
+<h2>{{ group.name }}</h2>
+
+<p>Invite Code: {{ group.invite_code }}</p>
+
+<h3>Tasks</h3>
+<a href="{{ url_for('tasks.create_task', group_id=group.id) }}">
+  Create Task
+</a>
+
+<ul>
+  {% for task in group.tasks %}
+    <li>
+      {{ task.title }} —
+      {{ task.status }}
+    </li>
+  {% else %}
+    <li>No tasks yet</li>
+  {% endfor %}
+</ul>
+
+<hr>
+
+<h3>Polls</h3>
+<a href="{{ url_for('polls.create_poll', group_id=group.id) }}">
+  Create Poll
+</a>
+
+<ul>
+  {% for poll in group.polls %}
+    <li>
+      {{ poll.question }}
+    </li>
+  {% else %}
+    <li>No polls yet</li>
+  {% endfor %}
+</ul>
+
+<br>
+<a href="{{ url_for('auth.dashboard') }}">Back to Dashboard</a>

@@ -7,7 +7,13 @@
 <h3>Your Groups</h3>
 <ul>
   {% for group in groups %}
-    <li>{{ group.name }} — Invite Code: {{ group.invite_code }}</li>
+    <li>
+  <a href="{{ url_for('groups.view_group', group_id=group.id) }}">
+    {{ group.name }}
+  </a>
+  — Invite Code: {{ group.invite_code }}
+    </li>
+
   {% else %}
     <li>No groups yet</li>
   {% endfor %}
