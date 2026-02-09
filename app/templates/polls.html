@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FunCollab - Polls</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        .feature-nav {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .feature-link {
+            padding: 0.5rem 1.5rem;
+            border: 2px solid black;
+            border-radius: 20px;
+            font-weight: 700;
+            background: white;
+            box-shadow: 4px 4px 0 black;
+        }
+        .feature-link.active {
+            background: var(--color-secondary);
+            color: white;
+        }
+
+        .poll-card {
+            background: white;
+            border: 2px solid black;
+            border-radius: 14px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 6px 6px 0 black;
+        }
+
+        .poll-option {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .progress-container {
+            flex-grow: 1;
+            height: 18px;
+            background: #eee;
+            border: 2px solid black;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--color-accent);
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="container">
+        <a href="/" class="logo">✨ FunCollab</a>
+        <div class="nav-links">
+            <strong>Group: {{ group.name }}</strong>
+            <a href="{{ url_for('auth.logout') }}" class="btn btn-sm">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<main class="container">
+
+    <div class="feature-nav">
+        <a href="{{ url_for('tasks.view_tasks', group_id=group.id) }}" class="feature-link">📝 Tasks</a>
+        <a class="feature-link active">📊 Polls</a>
+        <a href="{{ url_for('expenses.expenses_home', group_id=group.id) }}" class="feature-link">💸 Money</a>
+        <a href="{{ url_for('location.api_locations', group_id=group.id) }}" class="feature-link">📍 Map</a>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h2>Democracy in Action 🗳️</h2>
+        <a href="{{ url_for('polls.create_poll', group_id=group.id) }}"
+           class="btn btn-sm btn-secondary">
+            Create Poll
+        </a>
+    </div>
+
+    {% if polls %}
+        {% for poll in polls %}
+        <div class="poll-card">
+            <h3>{{ poll.question }}</h3>
+
+            {% set total_votes = poll.options | sum(attribute='votes') %}
+            {% set max_votes = poll.options | map(attribute='votes') | max %}
+
+            {% for option in poll.options %}
+                {% set percent = (option.votes * 100 / total_votes) if total_votes > 0 else 0 %}
+
+                <div class="poll-option">
+                    <span>{{ option.text }}</span>
+
+                    <div class="progress-container">
+                        <div class="progress-bar"
+                             style="
+                                width: {{ percent }}%;
+                                background:
+                                {% if option.votes == max_votes and max_votes > 0 %}
+                                    #4CAF50
+                                {% else %}
+                                    var(--color-accent)
+                                {% endif %}
+                             ">
+                        </div>
+                    </div>
+
+                    <strong>{{ option.votes }}</strong>
+
+                    {% if poll.id in user_votes %}
+                        <span style="color: green; font-weight: 600;">✔ You voted</span>
+                    {% else %}
+                        <a href="{{ url_for('polls.vote', option_id=option.id) }}"
+                           class="btn btn-sm btn-accent vote-btn">
+                            Vote
+                        </a>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    {% else %}
+        <p style="margin-top:2rem;">No polls yet. Create one! 🗳️</p>
+    {% endif %}
+
+</main>
+
+<script>
+/* Safe live-refresh after vote (no real AJAX) */
+document.querySelectorAll(".vote-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        setTimeout(() => location.reload(), 300);
+    });
+});
+</script>
+
+</body>
+</html>
