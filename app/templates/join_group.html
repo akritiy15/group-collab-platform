@@ -1,6 +1,79 @@
-<h2>Join Group</h2>
-<form method="POST">
-  <input name="invite_code" placeholder="Invite code" required>
-  <button type="submit">Join</button>
-</form>
-<a href="/dashboard">Back</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FunCollab - Join Group</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">✨ FunCollab</a>
+            <div class="nav-links">
+                <a href="/groups/create" class="nav-link">Create Group instead?</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container flex-center" style="min-height: 80vh;">
+        <div class="card" style="width: 100%; max-width: 420px; transform: rotate(1deg);">
+
+            <!-- ✅ SHOW INVITE CODE AFTER GROUP CREATION -->
+            {% with messages = get_flashed_messages(category_filter=["invite"]) %}
+                {% if messages %}
+                    <div style="text-align:center; margin-bottom: 1.5rem;">
+                        <h3 style="font-size: 1.6rem;">🎉 Group Created!</h3>
+                        <p>Share this invite code with friends:</p>
+                        <div style="
+                            font-size: 2rem;
+                            font-weight: 800;
+                            letter-spacing: 3px;
+                            padding: 0.75rem;
+                            border: 2px dashed black;
+                            margin-top: 0.5rem;
+                        ">
+                            {{ messages[0] }}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <!-- ❌ ERROR MESSAGE (INVALID CODE) -->
+            {% with errors = get_flashed_messages(category_filter=["error"]) %}
+                {% if errors %}
+                    <p style="color: red; text-align: center; font-weight: 700;">
+                        {{ errors[0] }}
+                    </p>
+                {% endif %}
+            {% endwith %}
+
+            <div style="text-align: center; font-size: 3rem; margin-bottom: 1rem;">🎟️</div>
+            <h2 class="text-center" style="font-size: 2rem; margin-bottom: 2rem;">
+                Got an Invite Code?
+            </h2>
+
+            <form method="POST">
+                <div class="input-group">
+                    <label>Enter Code</label>
+                    <input
+                        type="text"
+                        name="invite_code"
+                        placeholder="ABC123"
+                        style="text-align: center; letter-spacing: 2px; font-size: 1.5rem; text-transform: uppercase;"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="btn btn-accent btn-block">
+                    Beam Me Up! 🛸
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

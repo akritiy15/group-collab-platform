@@ -1,77 +1,79 @@
-from flask import Blueprint, render_template, redirect, url_for, request
+from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_required, current_user
 from app.models import Group, GroupMember
 from app.extensions import db
-import random, string
+import random
+import string
 
 groups_bp = Blueprint("groups", __name__, url_prefix="/groups")
+
 
 def generate_invite_code():
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
 
 
+# ---------------- CREATE GROUP ----------------
 @groups_bp.route("/create", methods=["GET", "POST"])
 @login_required
 def create_group():
     if request.method == "POST":
         name = request.form["name"]
-        code = generate_invite_code()
+
+        invite_code = generate_invite_code()
 
         group = Group(
             name=name,
-            invite_code=code,
+            invite_code=invite_code,
             created_by=current_user.id
         )
         db.session.add(group)
         db.session.commit()
 
-        db.session.add(GroupMember(
+        # creator becomes member
+        member = GroupMember(
             user_id=current_user.id,
             group_id=group.id
-        ))
+        )
+        db.session.add(member)
         db.session.commit()
 
-        return redirect(url_for("auth.dashboard"))
+        # ✅ flash success + invite code
+        flash(f"Group created! Invite Code: {invite_code}", "invite")
+
+        # stay on same page to show modal / message
+        return redirect(url_for("groups.create_group"))
 
     return render_template("create_group.html")
 
 
+# ---------------- JOIN GROUP ----------------
 @groups_bp.route("/join", methods=["GET", "POST"])
 @login_required
 def join_group():
     if request.method == "POST":
-        code = request.form["invite_code"]
-        group = Group.query.filter_by(invite_code=code).first()
+        invite_code = request.form["invite_code"].upper()
 
-        if group:
-            exists = GroupMember.query.filter_by(
+        group = Group.query.filter_by(invite_code=invite_code).first()
+
+        if not group:
+            flash("Invalid invite code 😕", "error")
+            return redirect(url_for("groups.join_group"))
+
+        # avoid duplicate membership
+        existing = GroupMember.query.filter_by(
+            user_id=current_user.id,
+            group_id=group.id
+        ).first()
+
+        if not existing:
+            member = GroupMember(
                 user_id=current_user.id,
                 group_id=group.id
-            ).first()
+            )
+            db.session.add(member)
+            db.session.commit()
 
-            if not exists:
-                db.session.add(GroupMember(
-                    user_id=current_user.id,
-                    group_id=group.id
-                ))
-                db.session.commit()
-
-        return redirect(url_for("auth.dashboard"))
+        # ✅ REDIRECT TO TASKS PAGE (THIS IS THE FIX)
+        return redirect(url_for("tasks.view_tasks", group_id=group.id))
 
     return render_template("join_group.html")
-
-@groups_bp.route("/<int:group_id>")
-@login_required
-def view_group(group_id):
-    group = Group.query.get_or_404(group_id)
-
-    # optional safety check
-    is_member = GroupMember.query.filter_by(
-        user_id=current_user.id,
-        group_id=group_id
-    ).first()
-
-    if not is_member:
-        return redirect(url_for("auth.dashboard"))
-
-    return render_template("group_detail.html", group=group)

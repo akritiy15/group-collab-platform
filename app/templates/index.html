@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FunCollab - Get Started</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">✨ FunCollab</a>
+            <div class="nav-links">
+                <a href="/login"" class="nav-link">Login</a>
+                <a href="/register" class="btn btn-sm">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container flex-center" style="flex-direction: column; padding: 4rem 1rem;">
+            <h1 class="text-center floating" style="font-size: 4rem; color: var(--color-secondary); -webkit-text-stroke: 2px black; text-shadow: 4px 4px 0px #000;">
+                Collaborate<br>Without the BORE!
+            </h1>
+            <p class="text-center" style="font-size: 1.5rem; margin: 2rem 0; font-weight: 700; max-width: 600px;">
+                The most colorful, chaotic (in a good way), and fun way to manage your group projects, trips, and schemes.
+            </p>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+                <a href="/register" class="btn btn-secondary">Get Started Now 🚀</a>
+                <a href="/login" class="btn">Login 🔑</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container" style="padding-bottom: 4rem;">
+        <h2 class="text-center" style="margin-bottom: 3rem; font-size: 2.5rem;">Why use FunCollab?</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+            <!-- Feat 1 -->
+            <div class="card" style="background-color: #E0F7FA;">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
+                <h3>Task Tracking</h3>
+                <p>Assign tasks, track progress, and celebrate wins with confetti!</p>
+            </div>
+            <!-- Feat 2 -->
+            <div class="card" style="background-color: #F8BBD0;">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
+                <h3>Voting Polls</h3>
+                <p>Can't decide where to eat? Let democracy decide (or just roll a dice).</p>
+            </div>
+            <!-- Feat 3 -->
+            <div class="card" style="background-color: #FFF9C4;">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">💸</div>
+                <h3>Split Expenses</h3>
+                <p>Keep track of who owes who without losing friends over $5.</p>
+            </div>
+             <!-- Feat 4 -->
+             <div class="card" style="background-color: #D1C4E9;">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">📍</div>
+                <h3>Live Location</h3>
+                <p>Find your lost friends at the festival. Privacy optional (jk, it's safe).</p>
+            </div>
+        </div>
+    </main>
+
+    <footer style="background-color: var(--color-black); color: var(--color-white); padding: 2rem 0; margin-top: auto;">
+        <div class="container text-center">
+            <p style="font-weight: 700;">&copy; 2026 FunCollab Inc. Made with ❤️ and ☕.</p>
+        </div>
+    </footer>
+
+   <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

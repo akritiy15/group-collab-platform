@@ -1,21 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-  <title>Register</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FunCollab - Register</title>
+   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
+
 <body>
-  <h2>Register</h2>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">✨ FunCollab</a>
+            <div class="nav-links">
+                <a href="/login" class="nav-link">Login</a>
+            </div>
+        </div>
+    </nav>
 
-  <form method="POST">
-    <input type="text" name="username" placeholder="Username" required><br><br>
-    <input type="email" name="email" placeholder="Email" required><br><br>
-    <input type="password" name="password" placeholder="Password" required><br><br>
-    <button type="submit">Register</button>
-  </form>
+    <div class="container flex-center" style="min-height: 80vh;">
+        <div class="card"
+            style="width: 100%; max-width: 450px; transform: rotate(2deg); background-color: var(--color-accent); border-width: 4px;">
+            <h2 class="text-center"
+                style="font-size: 2.5rem; color: var(--color-white); -webkit-text-stroke: 2px black; margin-bottom: 2rem; text-shadow: 4px 4px 0 #000;">
+                Join the Chaos! 🤪</h2>
 
-  <p>
-    Already have an account?
-    <a href="/login">Login</a>
-  </p>
+            <form method="POST">
+                <div class="input-group">
+                    <label for="name">Your Name</label>
+                    <input type="text" name="username" placeholder="Captain Awesome" required>
+                </div>
+                <div class="input-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" name="email" placeholder="awesome@example.com" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" placeholder="Level 99 security..." required>
+                </div>
+
+                <button type="submit" class="btn btn-secondary btn-block">Sign Up 🎉</button>
+            </form>
+
+            <p class="text-center"
+                style="margin-top: 1.5rem; font-weight: 700; color: var(--color-white); text-shadow: 1px 1px 0 #000;">
+                Already have an account? <a href="login.html"
+                    style="color: var(--color-primary); text-decoration: underline;">Login here</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
+
 </html>
