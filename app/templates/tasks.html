@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FunCollab - Tasks</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        .feature-nav {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .feature-link {
+            padding: 0.5rem 1.5rem;
+            border: 2px solid black;
+            border-radius: 20px;
+            font-weight: 700;
+            background: white;
+            box-shadow: 4px 4px 0 black;
+            transition: var(--transition);
+        }
+
+        .feature-link:hover,
+        .feature-link.active {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 black;
+            background: var(--color-primary);
+        }
+
+        .task-item {
+            background: white;
+            border: 2px solid black;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 4px 4px 0 #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .task-item:hover {
+            box-shadow: 4px 4px 0 black;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- NAV -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">✨ FunCollab</a>
+
+            <div class="nav-links">
+                <span style="font-weight: 700;">
+                    Group: {{ group.name }}
+                </span>
+
+                <span
+                    style="font-weight: 700; background: var(--color-bg); border: 2px solid black; padding: 0.2rem 0.5rem; border-radius: 4px;">
+                    Code: {{ group.invite_code }}
+                </span>
+
+                <a href="{{ url_for('auth.logout') }}" class="btn btn-sm">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+
+        <!-- Feature Navigation -->
+        <div class="feature-nav">
+            <a class="feature-link active">📝 Tasks</a>
+            <a href="{{ url_for('polls.view_polls', group_id=group.id) }}" class="feature-link">📊 Polls</a>
+            <a href="{{ url_for('expenses.expenses_home', group_id=group.id) }}" class="feature-link">💸 Money</a>
+            <a href="{{ url_for('location.location_page', group_id=group.id) }}" class="feature-link">📍 Map</a>
+        </div>
+
+        <!-- ADD TASK -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h2>Mission Log</h2>
+
+            <form method="POST" style="display: flex; gap: 1rem;">
+                <input
+                    type="text"
+                    name="title"
+                    placeholder="New task..."
+                    required
+                    style="padding: 0.5rem; border: 2px solid black; border-radius: 6px;"
+                >
+                <button class="btn btn-sm">Add Task +</button>
+            </form>
+        </div>
+
+        <!-- TASK LIST -->
+        <div class="card" style="min-height: 400px;">
+            {% if tasks %}
+                {% for task in tasks %}
+                <div class="task-item">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <a href="{{ url_for('tasks.toggle_task', task_id=task.id) }}">
+                            <input
+                                type="checkbox"
+                                {% if task.status == "Completed" %}checked{% endif %}
+                                style="width: 25px; height: 25px; accent-color: var(--color-primary); cursor: pointer;"
+                            >
+                        </a>
+
+                        <div>
+                            <h3
+                                style="font-size: 1.2rem; margin: 0;
+                                {% if task.status == 'Completed' %}
+                                    text-decoration: line-through; color: #888;
+                                {% endif %}">
+                                {{ task.title }}
+                            </h3>
+                        </div>
+                    </div>
+
+                    <span
+                        style="
+                            padding: 0.2rem 0.5rem;
+                            border: 1px solid black;
+                            border-radius: 4px;
+                            font-weight: bold;
+                            font-size: 0.8rem;
+                            background: {{ '#C8E6C9' if task.status == 'Completed' else '#FFEB3B' }};
+                        ">
+                        {{ task.status | upper }}
+                    </span>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p style="text-align:center; font-weight:700;">
+                    No tasks yet — add one 👆
+                </p>
+            {% endif %}
+        </div>
+
+    </main>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

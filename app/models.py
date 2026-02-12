@@ -1,13 +1,12 @@
 from .extensions import db
 from flask_login import UserMixin
 
-# USER MODEL (for login)
+# ---------- USER ----------
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(100), unique=True)
-    email = db.Column(db.String(120), unique=True)
-    password = db.Column(db.String(200))
-
+    username = db.Column(db.String(100), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(200), nullable=False)
 
 # EXPENSE MODEL
 class Expense(db.Model):
@@ -36,12 +35,7 @@ class UserLocation(db.Model):
 
 from datetime import datetime
 
-# ---------- USER ----------
-class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(100), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(200), nullable=False)
+
 
 # ---------- GROUPS ----------
 class Group(db.Model):
@@ -70,9 +64,20 @@ class Poll(db.Model):
     question = db.Column(db.String(300))
     group_id = db.Column(db.Integer, db.ForeignKey("group.id"))
 
+    options = db.relationship("PollOption", backref="poll", lazy=True)
 
 class PollOption(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.String(200))
+    text = db.Column(db.String(200), nullable=False)
+    votes = db.Column(db.Integer, default=0)   # ✅ ADD THIS
     poll_id = db.Column(db.Integer, db.ForeignKey("poll.id"))
     group_id = db.Column(db.Integer, db.ForeignKey("group.id"))
+
+class PollVote(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    poll_id = db.Column(db.Integer, db.ForeignKey("poll.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+
+    __table_args__ = (
+        db.UniqueConstraint("poll_id", "user_id", name="unique_user_poll_vote"),
+    )

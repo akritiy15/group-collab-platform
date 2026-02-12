@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FunCollab - Create Poll</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        .feature-nav {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .feature-link {
+            padding: 0.5rem 1.5rem;
+            border: 2px solid black;
+            border-radius: 20px;
+            font-weight: 700;
+            background: white;
+            box-shadow: 4px 4px 0 black;
+            transition: var(--transition);
+        }
+
+        .feature-link:hover,
+        .feature-link.active {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 black;
+            background: var(--color-secondary);
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- NAV -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">✨ FunCollab</a>
+            <div class="nav-links">
+                <span style="font-weight:700;">
+                    Group: {{ group.name }}
+                </span>
+                <a href="{{ url_for('auth.logout') }}" class="btn btn-sm">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Feature Navigation -->
+        <div class="feature-nav">
+            <a href="{{ url_for('tasks.view_tasks', group_id=group.id) }}" class="feature-link">📝 Tasks</a>
+            <a href="{{ url_for('polls.view_polls', group_id=group.id) }}" class="feature-link active">📊 Polls</a>
+            <a href="{{ url_for('expenses.expenses_home', group_id=group.id) }}" class="feature-link">💸 Money</a>
+            <a href="{{ url_for('location.api_locations', group_id=group.id) }}" class="feature-link">📍 Map</a>
+        </div>
+
+        <div class="card" style="max-width:600px; margin:0 auto;">
+            <h2 class="text-center">Create a New Poll 🗳️</h2>
+
+            <!-- FORM -->
+            <form method="POST" style="margin-top:1.5rem;">
+                <div class="input-group">
+                    <label>Poll Question</label>
+                    <input
+                        type="text"
+                        name="question"
+                        placeholder="e.g. Where should we eat? 🍕"
+                        required
+                    >
+                </div>
+
+                <div class="input-group">
+                    <label>Options</label>
+
+                    <div id="options-container" style="display:flex; flex-direction:column; gap:0.5rem;">
+                        <input type="text" name="options[]" placeholder="Option 1" required>
+                        <input type="text" name="options[]" placeholder="Option 2" required>
+                    </div>
+
+                    <button
+                        type="button"
+                        id="add-option-btn"
+                        class="btn btn-sm btn-secondary"
+                        style="margin-top:0.5rem; font-size:0.9rem;"
+                    >
+                        + Add Option
+                    </button>
+                </div>
+
+                <div style="display:flex; gap:1rem; margin-top:2rem;">
+                    <a href="{{ url_for('polls.view_polls', group_id=group.id) }}"
+                       class="btn"
+                       style="background:#ccc; flex:1; text-align:center;">
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="btn btn-accent" style="flex:1;">
+                        Create Poll
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+    <script>
+        const addOptionBtn = document.getElementById('add-option-btn');
+        const optionsContainer = document.getElementById('options-container');
+
+        addOptionBtn.addEventListener('click', () => {
+            const count = optionsContainer.children.length + 1;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.name = 'options[]';
+            input.placeholder = `Option ${count}`;
+            input.required = true;
+            optionsContainer.appendChild(input);
+        });
+    </script>
+</body>
+</html>
