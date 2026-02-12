@@ -2,9 +2,11 @@
 
 {% block content %}
 
-<h2>Live Group Locations</h2>
+<h2>Live Group Locations 📍</h2>
 
-<button onclick="startLiveTracking()">Start Live Location</button>
+<button onclick="startLiveTracking()" class="btn btn-primary">
+    Start Live Location
+</button>
 
 <div id="map"></div>
 
@@ -15,12 +17,15 @@
 #map {
     height: 500px;
     width: 100%;
+    margin-top: 1.5rem;
 }
 </style>
 
 <script>
 
-var map = L.map('map');
+var groupId = {{ group_id }};
+
+var map = L.map('map').setView([20.5937, 78.9629], 5);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
@@ -30,9 +35,14 @@ var markers = [];
 
 function startLiveTracking() {
 
+    if (!navigator.geolocation) {
+        alert("Geolocation not supported");
+        return;
+    }
+
     navigator.geolocation.getCurrentPosition(function(position) {
 
-        fetch("/share-location", {
+        fetch(`/location/share-location/${groupId}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -46,11 +56,9 @@ function startLiveTracking() {
     });
 }
 
-setInterval(startLiveTracking, 10000);
-
 function loadLocations() {
 
-    fetch("/api/locations")
+    fetch(`/location/api/${groupId}`)
     .then(response => response.json())
     .then(data => {
 
@@ -58,7 +66,6 @@ function loadLocations() {
         markers = [];
 
         if (data.length === 0) {
-            map.setView([20.5937, 78.9629], 5);
             return;
         }
 
@@ -68,24 +75,22 @@ function loadLocations() {
 
             var marker = L.marker([loc.latitude, loc.longitude])
                 .addTo(map)
-                .bindPopup(loc.user_id);
+                .bindPopup("User ID: " + loc.user_id);
 
             markers.push(marker);
 
             bounds.push([loc.latitude, loc.longitude]);
         });
 
-        // zoom map to fit all markers
         map.fitBounds(bounds, { padding: [50, 50] });
 
     });
 }
 
-
 loadLocations();
 setInterval(loadLocations, 5000);
+setInterval(startLiveTracking, 10000);
 
 </script>
 
 {% endblock %}
-

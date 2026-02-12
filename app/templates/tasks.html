@@ -68,18 +68,20 @@
                     Code: {{ group.invite_code }}
                 </span>
 
-                <a href="/logout" class="btn btn-sm">Logout</a>
+                <a href="{{ url_for('auth.logout') }}" class="btn btn-sm">Logout</a>
             </div>
         </div>
     </nav>
 
     <main class="container">
+
         <!-- Feature Navigation -->
         <div class="feature-nav">
             <a class="feature-link active">📝 Tasks</a>
             <a href="{{ url_for('polls.view_polls', group_id=group.id) }}" class="feature-link">📊 Polls</a>
             <a href="{{ url_for('expenses.expenses_home', group_id=group.id) }}" class="feature-link">💸 Money</a>
-            <a href="{{ url_for('location.api_locations', group_id=group.id) }}" class="feature-link">📍 Map</a>
+            <a href="{{ url_for('location.location_page', group_id=group.id) }}" class="feature-link">📍 Map</a>
+        </div>
 
         <!-- ADD TASK -->
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
@@ -141,6 +143,7 @@
                 </p>
             {% endif %}
         </div>
+
     </main>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
