@@ -1,28 +1,157 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FunCollab - Expenses</title>
 
-<h2>Expenses</h2>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
-<form method="POST">
-    <input name="title" placeholder="Expense title">
-    <input name="amount" placeholder="Amount">
-    <input name="paid_by" placeholder="Paid by">
-    <input name="members" placeholder="Members names">
-    <button type="submit">Add Expense</button>
-</form>
+    <style>
+        .feature-nav {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
 
-<hr>
+        .feature-link {
+            padding: 0.5rem 1.5rem;
+            border: 2px solid black;
+            border-radius: 20px;
+            font-weight: 700;
+            background: white;
+            box-shadow: 4px 4px 0 black;
+            transition: var(--transition);
+        }
 
-{% for e in expenses %}
-<p>{{ e.title }} - ₹{{ e.amount }} - paid by {{ e.paid_by }}</p>
-{% endfor %}
+        .feature-link.active {
+            background: var(--color-primary);
+            color: white;
+        }
 
-<hr>
-<h3>Balances</h3>
+        .expense-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            border: 2px solid black;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 4px 4px 0 #ddd;
+        }
 
-{% for user, balance in balances.items() %}
-<p>User {{ user }} : ₹ {{ balance }}</p>
-{% endfor %}
+        .amount {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
 
-{% endblock %}
+        .positive {
+            color: var(--color-accent);
+        }
+
+        .negative {
+            color: var(--color-secondary);
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background: #eee;
+            border: 2px solid black;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="container">
+        <a href="/" class="logo">✨ FunCollab</a>
+        <div class="nav-links">
+            <a href="{{ url_for('auth.logout') }}" class="btn btn-sm">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<main class="container">
+
+    <!-- Feature Navigation -->
+    <div class="feature-nav">
+        <a href="{{ url_for('tasks.view_tasks', group_id=1) }}" class="feature-link">📝 Tasks</a>
+        <a href="{{ url_for('polls.view_polls', group_id=1) }}" class="feature-link">📊 Polls</a>
+        <a class="feature-link active">💸 Money</a>
+        <a href="{{ url_for('location.api_locations') }}" class="feature-link">📍 Map</a>
+    </div>
+
+    <!-- BALANCE HEADER -->
+    {% set net = balances.values() | sum %}
+    <div style="display:flex; flex-direction:column; align-items:center; margin-bottom:3rem;">
+        <h2 style="font-size:3rem;">
+            You are
+            {% if net >= 0 %}
+                owed <span class="positive">₹{{ "%.2f"|format(net) }}</span> 🤑
+            {% else %}
+                owing <span class="negative">₹{{ "%.2f"|format(-net) }}</span> 😬
+            {% endif %}
+        </h2>
+        <p style="color:#666; font-size:1.2rem;">Don’t let them forget.</p>
+    </div>
+
+    <!-- ADD EXPENSE -->
+    <div class="card" style="margin-bottom:2rem;">
+        <h3>Add Expense 🧾</h3>
+
+        <form method="POST">
+            <input name="title" placeholder="Expense title" required>
+            <input name="amount" type="number" step="0.01" placeholder="Amount" required>
+            <input name="paid_by" placeholder="Paid by" required>
+            <input name="members" placeholder="Members (comma separated)" required>
+
+            <button class="btn btn-primary" style="margin-top:1rem;">
+                Add Expense
+            </button>
+        </form>
+    </div>
+
+    <!-- RECENT ACTIVITY -->
+    <div class="card">
+        <h3>Recent Activity</h3>
+
+        {% if expenses %}
+            {% for e in expenses %}
+            <div class="expense-item">
+                <div style="display:flex; align-items:center; gap:1rem;">
+                    <div class="avatar">
+                        {{ e.paid_by[:2]|upper }}
+                    </div>
+                    <div>
+                        <h4 style="margin:0;">{{ e.title }}</h4>
+                        <span style="font-size:0.9rem; color:#666;">
+                            {{ e.paid_by }} paid ₹{{ e.amount }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="amount">
+                    ₹{{ "%.2f"|format(e.amount) }}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No expenses yet. Add one! 💸</p>
+        {% endif %}
+    </div>
+
+</main>
+
+</body>
+</html>

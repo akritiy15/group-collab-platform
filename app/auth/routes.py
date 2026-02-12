@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from app.models import User
 from app.extensions import db
+from sqlalchemy.exc import IntegrityError
 
 auth_bp = Blueprint("auth", __name__)
 
@@ -34,8 +35,14 @@ def register():
             email=email,
             password=hashed_password
         )
-        db.session.add(user)
-        db.session.commit()
+
+        try:
+            db.session.add(user)
+            db.session.commit()
+        except IntegrityError:
+            db.session.rollback()
+            flash("Username already exists 😅 Please choose another one.", "error")
+            return redirect(url_for("auth.register"))
 
         flash("Account created successfully! Please log in.", "success")
         return redirect(url_for("auth.login"))
