@@ -1,20 +1,295 @@
-<h2>Dashboard</h2>
+{% extends "base.html" %}
 
-<a href="/groups/create">Create Group</a> |
-<a href="/groups/join">Join Group</a> |
-<a href="/logout">Logout</a>
+{% block content %}
 
-<h3>Your Groups</h3>
-<ul>
-  {% for group in groups %}
-    <li>
-  <a href="{{ url_for('groups.view_group', group_id=group.id) }}">
-    {{ group.name }}
-  </a>
-  — Invite Code: {{ group.invite_code }}
-    </li>
+<style>
+/* Modern SaaS Dashboard Styling for Dashboard view */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-light, #e5e7eb);
+    flex-wrap: wrap;
+    gap: 1rem;
+}
 
-  {% else %}
-    <li>No groups yet</li>
-  {% endfor %}
-</ul>
+.dashboard-title {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-main, #111827);
+    letter-spacing: -0.02em;
+}
+
+.dashboard-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.btn-dashboard {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: var(--accent-dark, #000000);
+    color: #ffffff;
+    border: 1px solid transparent;
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-hover, #1f2937);
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background-color: #ffffff;
+    color: var(--text-main, #111827);
+    border: 1px solid var(--border-light, #e5e7eb);
+}
+
+.btn-secondary:hover {
+    background-color: var(--input-bg, #f9fafb);
+}
+
+/* Section Titles */
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-muted, #4b5563);
+    margin-bottom: 1.5rem;
+}
+
+/* Grid Layout */
+.group-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Card Styling */
+.group-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.2s ease;
+}
+
+.group-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px rgba(0,0,0,0.05);
+}
+
+.group-header {
+    margin-bottom: 1rem;
+}
+
+.group-card h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.125rem;
+}
+
+.code {
+    font-size: 0.875rem;
+    color: #6b7280;
+    background: #f3f4f6;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+/* Card Actions */
+.actions {
+    margin-top: auto;
+    padding-top: 1.25rem;
+    border-top: 1px solid #f3f4f6;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.actions a {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #4b5563;
+    text-decoration: none;
+}
+
+.actions a:hover {
+    color: #000;
+}
+
+/* Empty State */
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 2rem;
+    background: #ffffff;
+    border: 1px dashed #e5e7eb;
+    border-radius: 12px;
+}
+
+/* Stats Grid */
+.stats-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:1rem;
+    margin-bottom:2rem;
+}
+
+/* Friend Request Row */
+.request-row {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:0.8rem;
+}
+</style>
+
+
+<div class="dashboard-header">
+    <h2 class="dashboard-title">Welcome, {{ user.username }}</h2>
+
+    <div class="dashboard-actions">
+        <a href="{{ url_for('groups.create_group') }}" class="btn-dashboard btn-primary">
+            <i class="ph ph-plus-circle"></i> Create Group
+        </a>
+        <a href="{{ url_for('groups.join_group') }}" class="btn-dashboard btn-secondary">
+            <i class="ph ph-link"></i> Join Group
+        </a>
+    </div>
+</div>
+
+
+<!-- Quick Stats -->
+<div class="stats-grid">
+
+    <div class="group-card">
+        <h3>{{ groups|length }}</h3>
+        <p>Workspaces</p>
+    </div>
+
+    <div class="group-card">
+        <h3>{{ friends_count }}</h3>
+        <p>Friends</p>
+    </div>
+
+</div>
+
+<div class="group-card" style="margin-bottom:2rem;">
+<h3 class="section-title">Find Friends</h3>
+
+<form action="{{ url_for('groups.search_users') }}" method="POST"
+style="display:flex; gap:1rem;">
+
+<input type="text"
+       name="username"
+       placeholder="Search by username"
+       style="flex:1; padding:0.6rem; border:1px solid #e5e7eb; border-radius:6px;"
+       required>
+
+<button class="btn-dashboard btn-primary">
+Search
+</button>
+
+</form>
+</div>
+<!-- Friend Requests -->
+{% if friend_requests %}
+<div class="group-card" style="margin-bottom:2rem;">
+    <h3 class="section-title">Friend Requests</h3>
+
+    {% for req in friend_requests %}
+    <div class="request-row">
+
+        <span>
+            <i class="ph ph-user"></i>
+            User {{ req.sender_id }}
+        </span>
+
+        <div style="display:flex; gap:0.5rem;">
+            <a href="{{ url_for('friends.accept_request', request_id=req.id) }}"
+               class="btn-dashboard btn-primary">
+                Accept
+            </a>
+
+            <a href="{{ url_for('friends.reject_request', request_id=req.id) }}"
+               class="btn-dashboard btn-secondary">
+                Decline
+            </a>
+        </div>
+
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+
+<h3 class="section-title">Your Workspaces</h3>
+
+<div class="group-grid">
+
+{% if groups %}
+
+    {% for group in groups %}
+
+    <div class="group-card">
+        <div class="group-header">
+            <h3>{{ group.name }}</h3>
+
+            {% if group.invite_code %}
+            <p class="code">
+                <i class="ph ph-key"></i> {{ group.invite_code }}
+            </p>
+            {% endif %}
+        </div>
+
+        <div class="actions">
+
+            <a href="{{ url_for('tasks.view_tasks', group_id=group.id) }}">
+                <i class="ph-fill ph-check-circle"></i> Tasks
+            </a>
+
+            <a href="{{ url_for('polls.view_polls', group_id=group.id) }}">
+                <i class="ph-fill ph-chart-bar"></i> Polls
+            </a>
+
+            <a href="{{ url_for('expenses.expenses_home', group_id=group.id) }}">
+                <i class="ph-fill ph-receipt"></i> Expenses
+            </a>
+
+            <a href="{{ url_for('location.location_page', group_id=group.id) }}">
+                <i class="ph-fill ph-map-pin"></i> Map
+            </a>
+
+        </div>
+    </div>
+
+    {% endfor %}
+
+{% else %}
+
+<div class="empty-state">
+    <i class="ph ph-layout" style="font-size:2.5rem;"></i>
+    <p>You haven't joined any groups yet.</p>
+</div>
+
+{% endif %}
+
+</div>
+
+{% endblock %}

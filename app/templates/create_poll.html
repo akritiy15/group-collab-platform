@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FunCollab - Create Poll</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        /* Modern SaaS Dashboard Styling Overrides */
+        :root {
+            --bg-color: #fbfcff;
+            --text-main: #111827;
+            --text-muted: #4b5563;
+            --border-light: #e5e7eb;
+            --accent-dark: #000000;
+            --accent-hover: #1f2937;
+            --card-surface: #ffffff;
+            --input-bg: #f9fafb;
+            --input-border: #d1d5db;
+            --input-focus-border: #9ca3af;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            line-height: 1.5;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at top center, #f3f4f6 0%, transparent 100%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Navbar Refined */
+        .navbar {
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            background: rgba(251, 252, 255, 0.75);
+            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            color: var(--accent-dark);
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        /* Modern Group Info Badges in Nav */
+        .group-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #4b5563;
+            background: #f3f4f6;
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #6b7280;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s ease;
+            margin-left: 0.5rem;
+        }
+
+        .nav-link:hover {
+            color: var(--text-main);
+        }
+
+        /* Feature Navigation (Tabs) Refined */
+        .feature-nav {
+            display: flex;
+            gap: 0.5rem;
+            margin: 2rem 0 3rem 0;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .feature-link {
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: #6b7280;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .feature-link:hover {
+            background: #f3f4f6;
+            color: #111827;
+        }
+
+        .feature-link.active {
+            color: var(--accent-dark);
+            background: #f3f4f6;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .feature-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -0.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 2px;
+            background-color: var(--accent-dark);
+            border-radius: 2px 2px 0 0;
+        }
+
+        /* Form Card Container */
+        .settings-card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 2.5rem 2.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .settings-card h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #111827;
+            margin: 0 0 2rem 0;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        /* Input Field Styling */
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            color: #111827;
+            background-color: #f9fafb;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: #9ca3af;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(209, 213, 219, 0.3);
+        }
+
+        /* Options Dynamic List Styling */
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .btn-add-option {
+            background-color: transparent;
+            color: #6b7280;
+            border: 1px dashed #d1d5db;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            margin-top: 0.5rem;
+            width: 100%;
+        }
+
+        .btn-add-option:hover {
+            background-color: #f9fafb;
+            color: #374151;
+            border-color: #9ca3af;
+        }
+
+        /* Action Buttons Area */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2.5rem;
+        }
+
+        .btn-cancel {
+            flex: 1;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0.85rem;
+            background-color: #ffffff;
+            color: #4b5563;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 1.05rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-cancel:hover {
+            background-color: #f9fafb;
+            color: #111827;
+            border-color: #9ca3af;
+        }
+
+        .btn-create {
+            flex: 1;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.85rem;
+            background-color: #000000;
+            color: #ffffff;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-create:hover {
+            background-color: #1f2937;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 12px -2px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- NAV -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">
+                <i class="ph-fill ph-circles-three-plus"></i>
+                FunCollab
+            </a>
+            <div class="nav-links">
+                <div class="group-badge" title="Current Workspace">
+                    <i class="ph ph-users"></i>
+                    {{ group.name }}
+                </div>
+                <a href="{{ url_for('auth.logout') }}" class="nav-link">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Feature Navigation -->
+        <div class="feature-nav">
+            <a href="{{ url_for('tasks.view_tasks', group_id=group.id) }}" class="feature-link">
+                <i class="ph ph-check-circle"></i> Tasks
+            </a>
+            <a href="{{ url_for('polls.view_polls', group_id=group.id) }}" class="feature-link active">
+                <i class="ph-fill ph-chart-bar"></i> Polls
+            </a>
+            <a href="{{ url_for('expenses.expenses_home', group_id=group.id) }}" class="feature-link">
+                <i class="ph ph-receipt"></i> Money
+            </a>
+            <a href="{{ url_for('location.location_page', group_id=group.id) }}" class="feature-link">
+                <!-- Assuming the typo here was corrected in previous sessions, location_page is the actual endpoint based on view_locations rendering location.html -->
+                <i class="ph ph-map-pin"></i> Map
+            </a>
+        </div>
+
+        <div class="settings-card">
+            <h2>
+                <i class="ph-duotone ph-list-numbers" style="color: #6366f1;"></i>
+                New Poll
+            </h2>
+
+            <!-- FORM -->
+            <form method="POST">
+                <div class="form-group">
+                    <label>
+                        <i class="ph-bold ph-question"></i> Poll Question
+                    </label>
+                    <input type="text" name="question" class="form-input" placeholder="e.g. Where should we eat?"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <i class="ph-bold ph-list-dashes"></i> Options
+                    </label>
+
+                    <div id="options-container" class="options-container">
+                        <input type="text" name="options[]" class="form-input" placeholder="Option 1" autocomplete="off"
+                            required>
+                        <input type="text" name="options[]" class="form-input" placeholder="Option 2" autocomplete="off"
+                            required>
+                    </div>
+
+                    <button type="button" id="add-option-btn" class="btn-add-option">
+                        <i class="ph-bold ph-plus"></i> Add Another Option
+                    </button>
+                </div>
+
+                <div class="action-buttons">
+                    <a href="{{ url_for('polls.view_polls', group_id=group.id) }}" class="btn-cancel">
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="btn-create">
+                        Launch Poll <i class="ph-bold ph-rocket-launch"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+    <script>
+        const addOptionBtn = document.getElementById('add-option-btn');
+        const optionsContainer = document.getElementById('options-container');
+
+        addOptionBtn.addEventListener('click', () => {
+            const count = optionsContainer.children.length + 1;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.name = 'options[]';
+            input.placeholder = `Option ${count}`;
+            input.className = 'form-input'; // Ensure the new input gets styling
+            input.required = true;
+            input.autocomplete = "off";
+
+            // Add a little pop effect to the new input
+            input.style.opacity = '0';
+            input.style.transform = 'translateY(-10px)';
+            input.style.transition = 'all 0.3s ease';
+
+            optionsContainer.appendChild(input);
+
+            // Trigger animation
+            setTimeout(() => {
+                input.style.opacity = '1';
+                input.style.transform = 'translateY(0)';
+            }, 10);
+
+            // Focus the new input automatically for better UX
+            input.focus();
+        });
+    </script>
+</body>
+
+</html>

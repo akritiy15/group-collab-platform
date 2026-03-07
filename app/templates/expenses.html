@@ -1,28 +1,561 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FunCollab - Expenses</title>
 
-<h2>Expenses</h2>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<form method="POST">
-    <input name="title" placeholder="Expense title">
-    <input name="amount" placeholder="Amount">
-    <input name="paid_by" placeholder="Paid by">
-    <input name="members" placeholder="Members names">
-    <button type="submit">Add Expense</button>
-</form>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
-<hr>
+    <style>
+        /* Modern SaaS Dashboard Styling Overrides */
+        :root {
+            --bg-color: #fbfcff;
+            --text-main: #111827;
+            --text-muted: #4b5563;
+            --border-light: #e5e7eb;
+            --accent-dark: #000000;
+            --accent-hover: #1f2937;
+            --card-surface: #ffffff;
+            --input-bg: #f9fafb;
+            --input-border: #d1d5db;
+            --input-focus-border: #9ca3af;
 
-{% for e in expenses %}
-<p>{{ e.title }} - ₹{{ e.amount }} - paid by {{ e.paid_by }}</p>
-{% endfor %}
+            /* Financial specific vars */
+            --positive-color: #15803d;
+            /* Green 700 */
+            --positive-bg: #dcfce7;
+            /* Green 100 */
+            --negative-color: #b91c1c;
+            /* Red 700 */
+            --negative-bg: #fee2e2;
+            /* Red 100 */
+        }
 
-<hr>
-<h3>Balances</h3>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            line-height: 1.5;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at top center, #f3f4f6 0%, transparent 100%);
+        }
 
-{% for user, balance in balances.items() %}
-<p>User {{ user }} : ₹ {{ balance }}</p>
-{% endfor %}
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
 
-{% endblock %}
+        /* Navbar Refined */
+        .navbar {
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            background: rgba(251, 252, 255, 0.75);
+            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            color: var(--accent-dark);
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        /* Modern Group Info Badges in Nav */
+        .group-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #4b5563;
+            background: #f3f4f6;
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #6b7280;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--text-main);
+        }
+
+        /* Feature Navigation (Tabs) Refined */
+        .feature-nav {
+            display: flex;
+            gap: 0.5rem;
+            margin: 2rem 0 3rem 0;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .feature-link {
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: #6b7280;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .feature-link:hover {
+            background: #f3f4f6;
+            color: #111827;
+        }
+
+        .feature-link.active {
+            color: var(--accent-dark);
+            background: #f3f4f6;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .feature-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -0.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 2px;
+            background-color: var(--accent-dark);
+            border-radius: 2px 2px 0 0;
+        }
+
+        /* Main Content Layout */
+        .workspace-main {
+            padding-bottom: 5rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .workspace-main {
+                grid-template-columns: 350px 1fr;
+                /* Split view: Add form on left, feed on right */
+            }
+        }
+
+        .nav-stretch {
+            grid-column: 1 / -1;
+        }
+
+        /* Balance Header Modernized */
+        .balance-card {
+            grid-column: 1 / -1;
+            background: var(--card-surface);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .balance-card h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: 0;
+            letter-spacing: -0.03em;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .balance-amount {
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .positive {
+            color: var(--positive-color);
+            background: var(--positive-bg);
+        }
+
+        .negative {
+            color: var(--negative-color);
+            background: var(--negative-bg);
+        }
+
+        .balance-card p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin: 0.75rem 0 0 0;
+        }
+
+        /* Sidebar: Add Expense Form */
+        .expense-form-card {
+            background: var(--card-surface);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+            position: sticky;
+            top: 5rem;
+            height: fit-content;
+        }
+
+        .expense-form-card h3 {
+            margin: 0 0 1.5rem 0;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            outline: none;
+        }
+
+        .input-group input::placeholder {
+            color: #9ca3af;
+        }
+
+        .input-group input:focus {
+            border-color: var(--input-focus-border);
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(209, 213, 219, 0.3);
+        }
+
+        /* Custom styling for amount input to look financial */
+        .amount-input-wrapper {
+            position: relative;
+        }
+
+        .amount-input-wrapper::before {
+            content: '₹';
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .amount-input-wrapper input {
+            padding-left: 2rem;
+            font-weight: 600;
+        }
+
+        .btn-submit {
+            width: 100%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.85rem;
+            background-color: var(--accent-dark);
+            color: #ffffff;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-top: 0.5rem;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 10px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Activity Feed (Expense List) */
+        .activity-feed {
+            background: var(--card-surface);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 0;
+            /* Padding applied to items instead for full-width borders */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+            overflow: hidden;
+        }
+
+        .feed-header {
+            padding: 1.5rem 1.5rem 1rem 1.5rem;
+            margin: 0;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-main);
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .expense-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border-light);
+            transition: background-color 0.2s ease;
+        }
+
+        .expense-item:last-child {
+            border-bottom: none;
+        }
+
+        .expense-item:hover {
+            background-color: #f9fafb;
+        }
+
+        .expense-details {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .avatar {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            border: 1px solid #d1d5db;
+            color: var(--text-main);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+            flex-shrink: 0;
+        }
+
+        .expense-text h4 {
+            margin: 0 0 0.2rem 0;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .expense-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .payer-name {
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .expense-amount {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            font-feature-settings: "tnum";
+            font-variant-numeric: tabular-nums;
+        }
+
+        .empty-state {
+            padding: 4rem 1rem;
+            text-align: center;
+            color: #6b7280;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">
+                <i class="ph-fill ph-circles-three-plus"></i>
+                FunCollab
+            </a>
+            <div class="nav-links">
+                <div class="group-badge" title="Current Workspace">
+                    <i class="ph ph-users"></i>
+                    {{ group.name }}
+                </div>
+                <a href="{{ url_for('auth.logout') }}" class="nav-link" style="margin-left: 0.5rem;">
+                    Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container workspace-main">
+
+        <!-- Feature Navigation -->
+        <div class="feature-nav nav-stretch">
+            <a href="{{ url_for('tasks.view_tasks', group_id=group.id) }}" class="feature-link">
+                <i class="ph ph-check-circle"></i> Tasks
+            </a>
+            <a href="{{ url_for('polls.view_polls', group_id=group.id) }}" class="feature-link">
+                <i class="ph ph-chart-bar"></i> Polls
+            </a>
+            <a class="feature-link active">
+                <i class="ph-fill ph-receipt"></i> Money
+            </a>
+            <a href="{{ url_for('location.location_page', group_id=group.id) }}" class="feature-link">
+                <i class="ph ph-map-pin"></i> Map
+            </a>
+        </div>
+
+        <!-- BALANCE HEADER -->
+        {% set net = balances.values() | sum %}
+        <div class="balance-card">
+            <h2>
+                You are
+                {% if net >= 0 %}
+                owed <span class="balance-amount positive">₹{{ "%.2f"|format(net) }}</span>
+                {% else %}
+                owing <span class="balance-amount negative">₹{{ "%.2f"|format(-net) }}</span>
+                {% endif %}
+            </h2>
+            <p>Keep your team's balances settled and stress-free.</p>
+        </div>
+
+        <!-- ADD EXPENSE (Sidebar on desktop) -->
+        <div>
+            <div class="expense-form-card">
+                <h3><i class="ph ph-plus-circle"></i> Record Expense</h3>
+
+                <form method="POST">
+                    <div class="input-group">
+                        <input name="title" placeholder="What was this for? (e.g. Dinner)" required>
+                    </div>
+
+                    <div class="input-group amount-input-wrapper">
+                        <input name="amount" type="number" step="0.01" placeholder="0.00" required>
+                    </div>
+
+                    <div class="input-group">
+                        <input name="paid_by" placeholder="Who paid? (e.g. You)" required>
+                    </div>
+
+                    <div class="input-group">
+                        <input name="members" placeholder="Split between (comma separated)" required>
+                    </div>
+
+                    <button type="submit" class="btn-submit">
+                        Save Expense
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- RECENT ACTIVITY (Main Feed) -->
+        <div>
+            <div class="activity-feed">
+                <h3 class="feed-header"><i class="ph ph-clock-counter-clockwise"></i> Recent Activity</h3>
+
+                {% if expenses %}
+                {% for e in expenses %}
+                <div class="expense-item">
+                    <div class="expense-details">
+                        <div class="avatar" title="{{ e.paid_by }}">
+                            {{ e.paid_by[:2]|upper }}
+                        </div>
+                        <div class="expense-text">
+                            <h4>{{ e.title }}</h4>
+                            <p class="expense-meta">
+                                <span class="payer-name">{{ e.paid_by }}</span> paid
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="expense-amount">
+                        ₹{{ "%.2f"|format(e.amount) }}
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="empty-state">
+                    <i class="ph ph-wallet" style="font-size: 2.5rem; margin-bottom: 1rem; color: #d1d5db;"></i>
+                    <p style="margin: 0; font-size: 1.1rem; font-weight: 500; color: #111827;">No expenses tracked yet
+                    </p>
+                    <p style="margin: 0.5rem 0 0 0; font-size: 0.95rem;">Add a receipt to start splitting costs.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+    </main>
+
+</body>
+
+</html>

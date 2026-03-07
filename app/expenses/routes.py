@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request
 from app.extensions import db
-from app.models import Expense, ExpenseSplit
+from app.models import Expense, ExpenseSplit, Group
 
 expenses_bp = Blueprint('expenses', __name__)
 
@@ -50,7 +50,12 @@ def expenses_home():
         balances.setdefault(e.paid_by, 0)
         balances[e.paid_by] += e.amount
 
-    return render_template("expenses.html", expenses=expenses, balances=balances)
+    return render_template(
+    "expenses.html",
+    expenses=expenses,
+    balances=balances,
+    group=Group.query.get(1)  # temporary until group system fixed
+)
 
 
 
