@@ -1,0 +1,339 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Phosphor Icons for modern SaaS styling -->
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+<style>
+    /* Modern SaaS Location Page Styling Overrides */
+
+    .location-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        background: #ffffff;
+        padding: 1.5rem 2rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -2px rgba(0, 0, 0, 0.02);
+    }
+
+    .location-title {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .location-title h2 {
+        font-family: 'Inter', sans-serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        color: #111827;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .location-title p {
+        margin: 0;
+        font-size: 0.95rem;
+        color: #6b7280;
+    }
+
+    /* Live Broadcasting Button */
+    .btn-live {
+        background-color: #000000;
+        color: #ffffff;
+        border: 1px solid transparent;
+        padding: 0.85rem 1.5rem;
+        border-radius: 8px;
+        font-family: 'Inter', sans-serif;
+        font-weight: 500;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-live:hover {
+        background-color: #1f2937;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 10px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-live:active {
+        transform: translateY(0);
+    }
+
+    .btn-live.active-cast {
+        background-color: #15803d;
+        /* Green indicating live */
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 0 0 0 rgba(21, 128, 61, 0.4);
+        }
+
+        70% {
+            box-shadow: 0 0 0 6px rgba(21, 128, 61, 0);
+        }
+
+        100% {
+            box-shadow: 0 0 0 0 rgba(21, 128, 61, 0);
+        }
+    }
+
+    /* Slick Map Wrapper */
+    .map-container {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 0.5rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+        position: relative;
+    }
+
+    #map {
+        height: 600px;
+        width: 100%;
+        border-radius: 8px;
+        z-index: 10;
+        font-family: 'Inter', sans-serif;
+    }
+
+    /* Elegant leaflet popup styling override */
+    .leaflet-popup-content-wrapper {
+        border-radius: 8px;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        padding: 0;
+        border: 1px solid #f3f4f6;
+    }
+
+    .leaflet-popup-tip-container {
+        margin-top: -1px;
+    }
+
+    .leaflet-popup-content {
+        margin: 1rem 1.25rem;
+    }
+
+    .user-popup-content {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-weight: 600;
+        color: #111827;
+        font-size: 0.95rem;
+    }
+
+    .user-popup-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        background: #f3f4f6;
+        border-radius: 50%;
+        color: #4b5563;
+    }
+
+    .leaflet-container a.leaflet-popup-close-button {
+        color: #9ca3af;
+        padding: 8px 8px 0 0;
+        transition: color 0.2s ease;
+    }
+
+    .leaflet-container a.leaflet-popup-close-button:hover {
+        color: #111827;
+        background: transparent;
+    }
+
+    /* Overriding Leaflet attribution to match theme */
+    .leaflet-control-attribution {
+        background: rgba(255, 255, 255, 0.8) !important;
+        backdrop-filter: blur(4px);
+        border-top-left-radius: 6px;
+        padding: 0.2rem 0.5rem !important;
+        color: #6b7280 !important;
+    }
+
+    .leaflet-control-attribution a {
+        color: #4b5563 !important;
+        font-weight: 500;
+    }
+</style>
+
+<div class="location-header">
+    <div class="location-title">
+        <h2><i class="ph-fill ph-map-pin" style="color: #ef4444;"></i> Radar</h2>
+        <p>See where your team is currently broadcasting from.</p>
+    </div>
+
+    <button onclick="startLiveTracking()" class="btn-live" id="broadcastBtn">
+        <i class="ph-bold ph-broadcast"></i> Start Sharing
+    </button>
+</div>
+
+<div class="map-container">
+    <div id="map"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+    var groupId = {{ group_id }};
+
+    var map = L.map('map', {
+        zoomControl: false // We reposition it for aesthetics
+    }).setView([20.5937, 78.9629], 5);
+
+    // Move zoom control to bottom right instead of top left
+    L.control.zoom({
+        position: 'bottomright'
+    }).addTo(map);
+
+    /* 
+     * Replaced default OpenStreetMap tiles with CARTO's Voyager tiles
+     * for a much cleaner, muted, and modern "SaaS" appearance.
+     */
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    var markers = [];
+    var isBroadcasting = false;
+    var watchId = null; // Store watch position ID if continuous tracking is needed
+
+    function startLiveTracking() {
+        if (!navigator.geolocation) {
+            alert("Geolocation not supported by your browser.");
+            return;
+        }
+
+        const btn = document.getElementById('broadcastBtn');
+
+        if (isBroadcasting) {
+            // Toggle OFF
+            isBroadcasting = false;
+            btn.classList.remove('active-cast');
+            btn.innerHTML = '<i class="ph-bold ph-broadcast"></i> Start Sharing';
+            // Note: Removing location from backend would require an API endpoint.
+            // For now, we just stop pinging.
+            return;
+        }
+
+        // Toggle ON Visuals
+        isBroadcasting = true;
+        btn.innerHTML = '<i class="ph-bold ph-spinner ph-spin"></i> Locating...';
+
+        // The POST to backend happens here
+        navigator.geolocation.getCurrentPosition(function (position) {
+
+            fetch(`/location/share-location/${groupId}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                })
+            }).then(() => {
+                // Once sent successfully, update button UI
+                btn.classList.add('active-cast');
+                btn.innerHTML = '<i class="ph-bold ph-check-circle"></i> Live Sharing';
+                loadLocations(); // Instantly refresh map
+            }).catch(err => {
+                console.error("Error sharing location:", err);
+                isBroadcasting = false;
+                btn.innerHTML = '<i class="ph-bold ph-warning-circle"></i> Error';
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="ph-bold ph-broadcast"></i> Start Sharing';
+                }, 2000);
+            });
+
+        }, function (error) {
+            console.error("Geolocation error:", error);
+            isBroadcasting = false;
+            btn.innerHTML = '<i class="ph-bold ph-broadcast"></i> Start Sharing';
+            alert("Unable to fetch location. Check your permissions.");
+        });
+    }
+
+    function loadLocations() {
+        fetch(`/location/api/${groupId}`)
+            .then(response => response.json())
+            .then(data => {
+
+                markers.forEach(m => map.removeLayer(m));
+                markers = [];
+
+                if (data.length === 0) {
+                    return;
+                }
+
+                var bounds = [];
+
+                // Custom marker icon creation could go here, but default is fine
+                // given leaflet's reliable marker PNGs. We style the popup instead.
+
+                data.forEach(loc => {
+                    // High-quality HTML injection for the popup
+                    var popupHTML = `
+                <div class="user-popup-content">
+                    <div class="user-popup-icon"><i class="ph-fill ph-user"></i></div>
+                    <span>User: ${loc.user_id}</span>
+                </div>
+            `;
+
+                    var marker = L.marker([loc.latitude, loc.longitude])
+                        .addTo(map)
+                        .bindPopup(popupHTML);
+
+                    markers.push(marker);
+                    bounds.push([loc.latitude, loc.longitude]);
+                });
+
+                // Only zoom to bounds if user is not actively interacting with the map
+                // to prevent jarring camera movements, but map.fitBounds handles this well.
+                map.fitBounds(bounds, { padding: [70, 70], maxZoom: 14 });
+            });
+    }
+
+    loadLocations();
+    setInterval(loadLocations, 5000);
+
+    // Only auto-ping if the user explicitly clicked "Start Sharing"
+    setInterval(() => {
+        if (isBroadcasting) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                fetch(`/location/share-location/${groupId}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    })
+                });
+            });
+        }
+    }, 10000);
+
+</script>
+
+{% endblock %}

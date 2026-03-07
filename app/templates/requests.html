@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Connection Requests</h2>
+
+{% if requests %}
+
+<ul>
+{% for req in requests %}
+
+<li>
+
+User ID: {{ req.sender_id }}
+
+<a href="{{ url_for('friends.accept_request', req_id=req.id) }}">
+Accept
+</a>
+
+<a href="{{ url_for('friends.reject_request', req_id=req.id) }}">
+Reject
+</a>
+
+</li>
+
+{% endfor %}
+</ul>
+
+{% else %}
+
+<p>No requests</p>
+
+{% endif %}
+
+{% endblock %}

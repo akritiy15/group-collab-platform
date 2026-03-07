@@ -1,0 +1,260 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Phosphor Icons -->
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+<style>
+    /* Modern SaaS Settings Page Styling Overrides */
+
+    .settings-container {
+        max-width: 650px;
+        margin: 2rem auto;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .settings-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .settings-header h2 {
+        font-family: 'Inter', sans-serif;
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: #111827;
+        margin: 0;
+        letter-spacing: -0.02em;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-back-profile {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        color: #6b7280;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+    }
+
+    .btn-back-profile:hover {
+        background: #f9fafb;
+        color: #111827;
+        border-color: #d1d5db;
+        transform: translateX(-2px);
+    }
+
+    /* Form Card Container */
+    .settings-card {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        padding: 2.5rem 2.5rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+    }
+
+    .form-group {
+        margin-bottom: 1.75rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .form-group label {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #374151;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    /* Input Field Styling */
+    .form-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-family: 'Inter', sans-serif;
+        font-size: 1rem;
+        color: #111827;
+        background-color: #f9fafb;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        box-sizing: border-box;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+        outline: none;
+    }
+
+    .form-input:focus {
+        border-color: #9ca3af;
+        background-color: #ffffff;
+        box-shadow: 0 0 0 3px rgba(209, 213, 219, 0.3);
+    }
+
+    /* Textarea specific overrides */
+    textarea.form-input {
+        resize: vertical;
+        min-height: 120px;
+        line-height: 1.5;
+    }
+
+    /* File Input Styling (Making it look beautiful) */
+    .file-upload-wrapper {
+        position: relative;
+        overflow: hidden;
+        display: inline-block;
+        width: 100%;
+    }
+
+    .file-upload-input {
+        /* Hide default messy input */
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+        z-index: 2;
+    }
+
+    .file-upload-visual {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.75rem 1rem;
+        background-color: #fbfcff;
+        border: 1px dashed #9ca3af;
+        border-radius: 8px;
+        color: #4b5563;
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        position: relative;
+        z-index: 1;
+    }
+
+    .file-upload-wrapper:hover .file-upload-visual {
+        background-color: #f3f4f6;
+        border-color: #6b7280;
+    }
+
+    .btn-save {
+        width: 100%;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        font-size: 1.05rem;
+        padding: 0.85rem;
+        background-color: #000000;
+        color: #ffffff;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        margin-top: 1rem;
+    }
+
+    .btn-save:hover {
+        background-color: #1f2937;
+        transform: translateY(-1px);
+        box-shadow: 0 8px 12px -2px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<div class="settings-container">
+
+    <div class="settings-header">
+        <a href="{{ url_for('profile.view_profile') }}" class="btn-back-profile" title="Back to Profile">
+            <i class="ph-bold ph-arrow-left"></i>
+        </a>
+        <h2>
+            <i class="ph-fill ph-gear" style="color: #6b7280;"></i>
+            Account Settings
+        </h2>
+    </div>
+
+    <div class="settings-card">
+        <form method="POST" enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label>
+                    <i class="ph-bold ph-user"></i> Username
+                </label>
+                <!-- Native Flask attributes unchanged -->
+                <input type="text" name="username" value="{{ user.username }}" class="form-input" autocomplete="off">
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <i class="ph-bold ph-text-aa"></i> Bio
+                </label>
+                <!-- Native Flask attributes unchanged -->
+                <textarea name="bio" class="form-input"
+                    placeholder="Tell the team a bit about yourself...">{{ user.bio }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <i class="ph-bold ph-image"></i> Profile Picture
+                </label>
+                <!-- Hidden native file input styled beautifully -->
+                <div class="file-upload-wrapper">
+                    <!-- Native Flask attributes unchanged -->
+                    <input type="file" name="profile_picture" class="file-upload-input" id="profileUpload"
+                        accept="image/*">
+
+                    <div class="file-upload-visual" id="fileNameDisplay">
+                        <i class="ph-fill ph-upload-simple" style="font-size: 1.25rem;"></i>
+                        <span>Click to upload a new avatar...</span>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-save">
+                <i class="ph-bold ph-floppy-disk"></i> Save Changes
+            </button>
+
+        </form>
+    </div>
+
+</div>
+
+<!-- Small Vanilla JS script to dynamically display the name of the file chosen in the custom upload box -->
+<script>
+    document.getElementById('profileUpload').addEventListener('change', function (e) {
+        const fileName = e.target.files[0] ? e.target.files[0].name : "Click to upload a new avatar...";
+        const displayDiv = document.getElementById('fileNameDisplay');
+
+        if (e.target.files[0]) {
+            displayDiv.innerHTML = `<i class="ph-fill ph-file-image" style="font-size: 1.25rem; color: #10b981;"></i><span style="color: #111827; font-weight: 600;">${fileName}</span>`;
+            displayDiv.style.borderStyle = 'solid';
+            displayDiv.style.borderColor = '#10b981';
+            displayDiv.style.backgroundColor = '#ecfdf5';
+        } else {
+            displayDiv.innerHTML = `<i class="ph-fill ph-upload-simple" style="font-size: 1.25rem;"></i><span>Click to upload a new avatar...</span>`;
+            displayDiv.style.borderStyle = 'dashed';
+            displayDiv.style.borderColor = '#9ca3af';
+            displayDiv.style.backgroundColor = '#fbfcff';
+        }
+    });
+</script>
+
+{% endblock %}

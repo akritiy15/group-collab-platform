@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FunCollab - Tasks</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        /* Modern SaaS Dashboard Styling Overrides */
+        :root {
+            --bg-color: #fbfcff;
+            --text-main: #111827;
+            --text-muted: #4b5563; 
+            --border-light: #e5e7eb;
+            --accent-dark: #000000;
+            --accent-hover: #1f2937;
+            --card-surface: #ffffff;
+            --input-bg: #f9fafb;
+            --input-border: #d1d5db;
+            --input-focus-border: #9ca3af;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            line-height: 1.5;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at top center, #f3f4f6 0%, transparent 100%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Navbar Refined */
+        .navbar {
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            background: rgba(251, 252, 255, 0.75);
+            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            color: var(--accent-dark);
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        /* Modern Group Info Badges in Nav */
+        .group-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #4b5563;
+            background: #f3f4f6;
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .code-badge {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background: #ffffff;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #6b7280;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--text-main);
+        }
+
+        /* Feature Navigation (Tabs) Refined */
+        .feature-nav {
+            display: flex;
+            gap: 0.5rem;
+            margin: 2rem 0 3rem 0;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .feature-link {
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: #6b7280;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .feature-link:hover {
+            background: #f3f4f6;
+            color: #111827;
+        }
+
+        .feature-link.active {
+            color: var(--accent-dark);
+            background: #f3f4f6; /* Soft gray for active tab */
+            font-weight: 600;
+            position: relative;
+        }
+        
+        .feature-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -0.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 2px;
+            background-color: var(--accent-dark);
+            border-radius: 2px 2px 0 0;
+        }
+
+        /* Main Content Layout */
+        .workspace-main {
+            padding-bottom: 5rem;
+        }
+
+        /* Task Header and Input */
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .task-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            margin: 0;
+        }
+
+        .task-form {
+            display: flex;
+            gap: 0.5rem;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .task-input {
+            flex-grow: 1;
+            padding: 0.625rem 1rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            background-color: var(--card-surface);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            outline: none;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .task-input::placeholder {
+            color: #9ca3af;
+        }
+
+        .task-input:focus {
+            border-color: var(--input-focus-border);
+            box-shadow: 0 0 0 3px rgba(209, 213, 219, 0.3);
+        }
+
+        .btn-add {
+            background-color: var(--accent-dark);
+            color: #ffffff;
+            border: 1px solid transparent;
+            padding: 0 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px -1px rgba(0,0,0,0.1);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .btn-add:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        /* Task List Area */
+        .task-list-container {
+            background: var(--card-surface);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+            overflow: hidden; /* For rounded corners on first/last items */
+        }
+
+        /* Modern Task Item */
+        .task-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-light);
+            transition: background-color 0.2s ease;
+        }
+        
+        .task-item:last-child {
+            border-bottom: none;
+        }
+
+        .task-item:hover {
+            background-color: #f9fafb;
+        }
+
+        .task-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-grow: 1;
+        }
+
+        /* Custom Checkbox mimicking Notion lists */
+        .task-checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 0; 
+        }
+
+        .task-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            border-radius: 4px; /* Chrome requires modern styling overrides for native checkboxes */
+            accent-color: var(--text-main);
+            margin: 0;
+            transition: transform 0.1s ease;
+        }
+        
+        .task-item input[type="checkbox"]:hover {
+            transform: scale(1.1);
+        }
+
+        .task-title {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-main);
+            margin: 0;
+            transition: color 0.2s ease;
+        }
+
+        .task-title.completed {
+            text-decoration: line-through;
+            color: #9ca3af;
+        }
+
+        /* Elegant Status Badges */
+        .status-badge {
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            border: 1px solid transparent;
+        }
+
+        .status-todo {
+            background-color: #fef9c3; /* Yellow-100 */
+            color: #854d0e; /* Yellow-800 */
+            border-color: #fef08a; /* Yellow-200 */
+        }
+
+        .status-completed {
+            background-color: #dcffe4; /* Green-100 */
+            color: #166534; /* Green-800 */
+            border-color: #bbf7d0; /* Green-200 */
+            box-shadow: inset 0 1px 2px rgba(255,255,255,0.5); /* slight inner glow */
+        }
+
+        /* Empty State */
+        .empty-state {
+            padding: 4rem 1rem;
+            text-align: center;
+            color: #6b7280;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- NAV -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">
+                <i class="ph-fill ph-circles-three-plus"></i>
+                FunCollab
+            </a>
+
+            <div class="nav-links">
+                <!-- Restyled Information Badges -->
+                <div class="group-badge" title="Current Workspace">
+                    <i class="ph ph-users"></i>
+                    {{ group.name }}
+                </div>
+
+                <div class="group-badge code-badge" title="Workspace Join Code">
+                    <i class="ph ph-key"></i>
+                    {{ group.invite_code }}
+                </div>
+
+                <a href="{{ url_for('auth.logout') }}" class="nav-link" style="margin-left: 0.5rem;">
+                    Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container workspace-main">
+
+        <!-- Feature Navigation -->
+        <div class="feature-nav">
+            <a class="feature-link active">
+                <i class="ph-fill ph-check-circle"></i> Tasks
+            </a>
+            <a href="{{ url_for('polls.view_polls', group_id=group.id) }}" class="feature-link">
+                <i class="ph ph-chart-bar"></i> Polls
+            </a>
+            <a href="{{ url_for('expenses.expenses_home', group_id=group.id) }}" class="feature-link">
+                <i class="ph ph-receipt"></i> Money
+            </a>
+            <a href="{{ url_for('location.location_page', group_id=group.id) }}" class="feature-link">
+                <i class="ph ph-map-pin"></i> Map
+            </a>
+        </div>
+
+        <!-- ADD TASK -->
+        <div class="task-header">
+            <h2>Task Board</h2>
+
+            <form method="POST" class="task-form">
+                <input
+                    type="text"
+                    name="title"
+                    class="task-input"
+                    placeholder="E.g., Finalize presentation slides..."
+                    required
+                >
+                <button type="submit" class="btn-add">
+                    <i class="ph ph-plus"></i> Add 
+                </button>
+            </form>
+        </div>
+
+        <!-- TASK LIST -->
+        <div class="task-list-container">
+            {% if tasks %}
+                {% for task in tasks %}
+                <div class="task-item">
+                    <div class="task-content">
+                        <!-- Native anchor wrapping for toggle (untouched Flask structure) -->
+                        <a href="{{ url_for('tasks.toggle_task', task_id=task.id) }}" class="task-checkbox-wrapper">
+                            <input
+                                type="checkbox"
+                                {% if task.status == "Completed" %}checked{% endif %}
+                            >
+                        </a>
+
+                        <h3 class="task-title {% if task.status == 'Completed' %}completed{% endif %}">
+                            {{ task.title }}
+                        </h3>
+                    </div>
+
+                    <!-- Modern Status Badges -->
+                    <span class="status-badge {% if task.status == 'Completed' %}status-completed{% else %}status-todo{% endif %}">
+                        {% if task.status == 'Completed' %}
+                            <i class="ph-fill ph-check-circle"></i>
+                        {% else %}
+                            <i class="ph-fill ph-circle-dashed"></i>
+                        {% endif %}
+                        {{ task.status }}
+                    </span>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="ph ph-clipboard-text" style="font-size: 2.5rem; margin-bottom: 1rem; color: #d1d5db;"></i>
+                    <p style="margin: 0; font-size: 1.1rem; font-weight: 500; color: #111827;">Your task list is empty</p>
+                    <p style="margin: 0.5rem 0 0 0; font-size: 0.95rem;">Type a task above and press Add to get started.</p>
+                </div>
+            {% endif %}
+        </div>
+
+    </main>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

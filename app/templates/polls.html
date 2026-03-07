@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FunCollab - Polls</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        /* Modern SaaS Dashboard Styling Overrides */
+        :root {
+            --bg-color: #fbfcff;
+            --text-main: #111827;
+            --text-muted: #4b5563; 
+            --border-light: #e5e7eb;
+            --accent-dark: #000000;
+            --accent-hover: #1f2937;
+            --card-surface: #ffffff;
+            --input-bg: #f9fafb;
+            --input-border: #d1d5db;
+            --input-focus-border: #9ca3af;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            line-height: 1.5;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at top center, #f3f4f6 0%, transparent 100%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Navbar Refined */
+        .navbar {
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            background: rgba(251, 252, 255, 0.75);
+            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            color: var(--accent-dark);
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        /* Modern Group Info Badges in Nav */
+        .group-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #4b5563;
+            background: #f3f4f6;
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #6b7280;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--text-main);
+        }
+
+        /* Feature Navigation (Tabs) Refined */
+        .feature-nav {
+            display: flex;
+            gap: 0.5rem;
+            margin: 2rem 0 3rem 0;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .feature-link {
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: #6b7280;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .feature-link:hover {
+            background: #f3f4f6;
+            color: #111827;
+        }
+
+        .feature-link.active {
+            color: var(--accent-dark);
+            background: #f3f4f6;
+            font-weight: 600;
+            position: relative;
+        }
+        
+        .feature-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -0.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 2px;
+            background-color: var(--accent-dark);
+            border-radius: 2px 2px 0 0;
+        }
+
+        /* Main Content Layout */
+        .workspace-main {
+            padding-bottom: 5rem;
+        }
+
+        /* Poll Header */
+        .poll-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .poll-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            margin: 0;
+        }
+
+        .btn-add {
+            background-color: var(--accent-dark);
+            color: #ffffff;
+            border: 1px solid transparent;
+            padding: 0.6rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-decoration: none;
+        }
+
+        .btn-add:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 10px -1px rgba(0,0,0,0.1);
+        }
+
+        /* Poll Grid Structure */
+        .poll-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        /* Poll Card Modernized */
+        .poll-card {
+            background: var(--card-surface);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -2px rgba(0, 0, 0, 0.02);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .poll-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+            border-color: rgba(209, 213, 219, 1);
+        }
+
+        .poll-card h3 {
+            margin: 0 0 1.25rem 0;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-main);
+            letter-spacing: -0.01em;
+            line-height: 1.4;
+        }
+
+        /* Poll Option Rows */
+        .poll-option {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+            position: relative;
+        }
+
+        .poll-option:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Progress Bar (Sleek Linear Style) */
+        .progress-container {
+            flex-grow: 1;
+            height: 36px;
+            background: var(--input-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #e0f2fe; /* Light blue by default */
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 1;
+        }
+
+        /* Dynamically overriding background when inline style is applied */
+        .progress-bar[style*="background: #4CAF50"], 
+        .progress-bar[style*="background:#4CAF50"] {
+            background-color: #dcfce7 !important; /* Soft green */
+        }
+        
+        .progress-bar-winning {
+            background-color: #dcfce7 !important;
+        }
+
+        .option-text {
+            position: relative;
+            z-index: 2;
+            padding-left: 0.75rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 65%;
+        }
+
+        .vote-count {
+            position: relative;
+            z-index: 2;
+            margin-left: auto;
+            padding-right: 0.75rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        /* Vote Button Modernized */
+        .vote-btn {
+            flex-shrink: 0;
+            width: 60px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            color: var(--text-main);
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .vote-btn:hover {
+            background: var(--input-bg);
+            border-color: #d1d5db;
+        }
+
+        .voted-badge {
+            flex-shrink: 0;
+            width: 60px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 6px;
+            color: #166534;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Empty State */
+        .empty-state {
+            padding: 4rem 1rem;
+            text-align: center;
+            background: var(--card-surface);
+            border: 1px dashed var(--border-light);
+            border-radius: 12px;
+            color: #6b7280;
+            grid-column: 1 / -1;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="container">
+        <a href="/" class="logo">
+            <i class="ph-fill ph-circles-three-plus"></i>
+            FunCollab
+        </a>
+        <div class="nav-links">
+            <div class="group-badge" title="Current Workspace">
+                <i class="ph ph-users"></i>
+                {{ group.name }}
+            </div>
+            <a href="{{ url_for('auth.logout') }}" class="nav-link" style="margin-left: 0.5rem;">
+                Logout
+            </a>
+        </div>
+    </div>
+</nav>
+
+<main class="container workspace-main">
+
+    <!-- Feature Navigation -->
+    <div class="feature-nav">
+        <a href="{{ url_for('tasks.view_tasks', group_id=group.id) }}" class="feature-link">
+            <i class="ph ph-check-circle"></i> Tasks
+        </a>
+        <a class="feature-link active">
+            <i class="ph-fill ph-chart-bar"></i> Polls
+        </a>
+        <a href="{{ url_for('expenses.expenses_home', group_id=group.id) }}" class="feature-link">
+            <i class="ph ph-receipt"></i> Money
+        </a>
+        <a href="{{ url_for('location.location_page', group_id=group.id) }}" class="feature-link">
+            <i class="ph ph-map-pin"></i> Map
+        </a>
+    </div>
+
+    <div class="poll-header">
+        <h2>Active Polls</h2>
+        <a href="{{ url_for('polls.create_poll', group_id=group.id) }}" class="btn-add">
+            <i class="ph ph-plus"></i> Create Poll
+        </a>
+    </div>
+
+    <!-- Polls Grid -->
+    <div class="poll-grid">
+        {% if polls %}
+            {% for poll in polls %}
+            <div class="poll-card">
+                <h3>{{ poll.question }}</h3>
+
+                {% set total_votes = poll.options | sum(attribute='votes') %}
+                {% set max_votes = poll.options | map(attribute='votes') | max %}
+
+                {% for option in poll.options %}
+                    {% set percent = (option.votes * 100 / total_votes) if total_votes > 0 else 0 %}
+
+                    <div class="poll-option">
+                        <!-- Redesigned Progress Bar: Overlays text natively like Twitter/Notion polls -->
+                        <div class="progress-container">
+                            <div class="progress-bar {% if option.votes == max_votes and max_votes > 0 %}progress-bar-winning{% endif %}"
+                                 style="width: {{ percent }}%;">
+                            </div>
+                            <!-- Inline text over progress bar -->
+                            <span class="option-text" title="{{ option.text }}">{{ option.text }}</span>
+                            <span class="vote-count">{{ percent|round|int }}% ({{ option.votes }})</span>
+                        </div>
+
+                        <!-- Action Buttons (Vote or Voted state) -->
+                        {% if poll.id in user_votes %}
+                            <div class="voted-badge" title="You voted for an option in this poll">
+                                <i class="ph-bold ph-check"></i>
+                            </div>
+                        {% else %}
+                            <a href="{{ url_for('polls.vote', option_id=option.id) }}" class="vote-btn">
+                                Vote
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <i class="ph ph-chart-polar" style="font-size: 2.5rem; margin-bottom: 1rem; color: #d1d5db;"></i>
+                <p style="margin: 0; font-size: 1.1rem; font-weight: 500; color: #111827;">No decisions yet</p>
+                <p style="margin: 0.5rem 0 0 0; font-size: 0.95rem;">Create a poll to cast a team vote.</p>
+            </div>
+        {% endif %}
+    </div>
+
+</main>
+
+<script>
+document.querySelectorAll(".vote-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        setTimeout(() => location.reload(), 300);
+    });
+});
+</script>
+
+</body>
+</html>
