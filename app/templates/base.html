@@ -30,10 +30,18 @@
 <body>
 
 <div class="navbar">
-    <a href="/expenses">Expenses</a>
-    <a href="/locations">Locations</a>
-    <a href="#">Tasks</a>
-    <a href="#">Polls</a>
+
+    <a href="{{ url_for('groups.dashboard') }}">Dashboard</a>
+
+    <a href="{{ url_for('profile.view_profile') }}">Profile</a>
+
+    <a href="{{ url_for('groups.create_group') }}">Create Group</a>
+
+    <a href="{{ url_for('groups.join_group') }}">Join Group</a>
+    <a href="{{ url_for('groups.dashboard') }}">Requests</a>
+
+    <a href="{{ url_for('auth.logout') }}">Logout</a>
+
 </div>
 
 <div class="container">

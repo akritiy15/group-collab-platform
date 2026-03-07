@@ -5,94 +5,408 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FunCollab - Create Group</title>
+   
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        /* Modern SaaS Dashboard Styling Overrides */
+        :root {
+            --bg-color: #fbfcff;
+            --text-main: #111827;
+            --text-muted: #4b5563; 
+            --border-light: #e5e7eb;
+            --accent-dark: #000000;
+            --accent-hover: #1f2937;
+            --card-surface: #ffffff;
+            --input-bg: #f9fafb;
+            --input-border: #d1d5db;
+            --input-focus-border: #9ca3af;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            line-height: 1.5;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at top center, #f3f4f6 0%, transparent 100%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Navbar Refined */
+        .navbar {
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            background: rgba(251, 252, 255, 0.75);
+            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            color: var(--accent-dark);
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #6b7280;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .nav-link:hover {
+            color: var(--text-main);
+        }
+
+        /* Centered Form Layout */
+        .form-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+            padding: 3rem 1rem;
+            position: relative;
+        }
+
+        /* Subtle Background Accent */
+        .ambient-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(230,230,235,0.4) 0%, rgba(255,255,255,0) 70%);
+            filter: blur(60px);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Modern Card Form */
+        .form-card {
+            background: var(--card-surface);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 2.5rem 2rem;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+            text-align: left;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .form-header h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 0 0 0.5rem 0;
+            letter-spacing: -0.02em;
+        }
+
+        .form-header p {
+            color: #6b7280;
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        /* Input Group Overrides */
+        .input-group {
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .input-group label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .input-group input[type="text"],
+        .input-group textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            outline: none;
+            resize: vertical;
+        }
+
+        .input-group input::placeholder,
+        .input-group textarea::placeholder {
+            color: #9ca3af;
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus {
+            border-color: var(--input-focus-border);
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(209, 213, 219, 0.3);
+        }
+
+        /* Color Picker Styling Refined */
+        .theme-selector {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 0.25rem;
+        }
+
+        .color-option {
+            cursor: pointer;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Hide the actual radio button but keep it accessible */
+        .color-option input[type="radio"] {
+            opacity: 0;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .color-swatch {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid transparent; /* default transparent border */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+        }
+        
+        .color-option:hover .color-swatch {
+            transform: scale(1.1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+        }
+
+        /* The checked state styles the span */
+        .color-option input[type="radio"]:checked + .color-swatch {
+            border-color: var(--text-main);
+            transform: scale(1.1);
+            box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px var(--text-main);
+        }
+
+        /* Modernized Theme Colors */
+        .swatch-gold { background: linear-gradient(135deg, #FACC15, #EAB308); }
+        .swatch-pink { background: linear-gradient(135deg, #F472B6, #EC4899); }
+        .swatch-cyan { background: linear-gradient(135deg, #22D3EE, #06B6D4); }
+
+        /* Button Styling Refined */
+        .btn-block {
+            width: 100%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 1rem;
+            padding: 0.75rem;
+            background-color: var(--accent-dark);
+            color: #ffffff;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            margin-top: 1rem;
+        }
+
+        .btn-block:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 10px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Alert/Flash Message Styling Refined */
+        .alert-card {
+            background: #f0fdf4; /* Light green bg */
+            border: 1px solid #bbf7d0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .alert-card h3 {
+            margin: 0 0 0.5rem 0;
+            color: #166534;
+            font-size: 1.125rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+        }
+
+        .invite-code-display {
+            font-family: 'Courier New', Courier, monospace;
+            background: #ffffff;
+            border: 1px solid #dcfce7;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            font-size: 1.75rem;
+            letter-spacing: 4px;
+            margin: 1rem auto;
+            font-weight: 700;
+            color: #15803d;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            display: inline-block;
+        }
+        
+        .alert-card p {
+            margin: 0;
+            color: #166534;
+            font-size: 0.9rem;
+        }
+
+    </style>
 </head>
 
 <body>
-  {% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    {% for category, message in messages %}
-      {% if category == "invite" %}
-        <div class="card" style="margin-bottom: 2rem; text-align:center;">
-          <h3>🎟️ Invite Code</h3>
-          <div style="
-              font-size: 2.2rem;
-              letter-spacing: 3px;
-              margin: 1rem 0;
-              font-weight: bold;
-            ">
-            {{ message.split(':')[-1].strip() }}
-          </div>
-          <p>Share this code with your friends</p>
-        </div>
-      {% endif %}
-    {% endfor %}
-  {% endif %}
-{% endwith %}
+    
     <nav class="navbar">
         <div class="container">
-            <a href="/" class="logo">✨ FunCollab</a>
+            <a href="/" class="logo">
+                <i class="ph-fill ph-circles-three-plus"></i>
+                FunCollab
+            </a>
             <div class="nav-links">
-                <a href="/groups/join" class="nav-link">Join Group instead?</a>
+                <a href="/groups/join" class="nav-link">
+                    <i class="ph ph-link"></i> Join Group Instead
+                </a>
             </div>
         </div>
     </nav>
 
-    <div class="container flex-center" style="min-height: 80vh;">
-        <div class="card"
-            style="width: 100%; max-width: 600px; border-color: var(--color-primary); box-shadow: 8px 8px 0 var(--color-primary);">
-            <h2 class="text-center" style="font-size: 2.5rem; margin-bottom: 2rem;">Squad Goals! 🚀</h2>
+    <div class="form-wrapper">
+        <div class="ambient-glow"></div>
+        
+        <!-- Flash Messages (Flask Syntax Untouched) -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              {% if category == "invite" %}
+                <div class="alert-card">
+                  <h3><i class="ph-fill ph-ticket"></i> Invite Code</h3>
+                  <div class="invite-code-display">
+                    {{ message.split(':')[-1].strip() }}
+                  </div>
+                  <p>Share this code with your team to invite them.</p>
+                </div>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
 
+        <div class="form-card">
+            <div class="form-header">
+                <h2>Create Workspace</h2>
+                <p>Set up a new space for your team.</p>
+            </div>
+
+            <!-- Form Structure Untouched -->
             <form method="POST">
                 <div class="input-group">
-                    <label for="group-name">Group Name</label>
-                    <input type="text" name="name" placeholder="e.g. The Avengers, EuroTrip 2026..." required>
+                    <label for="group-name">Workspace Name</label>
+                    <input type="text" id="group-name" name="name" placeholder="e.g. Engineering Team, Q3 Planning..." required>
                 </div>
 
                 <div class="input-group">
-                    <label for="description">What's the plan?</label>
-                    <textarea id="description" rows="3" placeholder="World domination? Weekend getaway?"></textarea>
+                    <label for="description">Workspace Purpose</label>
+                    <textarea id="description" name="description" rows="3" placeholder="Briefly describe the goal of this workspace..."></textarea>
                 </div>
 
                 <div class="input-group">
-                    <label>Pick a Vibe (Color Theme)</label>
-                    <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
-                        <label class="color-option" style="cursor: pointer;">
-                            <input type="radio" name="theme" value="gold" checked
-                                style="width: auto; margin-right: 5px;">
-                            <span
-                                style="display: inline-block; width: 30px; height: 30px; background: #FFD700; border: 2px solid black; border-radius: 50%;"></span>
+                    <label>Workspace Theme</label>
+                    <div class="theme-selector">
+                        <label class="color-option">
+                            <input type="radio" name="theme" value="gold" checked>
+                            <span class="color-swatch swatch-gold"></span>
                         </label>
-                        <label class="color-option" style="cursor: pointer;">
-                            <input type="radio" name="theme" value="pink" style="width: auto; margin-right: 5px;">
-                            <span
-                                style="display: inline-block; width: 30px; height: 30px; background: #FF69B4; border: 2px solid black; border-radius: 50%;"></span>
+                        <label class="color-option">
+                            <input type="radio" name="theme" value="pink">
+                            <span class="color-swatch swatch-pink"></span>
                         </label>
-                        <label class="color-option" style="cursor: pointer;">
-                            <input type="radio" name="theme" value="cyan" style="width: auto; margin-right: 5px;">
-                            <span
-                                style="display: inline-block; width: 30px; height: 30px; background: #00CED1; border: 2px solid black; border-radius: 50%;"></span>
+                        <label class="color-option">
+                            <input type="radio" name="theme" value="cyan">
+                            <span class="color-swatch swatch-cyan"></span>
                         </label>
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-block">Create Group & Invite Friends 🎉</button>
+                <button type="submit" class="btn-block">
+                    Create Workspace
+                    <i class="ph ph-arrow-right"></i>
+                </button>
             </form>
-        </div>
-    </div>
-    <div id="invite-modal"
-        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
-        <div class="card" style="width: 90%; max-width: 400px; text-align: center; animation: float 0.5s ease-out;">
-            <h2 style="font-size: 2rem; margin-bottom: 1rem;">Group Created! 🎉</h2>
-            <p>Share this code with your friends:</p>
-
-            <div
-                style="background: var(--color-bg); padding: 1rem; border: 2px solid black; border-radius: 8px; margin: 1.5rem 0; font-family: 'Fredoka One', cursive; font-size: 2rem; letter-spacing: 2px;">
-                XYZ-888
-            </div>
-
-            <a href="tasks.html" class="btn btn-block">Go to Dashboard 🚀</a>
         </div>
     </div>
 

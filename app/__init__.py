@@ -16,6 +16,8 @@ def create_app():
     from .polls.routes import polls_bp
     from .expenses.routes import expenses_bp
     from .location.routes import location_bp
+    from app.profile.routes import profile_bp
+    from .friends.routes import friends_bp 
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(groups_bp)
@@ -23,6 +25,8 @@ def create_app():
     app.register_blueprint(polls_bp)
     app.register_blueprint(expenses_bp)
     app.register_blueprint(location_bp)
+    app.register_blueprint(profile_bp)
+    app.register_blueprint(friends_bp)
 
     # ---- Create tables ----
     with app.app_context():

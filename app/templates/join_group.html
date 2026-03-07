@@ -4,71 +4,378 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FunCollab - Join Group</title>
+   
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        /* Modern SaaS Dashboard Styling Overrides */
+        :root {
+            --bg-color: #fbfcff;
+            --text-main: #111827;
+            --text-muted: #4b5563; 
+            --border-light: #e5e7eb;
+            --accent-dark: #000000;
+            --accent-hover: #1f2937;
+            --card-surface: #ffffff;
+            --input-bg: #f9fafb;
+            --input-border: #d1d5db;
+            --input-focus-border: #9ca3af;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            line-height: 1.5;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at top center, #f3f4f6 0%, transparent 100%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Navbar Refined */
+        .navbar {
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            background: rgba(251, 252, 255, 0.75);
+            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            color: var(--accent-dark);
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #6b7280;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .nav-link:hover {
+            color: var(--text-main);
+        }
+
+        /* Centered Layout */
+        .join-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+            padding: 4rem 1rem;
+            position: relative;
+        }
+
+        /* Subtle Background Accent */
+        .ambient-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(230,230,235,0.4) 0%, rgba(255,255,255,0) 70%);
+            filter: blur(60px);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Modern Card Form */
+        .join-card {
+            background: var(--card-surface);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 3rem 2.5rem; /* slightly roomier for short form */
+            width: 100%;
+            max-width: 440px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+            text-align: center; /* Center everything inside */
+        }
+
+        .join-header {
+            margin-bottom: 2rem;
+        }
+        
+        .join-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 64px;
+            height: 64px;
+            background: #f3f4f6;
+            color: var(--text-main);
+            border-radius: 16px;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .join-header h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 0 0 0.5rem 0;
+            letter-spacing: -0.02em;
+        }
+
+        .join-header p {
+            color: #6b7280;
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        /* Input Overrides for the specialized invite code */
+        .input-group {
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            text-align: left; /* Keep label left aligned */
+        }
+
+        .input-group label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .code-input {
+            width: 100%;
+            padding: 1rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--text-main);
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            outline: none;
+        }
+
+        .code-input::placeholder {
+            color: #d1d5db;
+            font-weight: 400;
+        }
+
+        .code-input:focus {
+            border-color: var(--input-focus-border);
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(209, 213, 219, 0.3);
+        }
+
+        /* Button Styling Refined */
+        .btn-block {
+            width: 100%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 1.05rem;
+            padding: 0.85rem;
+            background-color: var(--accent-dark);
+            color: #ffffff;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            margin-top: 0.5rem;
+        }
+
+        .btn-block:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 10px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Alert/Flash Message Styling Refined */
+        .alert-card {
+            background: #f0fdf4; /* Light green bg */
+            border: 1px solid #bbf7d0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 440px;
+        }
+
+        .alert-card h3 {
+            margin: 0 0 0.5rem 0;
+            color: #166534;
+            font-size: 1.125rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+        }
+
+        .invite-code-display {
+            font-family: 'Courier New', Courier, monospace;
+            background: #ffffff;
+            border: 1px dashed #86efac;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            font-size: 1.5rem;
+            letter-spacing: 4px;
+            margin: 1rem auto;
+            font-weight: 700;
+            color: #15803d;
+            display: inline-block;
+        }
+        
+        .alert-card p {
+            margin: 0;
+            color: #166534;
+            font-size: 0.95rem;
+        }
+
+        .error-msg {
+            background: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            max-width: 440px;
+            box-sizing: border-box;
+        }
+
+    </style>
 </head>
 
 <body>
+    
     <nav class="navbar">
         <div class="container">
-            <a href="/" class="logo">✨ FunCollab</a>
+            <a href="/" class="logo">
+                <i class="ph-fill ph-circles-three-plus"></i>
+                FunCollab
+            </a>
             <div class="nav-links">
-                <a href="/groups/create" class="nav-link">Create Group instead?</a>
+                <a href="/groups/create" class="nav-link">
+                    <i class="ph ph-plus-circle"></i> Create Group Instead
+                </a>
             </div>
         </div>
     </nav>
 
-    <div class="container flex-center" style="min-height: 80vh;">
-        <div class="card" style="width: 100%; max-width: 420px; transform: rotate(1deg);">
-
-            <!-- ✅ SHOW INVITE CODE AFTER GROUP CREATION -->
-            {% with messages = get_flashed_messages(category_filter=["invite"]) %}
-                {% if messages %}
-                    <div style="text-align:center; margin-bottom: 1.5rem;">
-                        <h3 style="font-size: 1.6rem;">🎉 Group Created!</h3>
-                        <p>Share this invite code with friends:</p>
-                        <div style="
-                            font-size: 2rem;
-                            font-weight: 800;
-                            letter-spacing: 3px;
-                            padding: 0.75rem;
-                            border: 2px dashed black;
-                            margin-top: 0.5rem;
-                        ">
-                            {{ messages[0] }}
-                        </div>
+    <div class="join-wrapper">
+        <div class="ambient-glow"></div>
+        
+        <!-- Flask Blocks Untouched -->
+        <!-- ✅ SHOW INVITE CODE AFTER GROUP CREATION -->
+        {% with messages = get_flashed_messages(category_filter=["invite"]) %}
+            {% if messages %}
+                <div class="alert-card">
+                    <h3><i class="ph-fill ph-check-circle"></i> Workspace Created</h3>
+                    <p>Share this invite code with your team:</p>
+                    <div class="invite-code-display">
+                        {{ messages[0] }}
                     </div>
-                {% endif %}
-            {% endwith %}
+                </div>
+            {% endif %}
+        {% endwith %}
 
-            <!-- ❌ ERROR MESSAGE (INVALID CODE) -->
-            {% with errors = get_flashed_messages(category_filter=["error"]) %}
-                {% if errors %}
-                    <p style="color: red; text-align: center; font-weight: 700;">
-                        {{ errors[0] }}
-                    </p>
-                {% endif %}
-            {% endwith %}
+        <!-- ❌ ERROR MESSAGE (INVALID CODE) -->
+        {% with errors = get_flashed_messages(category_filter=["error"]) %}
+            {% if errors %}
+                <div class="error-msg">
+                    <i class="ph-fill ph-warning-circle"></i> {{ errors[0] }}
+                </div>
+            {% endif %}
+        {% endwith %}
 
-            <div style="text-align: center; font-size: 3rem; margin-bottom: 1rem;">🎟️</div>
-            <h2 class="text-center" style="font-size: 2rem; margin-bottom: 2rem;">
-                Got an Invite Code?
-            </h2>
+        <div class="join-card">
+            
+            <div class="join-header">
+                <div class="join-icon">
+                    <i class="ph-fill ph-door-open"></i>
+                </div>
+                <h2>Join a Workspace</h2>
+                <p>Have an invite code? Enter it below to join your team.</p>
+            </div>
 
             <form method="POST">
                 <div class="input-group">
-                    <label>Enter Code</label>
+                    <label>Workspace Invite Code</label>
                     <input
                         type="text"
                         name="invite_code"
-                        placeholder="ABC123"
-                        style="text-align: center; letter-spacing: 2px; font-size: 1.5rem; text-transform: uppercase;"
+                        class="code-input"
+                        placeholder="ABC-123"
                         required
                     >
                 </div>
 
-                <button type="submit" class="btn btn-accent btn-block">
-                    Beam Me Up! 🛸
+                <button type="submit" class="btn-block">
+                    Join Workspace
+                    <i class="ph ph-arrow-right"></i>
                 </button>
             </form>
         </div>

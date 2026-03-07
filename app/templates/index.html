@@ -4,72 +4,402 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FunCollab - Get Started</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Base Stylesheet (Flask Template Syntax Unchanged) -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        /* Modern SaaS Dashboard Styling Overrides */
+        :root {
+            --bg-color: #fbfcff;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --border-light: #e5e7eb;
+            --accent-dark: #000000;
+            --accent-hover: #1f2937;
+            --card-surface: rgba(255, 255, 255, 0.7);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            line-height: 1.5;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at top center, #f3f4f6 0%, transparent 100%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Ambient Glow Background Element */
+        .ambient-glow {
+            position: absolute;
+            top: -10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 900px;
+            height: 900px;
+            background: radial-gradient(circle, rgba(230,230,235,0.4) 0%, rgba(255,255,255,0) 70%);
+            filter: blur(60px);
+            z-index: -1;
+            pointer-events: none;
+            animation: slowPulse 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes slowPulse {
+            0% { opacity: 0.6; transform: translateX(-50%) scale(0.95); }
+            100% { opacity: 1; transform: translateX(-50%) scale(1.05); }
+        }
+
+        /* Navbar */
+        .navbar {
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            background: rgba(251, 252, 255, 0.75);
+            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            color: var(--accent-dark);
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--text-main);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-dark);
+            color: #ffffff;
+            padding: 0.625rem 1.25rem;
+            border-radius: 8px;
+            border: 1px solid transparent;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 10px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-secondary {
+            background-color: #ffffff;
+            color: var(--text-main);
+            padding: 0.625rem 1.25rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-secondary:hover {
+            background-color: #f9fafb;
+            border-color: #d1d5db;
+        }
+
+        .btn-sm {
+            padding: 0.4rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        /* Hero text and styling */
+        .hero {
+            padding: 7rem 0 5rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            line-height: 1.1;
+            margin: 0 auto 1.5rem;
+            color: var(--text-main);
+            max-width: 800px;
+        }
+
+        /* Sleek text gradient for highlight */
+        .text-gradient {
+            background: linear-gradient(135deg, #111827 0%, #6b7280 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.125rem;
+            color: var(--text-muted);
+            max-width: 650px;
+            margin: 0 auto 2.5rem;
+            font-weight: 400;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 4rem 0 8rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.125rem;
+        }
+
+        /* Grid */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Feature Cards */
+        .card {
+            background: var(--card-surface);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(229, 231, 235, 0.8);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -2px rgba(0, 0, 0, 0.02);
+            position: relative;
+            overflow: hidden;
+            text-align: left;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(209, 213, 219, 1);
+            box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+        }
+
+        .icon-box {
+            width: 44px;
+            height: 44px;
+            background: #f3f4f6;
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            color: var(--accent-dark);
+        }
+
+        .card h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.01em;
+            margin-top: 0;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: auto;
+            border-top: 1px solid var(--border-light);
+            padding: 2.5rem 0;
+            background-color: var(--bg-color);
+            color: var(--text-muted);
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1rem; }
+            .hero { padding: 5rem 0 3rem; }
+            .features { padding: 3rem 0 5rem; }
+            .navbar .container { padding: 0 1rem; }
+        }
+    </style>
 </head>
 <body>
+    <div class="ambient-glow"></div>
+
     <nav class="navbar">
         <div class="container">
-            <a href="/" class="logo">✨ FunCollab</a>
+            <a href="/" class="logo">
+                <!-- Using a sleeker icon for the logo -->
+                <i class="ph-fill ph-circles-three-plus"></i>
+                FunCollab
+            </a>
             <div class="nav-links">
-                <a href="/login"" class="nav-link">Login</a>
-                <a href="/register" class="btn btn-sm">Sign Up</a>
+                <a href="/login" class="nav-link">Login</a>
+                <a href="/register" class="btn btn-primary btn-sm">Sign Up</a>
             </div>
         </div>
     </nav>
 
     <header class="hero">
-        <div class="container flex-center" style="flex-direction: column; padding: 4rem 1rem;">
-            <h1 class="text-center floating" style="font-size: 4rem; color: var(--color-secondary); -webkit-text-stroke: 2px black; text-shadow: 4px 4px 0px #000;">
-                Collaborate<br>Without the BORE!
+        <div class="container">
+            <h1>
+                Collaborate <br>
+                <span class="text-gradient">without the friction.</span>
             </h1>
-            <p class="text-center" style="font-size: 1.5rem; margin: 2rem 0; font-weight: 700; max-width: 600px;">
-                The most colorful, chaotic (in a good way), and fun way to manage your group projects, trips, and schemes.
+            <p>
+                The streamlined, intuitive, and efficient way to manage your group projects, trips, and schemes. Designed for teams that want to move fast.
             </p>
-            <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
-                <a href="/register" class="btn btn-secondary">Get Started Now 🚀</a>
-                <a href="/login" class="btn">Login 🔑</a>
+            <div class="hero-actions">
+                <a href="/register" class="btn btn-primary">
+                    Get Started Now
+                    <i class="ph ph-arrow-right"></i>
+                </a>
+                <a href="/login" class="btn btn-secondary">
+                    Login 
+                    <i class="ph ph-sign-in"></i>
+                </a>
             </div>
         </div>
     </header>
 
-    <main class="container" style="padding-bottom: 4rem;">
-        <h2 class="text-center" style="margin-bottom: 3rem; font-size: 2.5rem;">Why use FunCollab?</h2>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+    <main class="features container">
+        <div class="section-header">
+            <h2>Why use FunCollab?</h2>
+            <p>Everything you need for perfect coordination.</p>
+        </div>
+        
+        <div class="grid-cards">
             <!-- Feat 1 -->
-            <div class="card" style="background-color: #E0F7FA;">
-                <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
+            <div class="card">
+                <div class="icon-box">
+                    <i class="ph ph-check-square-offset"></i>
+                </div>
                 <h3>Task Tracking</h3>
-                <p>Assign tasks, track progress, and celebrate wins with confetti!</p>
+                <p>Assign tasks, track progress, and celebrate wins with complete clarity.</p>
             </div>
             <!-- Feat 2 -->
-            <div class="card" style="background-color: #F8BBD0;">
-                <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
+            <div class="card">
+                <div class="icon-box">
+                    <i class="ph ph-chart-bar"></i>
+                </div>
                 <h3>Voting Polls</h3>
-                <p>Can't decide where to eat? Let democracy decide (or just roll a dice).</p>
+                <p>Can't decide where to eat? Let democracy decide effortlessly.</p>
             </div>
             <!-- Feat 3 -->
-            <div class="card" style="background-color: #FFF9C4;">
-                <div style="font-size: 3rem; margin-bottom: 1rem;">💸</div>
+            <div class="card">
+                <div class="icon-box">
+                    <i class="ph ph-receipt"></i>
+                </div>
                 <h3>Split Expenses</h3>
-                <p>Keep track of who owes who without losing friends over $5.</p>
+                <p>Keep track of who owes who with simple math and transparent records.</p>
             </div>
              <!-- Feat 4 -->
-             <div class="card" style="background-color: #D1C4E9;">
-                <div style="font-size: 3rem; margin-bottom: 1rem;">📍</div>
+             <div class="card">
+                <div class="icon-box">
+                    <i class="ph ph-map-pin"></i>
+                </div>
                 <h3>Live Location</h3>
-                <p>Find your lost friends at the festival. Privacy optional (jk, it's safe).</p>
+                <p>Find your friends seamlessly. Privacy-first location sharing built in.</p>
             </div>
         </div>
     </main>
 
-    <footer style="background-color: var(--color-black); color: var(--color-white); padding: 2rem 0; margin-top: auto;">
-        <div class="container text-center">
-            <p style="font-weight: 700;">&copy; 2026 FunCollab Inc. Made with ❤️ and ☕.</p>
+    <footer>
+        <div class="container footer-content">
+            <p style="font-weight: 500; font-size: 0.9rem;">&copy; 2026 FunCollab Inc.</p>
+            <p style="font-size: 0.85rem;">Designed with precision.</p>
         </div>
     </footer>
 
+   <!-- Original Flask Template JS Unchanged -->
    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>

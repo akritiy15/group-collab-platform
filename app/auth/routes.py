@@ -60,7 +60,7 @@ def login():
         user = User.query.filter_by(email=email).first()
         if user and check_password_hash(user.password, password):
             login_user(user)
-            return redirect(url_for("groups.create_group"))
+            return redirect(url_for("groups.dashboard"))
 
         flash("Invalid email or password", "error")
         return redirect(url_for("auth.login"))
