@@ -2,19 +2,19 @@ from flask import Blueprint, request, jsonify, render_template
 from flask_login import login_required, current_user
 
 from app.extensions import db
-from app.models import UserLocation
+from app.models import UserLocation, User
 
 location_bp = Blueprint("location", __name__, url_prefix="/location")
 
 
-# ---------------- LOCATION PAGE ----------------
+# -------- Location Page --------
 @location_bp.route("/<int:group_id>")
 @login_required
 def location_page(group_id):
     return render_template("location.html", group_id=group_id)
 
 
-# ---------------- SAVE LOCATION ----------------
+# -------- Save Location --------
 @location_bp.route("/share-location/<int:group_id>", methods=["POST"])
 @login_required
 def share_location(group_id):
@@ -24,7 +24,6 @@ def share_location(group_id):
     lat = data["lat"]
     lng = data["lng"]
 
-    # check if already exists
     loc = UserLocation.query.filter_by(
         user_id=current_user.id,
         group_id=group_id
@@ -44,23 +43,28 @@ def share_location(group_id):
 
     db.session.commit()
 
-    return jsonify({"status": "saved"})
+    return jsonify({"status":"saved"})
 
 
-# ---------------- API GET LOCATIONS ----------------
+# -------- Get Locations --------
 @location_bp.route("/api/<int:group_id>")
 @login_required
 def api_locations(group_id):
 
     locations = UserLocation.query.filter_by(group_id=group_id).all()
 
-    location_data = []
+    data = []
 
     for loc in locations:
-        location_data.append({
-            "user_id": loc.user_id,
-            "latitude": loc.latitude,
-            "longitude": loc.longitude
+
+        user = User.query.get(loc.user_id)
+
+        data.append({
+            "user_id":loc.user_id,
+            "username":user.username,
+            "profile_picture":f"/static/profile_pics/{user.profile_picture}" if user.profile_picture else "/static/profile_pics/default.png",
+            "latitude":loc.latitude,
+            "longitude":loc.longitude
         })
 
-    return jsonify(location_data)
+    return jsonify(data)

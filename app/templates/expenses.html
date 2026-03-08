@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FunCollab - Expenses</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FunCollab - Expenses</title>
 
-    <!-- Google Fonts: Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
 
     <style>
         /* Modern SaaS Dashboard Styling Overrides */
@@ -434,128 +432,294 @@
             text-align: center;
             color: #6b7280;
         }
+
+        label:hover {
+background:#f5f5f5;
+border-radius:6px;
+}
     </style>
 </head>
 
 <body>
 
-    <nav class="navbar">
-        <div class="container">
-            <a href="/" class="logo">
-                <i class="ph-fill ph-circles-three-plus"></i>
-                FunCollab
-            </a>
-            <div class="nav-links">
-                <div class="group-badge" title="Current Workspace">
-                    <i class="ph ph-users"></i>
-                    {{ group.name }}
-                </div>
-                <a href="{{ url_for('auth.logout') }}" class="nav-link" style="margin-left: 0.5rem;">
-                    Logout
-                </a>
-            </div>
-        </div>
-    </nav>
+<nav class="navbar">
+<div class="container">
+<a href="/" class="logo">
+<i class="ph-fill ph-circles-three-plus"></i>
+FunCollab
+</a>
 
-    <main class="container workspace-main">
+<div class="nav-links">
+<div class="group-badge">
+<i class="ph ph-users"></i>
+{{ group.name }}
+</div>
 
-        <!-- Feature Navigation -->
-        <div class="feature-nav nav-stretch">
-            <a href="{{ url_for('tasks.view_tasks', group_id=group.id) }}" class="feature-link">
-                <i class="ph ph-check-circle"></i> Tasks
-            </a>
-            <a href="{{ url_for('polls.view_polls', group_id=group.id) }}" class="feature-link">
-                <i class="ph ph-chart-bar"></i> Polls
-            </a>
-            <a class="feature-link active">
-                <i class="ph-fill ph-receipt"></i> Money
-            </a>
-            <a href="{{ url_for('location.location_page', group_id=group.id) }}" class="feature-link">
-                <i class="ph ph-map-pin"></i> Map
-            </a>
-        </div>
+<a href="{{ url_for('auth.logout') }}" class="nav-link">Logout</a>
+</div>
+</div>
+</nav>
 
-        <!-- BALANCE HEADER -->
-        {% set net = balances.values() | sum %}
-        <div class="balance-card">
-            <h2>
-                You are
-                {% if net >= 0 %}
-                owed <span class="balance-amount positive">₹{{ "%.2f"|format(net) }}</span>
-                {% else %}
-                owing <span class="balance-amount negative">₹{{ "%.2f"|format(-net) }}</span>
-                {% endif %}
-            </h2>
-            <p>Keep your team's balances settled and stress-free.</p>
-        </div>
 
-        <!-- ADD EXPENSE (Sidebar on desktop) -->
-        <div>
-            <div class="expense-form-card">
-                <h3><i class="ph ph-plus-circle"></i> Record Expense</h3>
+<main class="container workspace-main">
 
-                <form method="POST">
-                    <div class="input-group">
-                        <input name="title" placeholder="What was this for? (e.g. Dinner)" required>
-                    </div>
+<!-- NAVIGATION -->
+<div class="feature-nav nav-stretch">
 
-                    <div class="input-group amount-input-wrapper">
-                        <input name="amount" type="number" step="0.01" placeholder="0.00" required>
-                    </div>
+<a href="{{ url_for('tasks.view_tasks', group_id=group.id) }}" class="feature-link">
+<i class="ph ph-check-circle"></i> Tasks
+</a>
 
-                    <div class="input-group">
-                        <input name="paid_by" placeholder="Who paid? (e.g. You)" required>
-                    </div>
+<a href="{{ url_for('polls.view_polls', group_id=group.id) }}" class="feature-link">
+<i class="ph ph-chart-bar"></i> Polls
+</a>
 
-                    <div class="input-group">
-                        <input name="members" placeholder="Split between (comma separated)" required>
-                    </div>
+<a class="feature-link active">
+<i class="ph-fill ph-receipt"></i> Money
+</a>
 
-                    <button type="submit" class="btn-submit">
-                        Save Expense
-                    </button>
-                </form>
-            </div>
-        </div>
+<a href="{{ url_for('location.location_page', group_id=group.id) }}" class="feature-link">
+<i class="ph ph-map-pin"></i> Map
+</a>
 
-        <!-- RECENT ACTIVITY (Main Feed) -->
-        <div>
-            <div class="activity-feed">
-                <h3 class="feed-header"><i class="ph ph-clock-counter-clockwise"></i> Recent Activity</h3>
+</div>
 
-                {% if expenses %}
-                {% for e in expenses %}
-                <div class="expense-item">
-                    <div class="expense-details">
-                        <div class="avatar" title="{{ e.paid_by }}">
-                            {{ e.paid_by[:2]|upper }}
-                        </div>
-                        <div class="expense-text">
-                            <h4>{{ e.title }}</h4>
-                            <p class="expense-meta">
-                                <span class="payer-name">{{ e.paid_by }}</span> paid
-                            </p>
-                        </div>
-                    </div>
 
-                    <div class="expense-amount">
-                        ₹{{ "%.2f"|format(e.amount) }}
-                    </div>
-                </div>
-                {% endfor %}
-                {% else %}
-                <div class="empty-state">
-                    <i class="ph ph-wallet" style="font-size: 2.5rem; margin-bottom: 1rem; color: #d1d5db;"></i>
-                    <p style="margin: 0; font-size: 1.1rem; font-weight: 500; color: #111827;">No expenses tracked yet
-                    </p>
-                    <p style="margin: 0.5rem 0 0 0; font-size: 0.95rem;">Add a receipt to start splitting costs.</p>
-                </div>
-                {% endif %}
-            </div>
-        </div>
+<!-- BALANCE SUMMARY -->
 
-    </main>
+<div class="balance-card">
+
+<div style="
+display:flex;
+justify-content:space-between;
+width:100%;
+max-width:420px;
+align-items:center;
+">
+
+<div style="text-align:left">
+<h2 style="margin:0">₹{{ "%.2f"|format(owed_by_you) }}</h2>
+<p style="margin:0;color:var(--text-muted);font-size:0.9rem">
+Owed by you
+</p>
+</div>
+
+<div style="width:1px;height:40px;background:#e5e7eb"></div>
+
+<div style="text-align:right">
+<h2 style="margin:0;color:var(--positive-color)">
+₹{{ "%.2f"|format(owed_to_you) }}
+</h2>
+<p style="margin:0;color:var(--text-muted);font-size:0.9rem">
+Owed to you
+</p>
+</div>
+
+</div>
+
+</div>
+
+<!-- WHO OWES WHO -->
+
+<div class="activity-feed">
+
+<h3 class="feed-header">
+<i class="ph ph-users-three"></i>
+Who owes who
+</h3>
+
+{% for user_id, amount in balances.items() %}
+
+{% if amount < 0 %}
+
+<div class="expense-item">
+
+<div class="expense-details">
+
+<div class="avatar">
+{{ user_map[user_id][0]|upper }}
+</div>
+
+<div class="expense-text">
+<h4>{{ user_map[user_id] }}</h4>
+<p class="expense-meta">
+owes you
+</p>
+</div>
+
+</div>
+
+<div class="expense-amount" style="color:var(--positive-color)">
+₹{{ "%.2f"|format(-amount) }}
+</div>
+
+</div>
+
+{% endif %}
+
+{% endfor %}
+
+</div>
+
+
+<!-- ADD EXPENSE -->
+<div>
+
+<div class="expense-form-card">
+
+<h3><i class="ph ph-plus-circle"></i> Record Expense</h3>
+
+<form method="POST">
+
+<div class="input-group">
+<input name="title" placeholder="What was this for? (e.g. Dinner)" required>
+</div>
+
+
+<div class="input-group amount-input-wrapper">
+<input name="amount" type="number" step="0.01" placeholder="0.00" required>
+</div>
+
+
+<!-- WHO PAID -->
+
+<div class="input-group">
+
+<label style="font-size:0.85rem;font-weight:600;color:#4b5563">
+Who paid?
+</label>
+
+<select name="paid_by"
+style="width:100%;padding:0.75rem;border-radius:8px;border:1px solid var(--input-border);background:var(--input-bg)"
+required>
+
+{% for m in members %}
+<option value="{{ m.user_id }}">
+{{ user_map[m.user_id] }}
+</option>
+{% endfor %}
+
+</select>
+
+</div>
+
+
+
+<!-- SPLIT BETWEEN -->
+
+<div class="input-group">
+
+<label style="font-size:0.85rem;font-weight:600;color:#4b5563">
+Split between
+</label>
+
+<div style="
+margin-top:0.5rem;
+border:1px solid var(--border-light);
+border-radius:8px;
+padding:10px;
+background:#fff;
+">
+
+{% for m in members %}
+
+<div style="
+display:flex;
+align-items:center;
+gap:10px;
+margin-bottom:6px;
+">
+
+<input
+type="checkbox"
+name="participants"
+value="{{ m.user_id }}"
+checked
+style="width:16px;height:16px;"
+>
+
+<span style="font-size:0.9rem;">
+{{ user_map[m.user_id] }}
+</span>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+</div>
+
+<button type="submit" class="btn-submit">
+Save Expense
+</button>
+
+</form>
+
+</div>
+</div>
+
+
+<!-- RECENT ACTIVITY -->
+
+<div>
+
+<div class="activity-feed">
+
+<h3 class="feed-header">
+<i class="ph ph-clock-counter-clockwise"></i>
+Recent Activity
+</h3>
+
+{% if expenses %}
+
+{% for e in expenses %}
+
+<div class="expense-item">
+
+<div class="expense-details">
+
+<div class="expense-text">
+<h4>{{ e.title }}</h4>
+<p class="expense-meta">
+{{ user_map[e.paid_by] }} paid ₹{{ "%.2f"|format(e.amount) }} 
+</p>
+</div>
+
+</div>
+
+<div class="expense-amount">
+₹{{ "%.2f"|format(e.amount) }}
+</div>
+
+</div>
+
+{% endfor %}
+
+{% else %}
+
+<div class="empty-state">
+
+<i class="ph ph-wallet"
+style="font-size:2.5rem;margin-bottom:1rem;color:#d1d5db"></i>
+
+<p style="margin:0;font-size:1.1rem;font-weight:500;color:#111827">
+No expenses tracked yet
+</p>
+
+<p style="margin:0.5rem 0 0 0;font-size:0.95rem">
+Add a receipt to start splitting costs.
+</p>
+
+</div>
+
+{% endif %}
+
+</div>
+</div>
+
+
+</main>
 
 </body>
-
 </html>
