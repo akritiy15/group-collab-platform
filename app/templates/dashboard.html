@@ -248,15 +248,17 @@ Search
     {% for group in groups %}
 
     <div class="group-card">
-        <div class="group-header">
-            <h3>{{ group.name }}</h3>
+        <a href="{{ url_for('tasks.view_tasks', group_id=group.id) }}" style="text-decoration: none; color: inherit;">
+            <div class="group-header" style="cursor: pointer;">
+                <h3>{{ group.name }}</h3>
 
-            {% if group.invite_code %}
-            <p class="code">
-                <i class="ph ph-key"></i> {{ group.invite_code }}
-            </p>
-            {% endif %}
-        </div>
+                {% if group.invite_code %}
+                <p class="code">
+                    <i class="ph ph-key"></i> {{ group.invite_code }}
+                </p>
+                {% endif %}
+            </div>
+        </a>
 
         <div class="actions">
 
