@@ -1,39 +1,634 @@
-<h2>{{ group.name }}</h2>
+<!DOCTYPE html>
+<html lang="en">
 
-<p>Invite Code: {{ group.invite_code }}</p>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FunCollab - {{ group.name }}</title>
 
-<h3>Tasks</h3>
-<a href="{{ url_for('tasks.create_task', group_id=group.id) }}">
-  Create Task
-</a>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<ul>
-  {% for task in group.tasks %}
-    <li>
-      {{ task.title }} —
-      {{ task.status }}
-    </li>
-  {% else %}
-    <li>No tasks yet</li>
-  {% endfor %}
-</ul>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
-<hr>
+    <style>
+        /* Modern SaaS Dashboard Styling Overrides */
+        :root {
+            --bg-color: #fbfcff;
+            --text-main: #111827;
+            --text-muted: #4b5563;
+            --border-light: #e5e7eb;
+            --accent-dark: #000000;
+            --accent-hover: #1f2937;
+            --card-surface: #ffffff;
+            --input-bg: #f9fafb;
+            --input-border: #d1d5db;
+            --input-focus-border: #9ca3af;
+        }
 
-<h3>Polls</h3>
-<a href="{{ url_for('polls.create_poll', group_id=group.id) }}">
-  Create Poll
-</a>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            line-height: 1.5;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at top center, #f3f4f6 0%, transparent 100%);
+        }
 
-<ul>
-  {% for poll in group.polls %}
-    <li>
-      {{ poll.question }}
-    </li>
-  {% else %}
-    <li>No polls yet</li>
-  {% endfor %}
-</ul>
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
 
-<br>
-<a href="{{ url_for('auth.dashboard') }}">Back to Dashboard</a>
+        /* Navbar Refined */
+        .navbar {
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            background: rgba(251, 252, 255, 0.75);
+            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            color: var(--accent-dark);
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        /* Modern Group Info Badges in Nav */
+        .group-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #4b5563;
+            background: #f3f4f6;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .group-badge i {
+            font-size: 1rem;
+        }
+
+        .group-badge.code-badge {
+            background: #fef3c7;
+            color: #92400e;
+            border-color: #f59e0b;
+        }
+
+        /* Main Content */
+        .workspace-main {
+            padding: 2rem 0;
+            flex: 1;
+        }
+
+        /* Feature Navigation */
+        .feature-nav {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .feature-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #6b7280;
+            text-decoration: none;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .feature-link:hover {
+            background: #f3f4f6;
+            color: #374151;
+            transform: translateY(-1px);
+        }
+
+        .feature-link.active {
+            background: var(--accent-dark);
+            color: #ffffff;
+            border-color: var(--accent-dark);
+        }
+
+        /* Group Profile Section */
+        .group-profile {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .group-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ffffff;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .group-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .group-avatar-upload {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: #000000;
+            color: #ffffff;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .group-avatar:hover .group-avatar-upload {
+            opacity: 1;
+        }
+
+        .group-info h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .group-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        .group-actions {
+            display: flex;
+            gap: 1rem;
+            flex-direction: column;
+        }
+
+        .btn-primary, .btn-secondary, .btn-danger {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-dark);
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: #ffffff;
+            color: var(--text-main);
+            border-color: #e5e7eb;
+        }
+
+        .btn-secondary:hover {
+            background-color: #f9fafb;
+            transform: translateY(-1px);
+        }
+
+        .btn-danger {
+            background-color: #dc2626;
+            color: #ffffff;
+        }
+
+        .btn-danger:hover {
+            background-color: #b91c1c;
+            transform: translateY(-1px);
+        }
+
+        /* Members Section */
+        .members-section {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .member-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .member-card:hover {
+            background: #f3f4f6;
+        }
+
+        .member-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #6b7280;
+            overflow: hidden;
+        }
+
+        .member-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .member-info h4 {
+            margin: 0 0 0.25rem 0;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .member-role {
+            font-size: 0.8rem;
+            color: #6b7280;
+            background: #e5e7eb;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .member-actions {
+            margin-left: auto;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+            border-radius: 6px;
+        }
+
+        /* Add Members Section */
+        .add-members-section {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        .friends-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .friend-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+        }
+
+        .friend-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .friend-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #6b7280;
+            overflow: hidden;
+        }
+
+        .friend-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .group-profile {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .group-actions {
+                flex-direction: row;
+                justify-content: center;
+            }
+
+            .members-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .friends-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- NAV -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="{{ url_for('groups.dashboard') }}" class="logo">
+                <i class="ph-fill ph-circles-three-plus"></i>
+                FunCollab
+            </a>
+
+            <div class="nav-links">
+                <!-- Restyled Information Badges -->
+                <div class="group-badge" title="Current Workspace">
+                    <i class="ph ph-users"></i>
+                    {{ group.name }}
+                </div>
+
+                <div class="group-badge code-badge" title="Workspace Join Code">
+                    <i class="ph ph-key"></i>
+                    {{ group.invite_code }}
+                </div>
+
+                <a href="{{ url_for('auth.logout') }}" class="nav-link" style="margin-left: 0.5rem;">
+                    Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container workspace-main">
+        <!-- Feature Navigation -->
+        <div class="feature-nav">
+            <a href="{{ url_for('tasks.view_tasks', group_id=group.id) }}" class="feature-link">
+                <i class="ph ph-check-circle"></i> Tasks
+            </a>
+            <a href="{{ url_for('polls.view_polls', group_id=group.id) }}" class="feature-link">
+                <i class="ph ph-chart-bar"></i> Polls
+            </a>
+            <a href="{{ url_for('expenses.expenses_home', group_id=group.id) }}" class="feature-link">
+                <i class="ph ph-receipt"></i> Expenses
+            </a>
+            <a href="{{ url_for('location.location_page', group_id=group.id) }}" class="feature-link">
+                <i class="ph ph-map-pin"></i> Map
+            </a>
+            <a href="{{ url_for('groups.group_detail', group_id=group.id) }}" class="feature-link active">
+                <i class="ph ph-info"></i> Group Details
+            </a>
+        </div>
+
+        <!-- Group Profile Section -->
+        <div class="group-profile">
+            <div class="group-avatar">
+                {% if group.profile_picture and group.profile_picture != 'default_group.png' %}
+                    <img src="{{ url_for('static', filename='group_pics/' + group.profile_picture) }}" alt="{{ group.name }}">
+                {% else %}
+                    {{ group.name[0].upper() }}
+                {% endif %}
+                {% if is_admin %}
+                <label for="profile-picture-input" class="group-avatar-upload" title="Update group picture">
+                    <i class="ph ph-camera"></i>
+                </label>
+                {% endif %}
+            </div>
+
+            {% if is_admin %}
+            <form id="profile-picture-form" method="POST" action="{{ url_for('groups.update_group_picture', group_id=group.id) }}" enctype="multipart/form-data" style="display: none;">
+                <input type="file" id="profile-picture-input" name="profile_picture" accept="image/*" onchange="document.getElementById('profile-picture-form').submit()">
+            </form>
+            {% endif %}
+
+            <div class="group-info">
+                <h1>{{ group.name }}</h1>
+                <div class="group-meta">
+                    <div class="meta-item">
+                        <i class="ph ph-users"></i>
+                        {{ members|length }} members
+                    </div>
+                    <div class="meta-item">
+                        <i class="ph ph-key"></i>
+                        {{ group.invite_code }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="group-actions">
+                <a href="{{ url_for('groups.dashboard') }}" class="btn-secondary">
+                    <i class="ph ph-arrow-left"></i> Back to Dashboard
+                </a>
+                {% if current_user.id != group.created_by %}
+                <form method="POST" action="{{ url_for('groups.remove_member', group_id=group.id, user_id=current_user.id) }}" style="display: inline;">
+                    <button type="submit" class="btn-danger" onclick="return confirm('Are you sure you want to leave this group?')">
+                        <i class="ph ph-sign-out"></i> Leave Group
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Members Section -->
+        <div class="members-section">
+            <div class="section-header">
+                <h2 class="section-title">Group Members</h2>
+                {% if is_admin and available_friends %}
+                <button class="btn-primary btn-small" onclick="document.getElementById('add-members-section').scrollIntoView({behavior: 'smooth'})">
+                    <i class="ph ph-plus"></i> Add Members
+                </button>
+                {% endif %}
+            </div>
+
+            <div class="members-grid">
+                {% for member in members %}
+                <div class="member-card">
+                    <div class="member-avatar">
+                        {% if member.profile_picture and member.profile_picture != 'default.png' %}
+                            <img src="{{ url_for('static', filename='profile_pics/' + member.profile_picture) }}" alt="{{ member.username }}">
+                        {% else %}
+                            {{ member.username[0].upper() }}
+                        {% endif %}
+                    </div>
+
+                    <div class="member-info">
+                        <h4>{{ member.username }}</h4>
+                        {% if member.id == group.created_by %}
+                        <span class="member-role">Admin</span>
+                        {% else %}
+                        <span class="member-role">Member</span>
+                        {% endif %}
+                    </div>
+
+                    {% if is_admin and member.id != current_user.id %}
+                    <div class="member-actions">
+                        <form method="POST" action="{{ url_for('groups.remove_member', group_id=group.id, user_id=member.id) }}" style="display: inline;">
+                            <button type="submit" class="btn-danger btn-small" onclick="return confirm('Remove {{ member.username }} from the group?')">
+                                <i class="ph ph-trash"></i> Remove
+                            </button>
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Add Members Section -->
+        {% if available_friends %}
+        <div id="add-members-section" class="add-members-section">
+            <div class="section-header">
+                <h2 class="section-title">Add Friends to Group</h2>
+            </div>
+
+            <div class="friends-list">
+                {% for friend in available_friends %}
+                <div class="friend-card">
+                    <div class="friend-info">
+                        <div class="friend-avatar">
+                            {% if friend.profile_picture and friend.profile_picture != 'default.png' %}
+                                <img src="{{ url_for('static', filename='profile_pics/' + friend.profile_picture) }}" alt="{{ friend.username }}">
+                            {% else %}
+                                {{ friend.username[0].upper() }}
+                            {% endif %}
+                        </div>
+                        <span>{{ friend.username }}</span>
+                    </div>
+
+                    <form method="POST" action="{{ url_for('groups.add_member', group_id=group.id) }}" style="display: inline;">
+                        <input type="hidden" name="user_id" value="{{ friend.id }}">
+                        <button type="submit" class="btn-primary btn-small">
+                            <i class="ph ph-plus"></i> Add
+                        </button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </main>
+
+    <!-- Original Flask Template JS Unchanged -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

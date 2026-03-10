@@ -223,6 +223,25 @@
     </button>
 </div>
 
+<!-- Feature Navigation -->
+<div class="feature-nav" style="margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #e5e7eb;">
+    <a href="{{ url_for('tasks.view_tasks', group_id=group_id) }}" class="feature-link" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; font-size: 0.95rem; font-weight: 500; color: #6b7280; text-decoration: none; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; transition: all 0.2s ease;">
+        <i class="ph ph-check-circle"></i> Tasks
+    </a>
+    <a href="{{ url_for('polls.view_polls', group_id=group_id) }}" class="feature-link" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; font-size: 0.95rem; font-weight: 500; color: #6b7280; text-decoration: none; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; transition: all 0.2s ease;">
+        <i class="ph ph-chart-bar"></i> Polls
+    </a>
+    <a href="{{ url_for('expenses.expenses_home', group_id=group_id) }}" class="feature-link" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; font-size: 0.95rem; font-weight: 500; color: #6b7280; text-decoration: none; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; transition: all 0.2s ease;">
+        <i class="ph ph-receipt"></i> Money
+    </a>
+    <a class="feature-link active" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; font-size: 0.95rem; font-weight: 500; color: #ffffff; text-decoration: none; background: #000000; border: 1px solid #000000; border-radius: 8px;">
+        <i class="ph-fill ph-map-pin"></i> Map
+    </a>
+    <a href="{{ url_for('groups.group_detail', group_id=group_id) }}" class="feature-link" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; font-size: 0.95rem; font-weight: 500; color: #6b7280; text-decoration: none; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; transition: all 0.2s ease;">
+        <i class="ph ph-info"></i> Group Details
+    </a>
+</div>
+
 <div class="map-container">
     <div id="map"></div>
 </div>
