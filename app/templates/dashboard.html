@@ -133,6 +133,51 @@
     color: #000;
 }
 
+/* Member Avatars */
+.members-section {
+    margin: 1rem 0;
+    padding: 1rem 0;
+    border-top: 1px solid #f3f4f6;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.members-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
+}
+
+.members-list {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.member-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #e5e7eb;
+    overflow: hidden;
+    border: 1px solid #d1d5db;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #6b7280;
+}
+
+.member-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 /* Empty State */
 .empty-state {
     grid-column: 1 / -1;
@@ -248,15 +293,35 @@ Search
     {% for group in groups %}
 
     <div class="group-card">
-        <div class="group-header">
-            <h3>{{ group.name }}</h3>
+        <a href="{{ url_for('tasks.view_tasks', group_id=group.id) }}" style="text-decoration: none; color: inherit;">
+            <div class="group-header" style="cursor: pointer;">
+                <h3>{{ group.name }}</h3>
 
-            {% if group.invite_code %}
-            <p class="code">
-                <i class="ph ph-key"></i> {{ group.invite_code }}
-            </p>
-            {% endif %}
+                {% if group.invite_code %}
+                <p class="code">
+                    <i class="ph ph-key"></i> {{ group.invite_code }}
+                </p>
+                {% endif %}
+            </div>
+        </a>
+
+        <!-- Members Section -->
+        {% if group_members[group.id] %}
+        <div class="members-section">
+            <div class="members-title">Members ({{ group_members[group.id]|length }})</div>
+            <div class="members-list">
+                {% for member in group_members[group.id] %}
+                <div class="member-avatar" title="{{ member.username }}">
+                    {% if member.profile_picture and member.profile_picture != 'default.png' %}
+                        <img src="{{ url_for('static', filename='profile_pics/' + member.profile_picture) }}" alt="{{ member.username }}">
+                    {% else %}
+                        {{ member.username[0].upper() }}
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
         </div>
+        {% endif %}
 
         <div class="actions">
 
@@ -274,6 +339,10 @@ Search
 
             <a href="{{ url_for('location.location_page', group_id=group.id) }}">
                 <i class="ph-fill ph-map-pin"></i> Map
+            </a>
+
+            <a href="{{ url_for('groups.group_detail', group_id=group.id) }}">
+                <i class="ph-fill ph-info"></i> Details
             </a>
 
         </div>

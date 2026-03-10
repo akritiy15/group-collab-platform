@@ -56,6 +56,7 @@ class Group(db.Model):
     name = db.Column(db.String(100), nullable=False)
     invite_code = db.Column(db.String(10), unique=True, nullable=False)
     created_by = db.Column(db.Integer, db.ForeignKey("user.id"))
+    profile_picture = db.Column(db.String(200), default="default_group.png")
     tasks = db.relationship("Task", backref="group", lazy=True)
     polls = db.relationship("Poll", backref="group", lazy=True)
 

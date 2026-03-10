@@ -560,7 +560,7 @@
     <!-- NAV -->
     <nav class="navbar">
         <div class="container">
-            <a href="/" class="logo">
+            <a href="{{ url_for('groups.dashboard') }}" class="logo">
                 <i class="ph-fill ph-circles-three-plus"></i>
                 FunCollab
             </a>
@@ -599,6 +599,9 @@
             </a>
             <a href="{{ url_for('location.location_page', group_id=group.id) }}" class="feature-link">
                 <i class="ph ph-map-pin"></i> Map
+            </a>
+            <a href="{{ url_for('groups.group_detail', group_id=group.id) }}" class="feature-link">
+                <i class="ph ph-info"></i> Group Details
             </a>
         </div>
 
