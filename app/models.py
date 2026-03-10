@@ -64,13 +64,27 @@ class GroupMember(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     group_id = db.Column(db.Integer, db.ForeignKey("group.id"))
+    user = db.relationship("User", backref="group_memberships")
 
 # ---------- TASK ----------
+class TaskAssignee(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    task_id = db.Column(db.Integer, db.ForeignKey('task.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200))
     status = db.Column(db.String(50), default="pending")
     group_id = db.Column(db.Integer, db.ForeignKey("group.id"))
+
+    # track creator and assignees
+    created_by = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    # assigned_to removed, using many-to-many
+
+    # relationships for convenience
+    creator = db.relationship("User", foreign_keys=[created_by], backref="created_tasks")
+    assignees = db.relationship('User', secondary='task_assignee', backref='assigned_tasks')
 
 
 # ---------- POLLS ----------
@@ -78,8 +92,10 @@ class Poll(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     question = db.Column(db.String(300))
     group_id = db.Column(db.Integer, db.ForeignKey("group.id"))
+    created_by = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
 
     options = db.relationship("PollOption", backref="poll", lazy=True)
+    creator = db.relationship("User", foreign_keys=[created_by], backref="created_polls")
 
 class PollOption(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -49,7 +49,8 @@ def create_poll(group_id):
 
         poll = Poll(
             question=question,
-            group_id=group.id
+            group_id=group.id,
+            created_by=current_user.id
         )
         db.session.add(poll)
         db.session.commit()
@@ -103,3 +104,29 @@ def vote(option_id):
     return redirect(
         url_for("polls.view_polls", group_id=poll.group_id)
     )
+
+
+# ---------------- DELETE POLL ----------------
+@polls_bp.route("/delete/<int:poll_id>", methods=["POST"])
+@login_required
+def delete_poll(poll_id):
+    poll = Poll.query.get_or_404(poll_id)
+    group_id = poll.group_id
+    
+    # Ensure user is the creator of the poll (or it's a legacy poll with no creator)
+    if poll.created_by is not None and poll.created_by != current_user.id:
+        flash("You can only delete your own polls 🚫", "error")
+        return redirect(url_for("polls.view_polls", group_id=group_id))
+    
+    # Delete all votes for this poll
+    PollVote.query.filter_by(poll_id=poll.id).delete()
+    
+    # Delete all options for this poll
+    PollOption.query.filter_by(poll_id=poll.id).delete()
+    
+    # Delete the poll
+    db.session.delete(poll)
+    db.session.commit()
+    
+    flash("Poll deleted successfully 🗑️", "success")
+    return redirect(url_for("polls.view_polls", group_id=group_id))

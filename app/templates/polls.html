@@ -238,6 +238,36 @@
             line-height: 1.4;
         }
 
+        .poll-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .poll-header-row h3 {
+            margin: 0;
+            flex: 1;
+        }
+
+        .btn-delete-poll {
+            background: none;
+            border: none;
+            color: #dc2626;
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .btn-delete-poll:hover {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
         /* Poll Option Rows */
         .poll-option {
             display: flex;
@@ -410,7 +440,15 @@
         {% if polls %}
             {% for poll in polls %}
             <div class="poll-card">
-                <h3>{{ poll.question }}</h3>
+                <div class="poll-header-row">
+                    <h3>{{ poll.question }}</h3>
+                    <form method="POST" action="{{ url_for('polls.delete_poll', poll_id=poll.id) }}" style="display: inline;">
+                        <button type="submit" class="btn-delete-poll" title="Delete Poll" onclick="return confirm('Are you sure you want to delete this poll?')">
+                            <i class="ph ph-trash"></i>
+                        </button>
+                    </form>
+                </div>
+                <div style="font-size: 0.75rem; color: #6b7280; margin-bottom: 1rem;">Created by: <strong>{% if poll.creator %}{{ poll.creator.username }}{% else %}Unknown{% endif %}</strong></div>
 
                 {% set total_votes = poll.options | sum(attribute='votes') %}
                 {% set max_votes = poll.options | map(attribute='votes') | max %}
