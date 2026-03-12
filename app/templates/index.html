@@ -1,30 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FunCollab - Get Started</title>
-    
+    <title>EasyCollab - Get Star</title>
+
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+
     <!-- Base Stylesheet (Flask Template Syntax Unchanged) -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    
+
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
     <style>
         /* Modern SaaS Dashboard Styling Overrides */
         :root {
-            --bg-color: #fbfcff;
-            --text-main: #111827;
-            --text-muted: #6b7280;
-            --border-light: #e5e7eb;
-            --accent-dark: #000000;
-            --accent-hover: #1f2937;
+            --bg-color: #F6F8F5;
+            --text-main: #1F2937;
+            --text-muted: #6B7280;
+            --border-light: #D8E2D1;
+            --accent-dark: #9CAF88;
+            --accent-hover: #8A9D76;
             --card-surface: rgba(255, 255, 255, 0.7);
         }
 
@@ -38,7 +39,7 @@
             min-height: 100vh;
             line-height: 1.5;
             overflow-x: hidden;
-            background-image: radial-gradient(circle at top center, #f3f4f6 0%, transparent 100%);
+            background-image: radial-gradient(circle at top center, rgba(156, 175, 136, 0.3) 0%, transparent 100%);
         }
 
         .container {
@@ -56,7 +57,7 @@
             transform: translateX(-50%);
             width: 900px;
             height: 900px;
-            background: radial-gradient(circle, rgba(230,230,235,0.4) 0%, rgba(255,255,255,0) 70%);
+            background: radial-gradient(circle, rgba(156, 175, 136, 0.2) 0%, rgba(255, 255, 255, 0) 70%);
             filter: blur(60px);
             z-index: -1;
             pointer-events: none;
@@ -64,8 +65,15 @@
         }
 
         @keyframes slowPulse {
-            0% { opacity: 0.6; transform: translateX(-50%) scale(0.95); }
-            100% { opacity: 1; transform: translateX(-50%) scale(1.05); }
+            0% {
+                opacity: 0.6;
+                transform: translateX(-50%) scale(0.95);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateX(-50%) scale(1.05);
+            }
         }
 
         /* Navbar */
@@ -76,8 +84,8 @@
             z-index: 50;
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            background: rgba(251, 252, 255, 0.75);
-            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+            background: rgba(246, 248, 245, 0.75);
+            border-bottom: 1px solid rgba(216, 226, 209, 0.5);
         }
 
         .navbar .container {
@@ -158,8 +166,8 @@
         }
 
         .btn-secondary:hover {
-            background-color: #f9fafb;
-            border-color: #d1d5db;
+            background-color: #F6F8F5;
+            border-color: #D8E2D1;
         }
 
         .btn-sm {
@@ -186,8 +194,9 @@
 
         /* Sleek text gradient for highlight */
         .text-gradient {
-            background: linear-gradient(135deg, #111827 0%, #6b7280 100%);
+            background: linear-gradient(135deg, #9CAF88 0%, #D8E2D1 100%);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
@@ -240,7 +249,7 @@
             background: var(--card-surface);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(229, 231, 235, 0.8);
+            border: 1px solid rgba(216, 226, 209, 0.8);
             border-radius: 16px;
             padding: 2rem;
             transition: all 0.3s ease;
@@ -252,14 +261,14 @@
 
         .card:hover {
             transform: translateY(-4px);
-            border-color: rgba(209, 213, 219, 1);
+            border-color: rgba(156, 175, 136, 1);
             box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
         }
 
         .icon-box {
             width: 44px;
             height: 44px;
-            background: #f3f4f6;
+            background: #F6F8F5;
             border: 1px solid var(--border-light);
             border-radius: 12px;
             display: flex;
@@ -303,14 +312,29 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            .hero h1 { font-size: 2.5rem; }
-            .hero p { font-size: 1rem; }
-            .hero { padding: 5rem 0 3rem; }
-            .features { padding: 3rem 0 5rem; }
-            .navbar .container { padding: 0 1rem; }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .hero {
+                padding: 5rem 0 3rem;
+            }
+
+            .features {
+                padding: 3rem 0 5rem;
+            }
+
+            .navbar .container {
+                padding: 0 1rem;
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="ambient-glow"></div>
 
@@ -319,7 +343,7 @@
             <a href="/" class="logo">
                 <!-- Using a sleeker icon for the logo -->
                 <i class="ph-fill ph-circles-three-plus"></i>
-                FunCollab
+                EasyCollab
             </a>
             <div class="nav-links">
                 <a href="/login" class="nav-link">Login</a>
@@ -335,7 +359,8 @@
                 <span class="text-gradient">without the friction.</span>
             </h1>
             <p>
-                The streamlined, intuitive, and efficient way to manage your group projects, trips, and schemes. Designed for teams that want to move fast.
+                The streamlined, intuitive, and efficient way to manage your group projects, trips, and schemes.
+                Designed for teams that want to move fast.
             </p>
             <div class="hero-actions">
                 <a href="/register" class="btn btn-primary">
@@ -343,7 +368,7 @@
                     <i class="ph ph-arrow-right"></i>
                 </a>
                 <a href="/login" class="btn btn-secondary">
-                    Login 
+                    Login
                     <i class="ph ph-sign-in"></i>
                 </a>
             </div>
@@ -352,10 +377,10 @@
 
     <main class="features container">
         <div class="section-header">
-            <h2>Why use FunCollab?</h2>
+            <h2>Why use EasyCollab?</h2>
             <p>Everything you need for perfect coordination.</p>
         </div>
-        
+
         <div class="grid-cards">
             <!-- Feat 1 -->
             <div class="card">
@@ -381,8 +406,8 @@
                 <h3>Split Expenses</h3>
                 <p>Keep track of who owes who with simple math and transparent records.</p>
             </div>
-             <!-- Feat 4 -->
-             <div class="card">
+            <!-- Feat 4 -->
+            <div class="card">
                 <div class="icon-box">
                     <i class="ph ph-map-pin"></i>
                 </div>
@@ -394,12 +419,13 @@
 
     <footer>
         <div class="container footer-content">
-            <p style="font-weight: 500; font-size: 0.9rem;">&copy; 2026 FunCollab Inc.</p>
+            <p style="font-weight: 500; font-size: 0.9rem;">&copy; 2026 EasyCollab Inc.</p>
             <p style="font-size: 0.85rem;">Designed with precision.</p>
         </div>
     </footer>
 
-   <!-- Original Flask Template JS Unchanged -->
-   <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <!-- Original Flask Template JS Unchanged -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
+
 </html>

@@ -27,7 +27,7 @@
         font-family: 'Inter', sans-serif;
         font-size: 1.75rem;
         font-weight: 800;
-        color: #111827;
+        color: #1F2937;
         margin: 0;
         letter-spacing: -0.02em;
         display: flex;
@@ -42,25 +42,25 @@
         width: 36px;
         height: 36px;
         background: #ffffff;
-        border: 1px solid #e5e7eb;
+        border: 1px solid #D8E2D1;
         border-radius: 8px;
-        color: #6b7280;
+        color: #6B7280;
         text-decoration: none;
         transition: all 0.2s ease;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
     }
 
     .btn-back-profile:hover {
-        background: #f9fafb;
-        color: #111827;
-        border-color: #d1d5db;
+        background: #F6F8F5;
+        color: #1F2937;
+        border-color: #D8E2D1;
         transform: translateX(-2px);
     }
 
     /* Form Card Container */
     .settings-card {
         background: #ffffff;
-        border: 1px solid #e5e7eb;
+        border: 1px solid #D8E2D1;
         border-radius: 16px;
         padding: 2.5rem 2.5rem;
         box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
@@ -77,7 +77,7 @@
         font-family: 'Inter', sans-serif;
         font-size: 0.95rem;
         font-weight: 600;
-        color: #374151;
+        color: #1F2937;
         display: flex;
         align-items: center;
         gap: 0.4rem;
@@ -89,9 +89,9 @@
         padding: 0.75rem 1rem;
         font-family: 'Inter', sans-serif;
         font-size: 1rem;
-        color: #111827;
-        background-color: #f9fafb;
-        border: 1px solid #d1d5db;
+        color: #1F2937;
+        background-color: #F6F8F5;
+        border: 1px solid #D8E2D1;
         border-radius: 8px;
         box-sizing: border-box;
         transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
@@ -99,9 +99,9 @@
     }
 
     .form-input:focus {
-        border-color: #9ca3af;
+        border-color: #9CAF88;
         background-color: #ffffff;
-        box-shadow: 0 0 0 3px rgba(209, 213, 219, 0.3);
+        box-shadow: 0 0 0 3px rgba(156, 175, 136, 0.3);
     }
 
     /* Textarea specific overrides */
@@ -136,10 +136,10 @@
         align-items: center;
         gap: 1rem;
         padding: 0.75rem 1rem;
-        background-color: #fbfcff;
-        border: 1px dashed #9ca3af;
+        background-color: #F6F8F5;
+        border: 1px dashed #9CAF88;
         border-radius: 8px;
-        color: #4b5563;
+        color: #6B7280;
         font-size: 0.95rem;
         font-weight: 500;
         transition: all 0.2s ease;
@@ -148,8 +148,8 @@
     }
 
     .file-upload-wrapper:hover .file-upload-visual {
-        background-color: #f3f4f6;
-        border-color: #6b7280;
+        background-color: #D8E2D1;
+        border-color: #6B7280;
     }
 
     .btn-save {
@@ -162,7 +162,7 @@
         font-weight: 600;
         font-size: 1.05rem;
         padding: 0.85rem;
-        background-color: #000000;
+        background-color: #9CAF88;
         color: #ffffff;
         border: 1px solid transparent;
         border-radius: 8px;
@@ -173,7 +173,7 @@
     }
 
     .btn-save:hover {
-        background-color: #1f2937;
+        background-color: #8A9D76;
         transform: translateY(-1px);
         box-shadow: 0 8px 12px -2px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
     }
@@ -186,7 +186,7 @@
             <i class="ph-bold ph-arrow-left"></i>
         </a>
         <h2>
-            <i class="ph-fill ph-gear" style="color: #6b7280;"></i>
+            <i class="ph-fill ph-gear" style="color: #6B7280;"></i>
             Account Settings
         </h2>
     </div>
@@ -244,15 +244,15 @@
         const displayDiv = document.getElementById('fileNameDisplay');
 
         if (e.target.files[0]) {
-            displayDiv.innerHTML = `<i class="ph-fill ph-file-image" style="font-size: 1.25rem; color: #10b981;"></i><span style="color: #111827; font-weight: 600;">${fileName}</span>`;
+            displayDiv.innerHTML = `<i class="ph-fill ph-file-image" style="font-size: 1.25rem; color: #9CAF88;"></i><span style="color: #1F2937; font-weight: 600;">${fileName}</span>`;
             displayDiv.style.borderStyle = 'solid';
-            displayDiv.style.borderColor = '#10b981';
-            displayDiv.style.backgroundColor = '#ecfdf5';
+            displayDiv.style.borderColor = '#9CAF88';
+            displayDiv.style.backgroundColor = '#F6F8F5';
         } else {
             displayDiv.innerHTML = `<i class="ph-fill ph-upload-simple" style="font-size: 1.25rem;"></i><span>Click to upload a new avatar...</span>`;
             displayDiv.style.borderStyle = 'dashed';
-            displayDiv.style.borderColor = '#9ca3af';
-            displayDiv.style.backgroundColor = '#fbfcff';
+            displayDiv.style.borderColor = '#9CAF88';
+            displayDiv.style.backgroundColor = '#F6F8F5';
         }
     });
 </script>

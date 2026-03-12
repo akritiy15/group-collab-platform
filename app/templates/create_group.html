@@ -4,31 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FunCollab - Create Group</title>
-   
+    <title>EasyCollab - Create Group</title>
+
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    
+
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
     <style>
         /* Modern SaaS Dashboard Styling Overrides */
         :root {
-            --bg-color: #fbfcff;
-            --text-main: #111827;
-            --text-muted: #4b5563; 
-            --border-light: #e5e7eb;
-            --accent-dark: #000000;
-            --accent-hover: #1f2937;
+            --bg-color: #F6F8F5;
+            --text-main: #1F2937;
+            --text-muted: #6B7280;
+            --border-light: #D8E2D1;
+            --accent-dark: #9CAF88;
+            --accent-hover: #8A9D76;
             --card-surface: #ffffff;
-            --input-bg: #f9fafb;
-            --input-border: #d1d5db;
-            --input-focus-border: #9ca3af;
+            --input-bg: #F6F8F5;
+            --input-border: #D8E2D1;
+            --input-focus-border: #9CAF88;
         }
 
         body {
@@ -41,7 +41,7 @@
             min-height: 100vh;
             line-height: 1.5;
             overflow-x: hidden;
-            background-image: radial-gradient(circle at top center, #f3f4f6 0%, transparent 100%);
+            background-image: radial-gradient(circle at top center, rgba(156, 175, 136, 0.3) 0%, transparent 100%);
         }
 
         .container {
@@ -59,8 +59,8 @@
             z-index: 50;
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            background: rgba(251, 252, 255, 0.75);
-            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+            background: rgba(246, 248, 245, 0.75);
+            border-bottom: 1px solid rgba(216, 226, 209, 0.5);
         }
 
         .navbar .container {
@@ -93,7 +93,7 @@
 
         .nav-link {
             text-decoration: none;
-            color: #6b7280;
+            color: #6B7280;
             font-weight: 500;
             font-size: 0.95rem;
             transition: color 0.2s ease;
@@ -125,7 +125,7 @@
             transform: translate(-50%, -50%);
             width: 800px;
             height: 800px;
-            background: radial-gradient(circle, rgba(230,230,235,0.4) 0%, rgba(255,255,255,0) 70%);
+            background: radial-gradient(circle, rgba(156, 175, 136, 0.2) 0%, rgba(255, 255, 255, 0) 70%);
             filter: blur(60px);
             z-index: -1;
             pointer-events: none;
@@ -157,7 +157,7 @@
         }
 
         .form-header p {
-            color: #6b7280;
+            color: #6B7280;
             font-size: 0.95rem;
             margin: 0;
         }
@@ -194,14 +194,14 @@
 
         .input-group input::placeholder,
         .input-group textarea::placeholder {
-            color: #9ca3af;
+            color: #6B7280;
         }
 
         .input-group input:focus,
         .input-group textarea:focus {
             border-color: var(--input-focus-border);
             background-color: #ffffff;
-            box-shadow: 0 0 0 3px rgba(209, 213, 219, 0.3);
+            box-shadow: 0 0 0 3px rgba(156, 175, 136, 0.3);
         }
 
         /* Color Picker Styling Refined */
@@ -218,7 +218,7 @@
             align-items: center;
             justify-content: center;
         }
-        
+
         /* Hide the actual radio button but keep it accessible */
         .color-option input[type="radio"] {
             opacity: 0;
@@ -234,27 +234,36 @@
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            border: 2px solid transparent; /* default transparent border */
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
+            /* default transparent border */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
         }
-        
+
         .color-option:hover .color-swatch {
             transform: scale(1.1);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
         }
 
         /* The checked state styles the span */
-        .color-option input[type="radio"]:checked + .color-swatch {
+        .color-option input[type="radio"]:checked+.color-swatch {
             border-color: var(--text-main);
             transform: scale(1.1);
             box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px var(--text-main);
         }
 
         /* Modernized Theme Colors */
-        .swatch-gold { background: linear-gradient(135deg, #FACC15, #EAB308); }
-        .swatch-pink { background: linear-gradient(135deg, #F472B6, #EC4899); }
-        .swatch-cyan { background: linear-gradient(135deg, #22D3EE, #06B6D4); }
+        .swatch-gold {
+            background: linear-gradient(135deg, #FACC15, #EAB308);
+        }
+
+        .swatch-pink {
+            background: linear-gradient(135deg, #F472B6, #EC4899);
+        }
+
+        .swatch-cyan {
+            background: linear-gradient(135deg, #22D3EE, #06B6D4);
+        }
 
         /* Button Styling Refined */
         .btn-block {
@@ -285,8 +294,9 @@
 
         /* Alert/Flash Message Styling Refined */
         .alert-card {
-            background: #f0fdf4; /* Light green bg */
-            border: 1px solid #bbf7d0;
+            background: #F6F8F5;
+            /* Light sage bg */
+            border: 1px solid #D8E2D1;
             border-radius: 12px;
             padding: 1.5rem;
             margin-bottom: 2rem;
@@ -298,7 +308,7 @@
 
         .alert-card h3 {
             margin: 0 0 0.5rem 0;
-            color: #166534;
+            color: #1F2937;
             font-size: 1.125rem;
             display: flex;
             align-items: center;
@@ -309,34 +319,33 @@
         .invite-code-display {
             font-family: 'Courier New', Courier, monospace;
             background: #ffffff;
-            border: 1px solid #dcfce7;
+            border: 1px solid #D8E2D1;
             border-radius: 8px;
             padding: 0.75rem 1.5rem;
             font-size: 1.75rem;
             letter-spacing: 4px;
             margin: 1rem auto;
             font-weight: 700;
-            color: #15803d;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            color: #9CAF88;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
             display: inline-block;
         }
-        
+
         .alert-card p {
             margin: 0;
-            color: #166534;
+            color: #6B7280;
             font-size: 0.9rem;
         }
-
     </style>
 </head>
 
 <body>
-    
+
     <nav class="navbar">
         <div class="container">
             <a href="/" class="logo">
                 <i class="ph-fill ph-circles-three-plus"></i>
-                FunCollab
+                EasyCollab
             </a>
             <div class="nav-links">
                 <a href="/groups/join" class="nav-link">
@@ -348,22 +357,22 @@
 
     <div class="form-wrapper">
         <div class="ambient-glow"></div>
-        
+
         <!-- Flash Messages (Flask Syntax Untouched) -->
         {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            {% for category, message in messages %}
-              {% if category == "invite" %}
-                <div class="alert-card">
-                  <h3><i class="ph-fill ph-ticket"></i> Invite Code</h3>
-                  <div class="invite-code-display">
-                    {{ message.split(':')[-1].strip() }}
-                  </div>
-                  <p>Share this code with your team to invite them.</p>
-                </div>
-              {% endif %}
-            {% endfor %}
-          {% endif %}
+        {% if messages %}
+        {% for category, message in messages %}
+        {% if category == "invite" %}
+        <div class="alert-card">
+            <h3><i class="ph-fill ph-ticket"></i> Invite Code</h3>
+            <div class="invite-code-display">
+                {{ message.split(':')[-1].strip() }}
+            </div>
+            <p>Share this code with your team to invite them.</p>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
         {% endwith %}
 
         <div class="form-card">
@@ -376,12 +385,14 @@
             <form method="POST">
                 <div class="input-group">
                     <label for="group-name">Workspace Name</label>
-                    <input type="text" id="group-name" name="name" placeholder="e.g. Engineering Team, Q3 Planning..." required>
+                    <input type="text" id="group-name" name="name" placeholder="e.g. Engineering Team, Q3 Planning..."
+                        required>
                 </div>
 
                 <div class="input-group">
                     <label for="description">Workspace Purpose</label>
-                    <textarea id="description" name="description" rows="3" placeholder="Briefly describe the goal of this workspace..."></textarea>
+                    <textarea id="description" name="description" rows="3"
+                        placeholder="Briefly describe the goal of this workspace..."></textarea>
                 </div>
 
                 <div class="input-group">

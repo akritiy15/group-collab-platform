@@ -16,7 +16,7 @@
     font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: 1.5rem;
-    color: #111827;
+    color: #1F2937;
     letter-spacing: -0.025em;
   }
 
@@ -35,7 +35,7 @@
     align-items: center;
     justify-content: space-between;
     background-color: #ffffff;
-    border: 1px solid #eaeaea;
+    border: 1px solid #D8E2D1;
     border-radius: 10px;
     padding: 1rem 1.25rem;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
@@ -45,13 +45,13 @@
   .user-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 12px -2px rgba(0, 0, 0, 0.05);
-    border-color: #d1d5db;
+    border-color: #9CAF88;
   }
 
   .user-name {
     font-weight: 500;
     font-size: 0.95rem;
-    color: #374151;
+    color: #1F2937;
   }
 
   /* Buttons */
@@ -59,7 +59,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background-color: #4f46e5; /* Soft Indigo */
+    background-color: #9CAF88;
+    /* Sage Green */
     color: #ffffff;
     font-weight: 500;
     font-size: 0.875rem;
@@ -72,7 +73,7 @@
   }
 
   .btn-primary:hover {
-    background-color: #4338ca;
+    background-color: #8A9D76;
     color: #ffffff;
     text-decoration: none;
   }
@@ -86,21 +87,21 @@
     align-items: center;
     justify-content: center;
     background-color: #ffffff;
-    color: #4b5563;
+    color: #6B7280;
     font-weight: 500;
     font-size: 0.875rem;
     padding: 0.5rem 1rem;
     border-radius: 6px;
     text-decoration: none;
-    border: 1px solid #e5e7eb;
+    border: 1px solid #D8E2D1;
     transition: all 0.2s ease;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
   }
 
   .btn-secondary:hover {
-    background-color: #f9fafb;
-    color: #111827;
-    border-color: #d1d5db;
+    background-color: #F6F8F5;
+    color: #1F2937;
+    border-color: #9CAF88;
     text-decoration: none;
   }
 
@@ -108,10 +109,10 @@
   .empty-state {
     text-align: center;
     padding: 3rem 1.5rem;
-    background-color: #fafafa;
-    border: 1px dashed #d1d5db;
+    background-color: #F6F8F5;
+    border: 1px dashed #D8E2D1;
     border-radius: 10px;
-    color: #6b7280;
+    color: #6B7280;
     font-size: 0.95rem;
   }
 
@@ -126,22 +127,21 @@
   <h2 class="search-header">Search Results</h2>
 
   {% if users %}
-    <ul class="user-list">
-      {% for user in users %}
-        <li class="user-card">
-          <span class="user-name">{{ user.username }}</span>
-          
-          <a href="{{ url_for('groups.send_request', user_id=user.id) }}" 
-             class="btn-dashboard btn-primary">
-            Send Request
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
+  <ul class="user-list">
+    {% for user in users %}
+    <li class="user-card">
+      <span class="user-name">{{ user.username }}</span>
+
+      <a href="{{ url_for('groups.send_request', user_id=user.id) }}" class="btn-dashboard btn-primary">
+        Send Request
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
   {% else %}
-    <div class="empty-state">
-      <p>No users found.</p>
-    </div>
+  <div class="empty-state">
+    <p>No users found.</p>
+  </div>
   {% endif %}
 
   <div class="bottom-actions">
