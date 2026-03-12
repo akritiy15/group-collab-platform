@@ -1,30 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>FunCollab - Polls</title>
+    <title>EasyCollab - Polls</title>
 
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
     <style>
         /* Modern SaaS Dashboard Styling Overrides */
         :root {
-            --bg-color: #fbfcff;
-            --text-main: #111827;
-            --text-muted: #4b5563; 
-            --border-light: #e5e7eb;
-            --accent-dark: #000000;
-            --accent-hover: #1f2937;
+            --bg-color: #F6F8F5;
+            --text-main: #1F2937;
+            --text-muted: #6B7280;
+            --border-light: #D8E2D1;
+            --accent-dark: #9CAF88;
+            --accent-hover: #8A9D76;
             --card-surface: #ffffff;
-            --input-bg: #f9fafb;
-            --input-border: #d1d5db;
-            --input-focus-border: #9ca3af;
+            --input-bg: #F6F8F5;
+            --input-border: #D8E2D1;
+            --input-focus-border: #9CAF88;
         }
 
         body {
@@ -37,7 +38,7 @@
             min-height: 100vh;
             line-height: 1.5;
             overflow-x: hidden;
-            background-image: radial-gradient(circle at top center, #f3f4f6 0%, transparent 100%);
+            background-image: radial-gradient(circle at top center, rgba(156, 175, 136, 0.3) 0%, transparent 100%);
         }
 
         .container {
@@ -55,8 +56,8 @@
             z-index: 50;
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            background: rgba(251, 252, 255, 0.75);
-            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+            background: rgba(246, 248, 245, 0.75);
+            border-bottom: 1px solid rgba(216, 226, 209, 0.5);
         }
 
         .navbar .container {
@@ -86,7 +87,7 @@
             align-items: center;
             gap: 1.5rem;
         }
-        
+
         /* Modern Group Info Badges in Nav */
         .group-badge {
             display: inline-flex;
@@ -94,16 +95,16 @@
             gap: 0.4rem;
             font-size: 0.85rem;
             font-weight: 500;
-            color: #4b5563;
-            background: #f3f4f6;
+            color: #6B7280;
+            background: #F6F8F5;
             padding: 0.4rem 0.75rem;
             border-radius: 6px;
-            border: 1px solid #e5e7eb;
+            border: 1px solid #D8E2D1;
         }
 
         .nav-link {
             text-decoration: none;
-            color: #6b7280;
+            color: #6B7280;
             font-weight: 500;
             font-size: 0.95rem;
             transition: color 0.2s ease;
@@ -118,7 +119,7 @@
             display: flex;
             gap: 0.5rem;
             margin: 2rem 0 3rem 0;
-            border-bottom: 1px solid #e5e7eb;
+            border-bottom: 1px solid #D8E2D1;
             padding-bottom: 0.5rem;
             flex-wrap: wrap;
         }
@@ -127,7 +128,7 @@
             padding: 0.5rem 1rem;
             font-weight: 500;
             font-size: 0.95rem;
-            color: #6b7280;
+            color: #6B7280;
             text-decoration: none;
             border-radius: 8px;
             transition: all 0.2s ease;
@@ -137,17 +138,17 @@
         }
 
         .feature-link:hover {
-            background: #f3f4f6;
-            color: #111827;
+            background: #F6F8F5;
+            color: #1F2937;
         }
 
         .feature-link.active {
             color: var(--accent-dark);
-            background: #f3f4f6;
+            background: #F6F8F5;
             font-weight: 600;
             position: relative;
         }
-        
+
         .feature-link.active::after {
             content: '';
             position: absolute;
@@ -192,7 +193,7 @@
             font-size: 0.95rem;
             cursor: pointer;
             transition: all 0.2s ease;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             display: inline-flex;
             align-items: center;
             gap: 0.4rem;
@@ -202,7 +203,7 @@
         .btn-add:hover {
             background-color: var(--accent-hover);
             transform: translateY(-1px);
-            box-shadow: 0 6px 10px -1px rgba(0,0,0,0.1);
+            box-shadow: 0 6px 10px -1px rgba(0, 0, 0, 0.1);
         }
 
         /* Poll Grid Structure */
@@ -226,7 +227,7 @@
         .poll-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
-            border-color: rgba(209, 213, 219, 1);
+            border-color: rgba(156, 175, 136, 1);
         }
 
         .poll-card h3 {
@@ -296,7 +297,8 @@
 
         .progress-bar {
             height: 100%;
-            background: #e0f2fe; /* Light blue by default */
+            background: #F6F8F5;
+            /* Light default */
             transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: absolute;
             left: 0;
@@ -305,13 +307,14 @@
         }
 
         /* Dynamically overriding background when inline style is applied */
-        .progress-bar[style*="background: #4CAF50"], 
+        .progress-bar[style*="background: #4CAF50"],
         .progress-bar[style*="background:#4CAF50"] {
-            background-color: #dcfce7 !important; /* Soft green */
+            background-color: #D8E2D1 !important;
+            /* Soft sage */
         }
-        
+
         .progress-bar-winning {
-            background-color: #dcfce7 !important;
+            background-color: #D8E2D1 !important;
         }
 
         .option-text {
@@ -353,7 +356,7 @@
             font-weight: 500;
             text-decoration: none;
             transition: all 0.2s ease;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
         }
 
         .vote-btn:hover {
@@ -368,10 +371,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #f0fdf4;
-            border: 1px solid #bbf7d0;
+            background: #F6F8F5;
+            border: 1px solid #D8E2D1;
             border-radius: 6px;
-            color: #166534;
+            color: #9CAF88;
             font-size: 0.85rem;
             font-weight: 600;
         }
@@ -383,125 +386,134 @@
             background: var(--card-surface);
             border: 1px dashed var(--border-light);
             border-radius: 12px;
-            color: #6b7280;
+            color: #6B7280;
             grid-column: 1 / -1;
         }
-
     </style>
 </head>
 
 <body>
 
-<nav class="navbar">
-    <div class="container">
-        <a href="{{ url_for('groups.dashboard') }}" class="logo">
-            <i class="ph-fill ph-circles-three-plus"></i>
-            FunCollab
-        </a>
-        <div class="nav-links">
-            <div class="group-badge" title="Current Workspace">
-                <i class="ph ph-users"></i>
-                {{ group.name }}
+    <nav class="navbar">
+        <div class="container">
+            <a href="{{ url_for('groups.dashboard') }}" class="logo">
+                <i class="ph-fill ph-circles-three-plus"></i>
+                EasyCollab
+            </a>
+
+            <div class="nav-links">
+                <a href="{{ url_for('profile.view_profile') }}" class="nav-link">
+                    Profile
+                </a>
+                <a href="{{ url_for('groups.create_group') }}" class="nav-link">
+                    Create Group
+                </a>
+                <a href="{{ url_for('groups.join_group') }}" class="nav-link">
+                    Join Group
+                </a>
+                <a href="{{ url_for('auth.logout') }}" class="nav-link" style="margin-left: 0.5rem;">
+                    Logout
+                </a>
             </div>
-            <a href="{{ url_for('auth.logout') }}" class="nav-link" style="margin-left: 0.5rem;">
-                Logout
+        </div>
+    </nav>
+
+    <main class="container workspace-main">
+
+        <!-- Feature Navigation -->
+        <div class="feature-nav">
+            <a href="{{ url_for('tasks.view_tasks', group_id=group.id) }}" class="feature-link">
+                <i class="ph ph-check-circle"></i> Tasks
+            </a>
+            <a class="feature-link active">
+                <i class="ph-fill ph-chart-bar"></i> Polls
+            </a>
+            <a href="{{ url_for('expenses.expenses_home', group_id=group.id) }}" class="feature-link">
+                <i class="ph ph-receipt"></i> Money
+            </a>
+            <a href="{{ url_for('location.location_page', group_id=group.id) }}" class="feature-link">
+                <i class="ph ph-map-pin"></i> Map
+            </a>
+            <a href="{{ url_for('groups.group_detail', group_id=group.id) }}" class="feature-link">
+                <i class="ph ph-info"></i> Group Details
             </a>
         </div>
-    </div>
-</nav>
 
-<main class="container workspace-main">
+        <div class="poll-header">
+            <h2>Active Polls</h2>
+            <a href="{{ url_for('polls.create_poll', group_id=group.id) }}" class="btn-add">
+                <i class="ph ph-plus"></i> Create Poll
+            </a>
+        </div>
 
-    <!-- Feature Navigation -->
-    <div class="feature-nav">
-        <a href="{{ url_for('tasks.view_tasks', group_id=group.id) }}" class="feature-link">
-            <i class="ph ph-check-circle"></i> Tasks
-        </a>
-        <a class="feature-link active">
-            <i class="ph-fill ph-chart-bar"></i> Polls
-        </a>
-        <a href="{{ url_for('expenses.expenses_home', group_id=group.id) }}" class="feature-link">
-            <i class="ph ph-receipt"></i> Money
-        </a>
-        <a href="{{ url_for('location.location_page', group_id=group.id) }}" class="feature-link">
-            <i class="ph ph-map-pin"></i> Map
-        </a>
-        <a href="{{ url_for('groups.group_detail', group_id=group.id) }}" class="feature-link">
-            <i class="ph ph-info"></i> Group Details
-        </a>
-    </div>
-
-    <div class="poll-header">
-        <h2>Active Polls</h2>
-        <a href="{{ url_for('polls.create_poll', group_id=group.id) }}" class="btn-add">
-            <i class="ph ph-plus"></i> Create Poll
-        </a>
-    </div>
-
-    <!-- Polls Grid -->
-    <div class="poll-grid">
-        {% if polls %}
+        <!-- Polls Grid -->
+        <div class="poll-grid">
+            {% if polls %}
             {% for poll in polls %}
             <div class="poll-card">
                 <div class="poll-header-row">
                     <h3>{{ poll.question }}</h3>
-                    <form method="POST" action="{{ url_for('polls.delete_poll', poll_id=poll.id) }}" style="display: inline;">
-                        <button type="submit" class="btn-delete-poll" title="Delete Poll" onclick="return confirm('Are you sure you want to delete this poll?')">
+                    <form method="POST" action="{{ url_for('polls.delete_poll', poll_id=poll.id) }}"
+                        style="display: inline;">
+                        <button type="submit" class="btn-delete-poll" title="Delete Poll"
+                            onclick="return confirm('Are you sure you want to delete this poll?')">
                             <i class="ph ph-trash"></i>
                         </button>
                     </form>
                 </div>
-                <div style="font-size: 0.75rem; color: #6b7280; margin-bottom: 1rem;">Created by: <strong>{% if poll.creator %}{{ poll.creator.username }}{% else %}Unknown{% endif %}</strong></div>
+                <div style="font-size: 0.75rem; color: #6B7280; margin-bottom: 1rem;">Created by: <strong>{% if
+                        poll.creator %}{{ poll.creator.username }}{% else %}Unknown{% endif %}</strong></div>
 
                 {% set total_votes = poll.options | sum(attribute='votes') %}
                 {% set max_votes = poll.options | map(attribute='votes') | max %}
 
                 {% for option in poll.options %}
-                    {% set percent = (option.votes * 100 / total_votes) if total_votes > 0 else 0 %}
+                {% set percent = (option.votes * 100 / total_votes) if total_votes > 0 else 0 %}
 
-                    <div class="poll-option">
-                        <!-- Redesigned Progress Bar: Overlays text natively like Twitter/Notion polls -->
-                        <div class="progress-container">
-                            <div class="progress-bar {% if option.votes == max_votes and max_votes > 0 %}progress-bar-winning{% endif %}"
-                                 style="width: {{ percent }}%;">
-                            </div>
-                            <!-- Inline text over progress bar -->
-                            <span class="option-text" title="{{ option.text }}">{{ option.text }}</span>
-                            <span class="vote-count">{{ percent|round|int }}% ({{ option.votes }})</span>
+                <div class="poll-option">
+                    <!-- Redesigned Progress Bar: Overlays text natively like Twitter/Notion polls -->
+                    <div class="progress-container">
+                        <div class="progress-bar {% if option.votes == max_votes and max_votes > 0 %}progress-bar-winning{% endif %}"
+                            style="width: {{ percent }}%;">
                         </div>
-
-                        <!-- Action Buttons (Vote or Voted state) -->
-                        {% if poll.id in user_votes %}
-                            <div class="voted-badge" title="You voted for an option in this poll">
-                                <i class="ph-bold ph-check"></i>
-                            </div>
-                        {% else %}
-                            <a href="{{ url_for('polls.vote', option_id=option.id) }}" class="vote-btn">
-                                Vote
-                            </a>
-                        {% endif %}
+                        <!-- Inline text over progress bar -->
+                        <span class="option-text" title="{{ option.text }}">{{ option.text }}</span>
+                        <span class="vote-count">{{ percent|round|int }}% ({{ option.votes }})</span>
                     </div>
+
+                    <!-- Action Buttons (Vote or Voted state) -->
+                    {% if poll.id in user_votes %}
+                    <div class="voted-badge" title="You voted for an option in this poll">
+                        <i class="ph-bold ph-check"></i>
+                    </div>
+                    {% else %}
+                    <a href="{{ url_for('polls.vote', option_id=option.id) }}" class="vote-btn">
+                        Vote
+                    </a>
+                    {% endif %}
+                </div>
                 {% endfor %}
             </div>
             {% endfor %}
-        {% else %}
+            {% else %}
             <div class="empty-state">
-                <i class="ph ph-chart-polar" style="font-size: 2.5rem; margin-bottom: 1rem; color: #d1d5db;"></i>
-                <p style="margin: 0; font-size: 1.1rem; font-weight: 500; color: #111827;">No decisions yet</p>
+                <i class="ph ph-chart-polar" style="font-size: 2.5rem; margin-bottom: 1rem; color: #D8E2D1;"></i>
+                <p style="margin: 0; font-size: 1.1rem; font-weight: 500; color: #1F2937;">No decisions yet</p>
                 <p style="margin: 0.5rem 0 0 0; font-size: 0.95rem;">Create a poll to cast a team vote.</p>
             </div>
-        {% endif %}
-    </div>
+            {% endif %}
+        </div>
 
-</main>
+    </main>
 
-<script>
-document.querySelectorAll(".vote-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-        setTimeout(() => location.reload(), 300);
-    });
-});
-</script>
+    <script>
+        document.querySelectorAll(".vote-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                setTimeout(() => location.reload(), 300);
+            });
+        });
+    </script>
 
 </body>
+
 </html>

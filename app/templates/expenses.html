@@ -1,30 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FunCollab - Expenses</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyCollab - Expenses</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-<script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
     <style>
         /* Modern SaaS Dashboard Styling Overrides */
         :root {
-            --bg-color: #fbfcff;
-            --text-main: #111827;
-            --text-muted: #4b5563;
-            --border-light: #e5e7eb;
-            --accent-dark: #000000;
-            --accent-hover: #1f2937;
+            --bg-color: #F6F8F5;
+            --text-main: #1F2937;
+            --text-muted: #6B7280;
+            --border-light: #D8E2D1;
+            --accent-dark: #9CAF88;
+            --accent-hover: #8A9D76;
             --card-surface: #ffffff;
-            --input-bg: #f9fafb;
-            --input-border: #d1d5db;
-            --input-focus-border: #9ca3af;
+            --input-bg: #F6F8F5;
+            --input-border: #D8E2D1;
+            --input-focus-border: #9CAF88;
 
             /* Financial specific vars */
             --positive-color: #15803d;
@@ -47,7 +48,7 @@
             min-height: 100vh;
             line-height: 1.5;
             overflow-x: hidden;
-            background-image: radial-gradient(circle at top center, #f3f4f6 0%, transparent 100%);
+            background-image: radial-gradient(circle at top center, rgba(156, 175, 136, 0.3) 0%, transparent 100%);
         }
 
         .container {
@@ -65,8 +66,8 @@
             z-index: 50;
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            background: rgba(251, 252, 255, 0.75);
-            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+            background: rgba(246, 248, 245, 0.75);
+            border-bottom: 1px solid rgba(216, 226, 209, 0.5);
         }
 
         .navbar .container {
@@ -104,16 +105,16 @@
             gap: 0.4rem;
             font-size: 0.85rem;
             font-weight: 500;
-            color: #4b5563;
-            background: #f3f4f6;
+            color: #6B7280;
+            background: #F6F8F5;
             padding: 0.4rem 0.75rem;
             border-radius: 6px;
-            border: 1px solid #e5e7eb;
+            border: 1px solid #D8E2D1;
         }
 
         .nav-link {
             text-decoration: none;
-            color: #6b7280;
+            color: #6B7280;
             font-weight: 500;
             font-size: 0.95rem;
             transition: color 0.2s ease;
@@ -128,7 +129,7 @@
             display: flex;
             gap: 0.5rem;
             margin: 2rem 0 3rem 0;
-            border-bottom: 1px solid #e5e7eb;
+            border-bottom: 1px solid #D8E2D1;
             padding-bottom: 0.5rem;
             flex-wrap: wrap;
         }
@@ -137,7 +138,7 @@
             padding: 0.5rem 1rem;
             font-weight: 500;
             font-size: 0.95rem;
-            color: #6b7280;
+            color: #6B7280;
             text-decoration: none;
             border-radius: 8px;
             transition: all 0.2s ease;
@@ -147,13 +148,13 @@
         }
 
         .feature-link:hover {
-            background: #f3f4f6;
-            color: #111827;
+            background: #F6F8F5;
+            color: #1F2937;
         }
 
         .feature-link.active {
             color: var(--accent-dark);
-            background: #f3f4f6;
+            background: #F6F8F5;
             font-weight: 600;
             position: relative;
         }
@@ -281,13 +282,13 @@
         }
 
         .input-group input::placeholder {
-            color: #9ca3af;
+            color: #6B7280;
         }
 
         .input-group input:focus {
             border-color: var(--input-focus-border);
             background-color: #ffffff;
-            box-shadow: 0 0 0 3px rgba(209, 213, 219, 0.3);
+            box-shadow: 0 0 0 3px rgba(156, 175, 136, 0.3);
         }
 
         /* Custom styling for amount input to look financial */
@@ -372,7 +373,7 @@
         }
 
         .expense-item:hover {
-            background-color: #f9fafb;
+            background-color: #F6F8F5;
         }
 
         .expense-details {
@@ -384,8 +385,8 @@
         .avatar {
             width: 44px;
             height: 44px;
-            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-            border: 1px solid #d1d5db;
+            background: linear-gradient(135deg, #F6F8F5 0%, #D8E2D1 100%);
+            border: 1px solid #D8E2D1;
             color: var(--text-main);
             border-radius: 50%;
             display: flex;
@@ -430,70 +431,76 @@
         .empty-state {
             padding: 4rem 1rem;
             text-align: center;
-            color: #6b7280;
+            color: #6B7280;
         }
 
         label:hover {
-background:#f5f5f5;
-border-radius:6px;
-}
+            background: #F6F8F5;
+            border-radius: 6px;
+        }
     </style>
 </head>
 
 <body>
 
-<nav class="navbar">
-<div class="container">
-<a href="{{ url_for('groups.dashboard') }}" class="logo">
-<i class="ph-fill ph-circles-three-plus"></i>
-FunCollab
-</a>
+    <nav class="navbar">
+        <div class="container">
+            <a href="{{ url_for('groups.dashboard') }}" class="logo">
+                <i class="ph-fill ph-circles-three-plus"></i>
+                EasyCollab
+            </a>
 
-<div class="nav-links">
-<div class="group-badge">
-<i class="ph ph-users"></i>
-{{ group.name }}
-</div>
-
-<a href="{{ url_for('auth.logout') }}" class="nav-link">Logout</a>
-</div>
-</div>
-</nav>
-
-
-<main class="container workspace-main">
-
-<!-- NAVIGATION -->
-<div class="feature-nav nav-stretch">
-
-<a href="{{ url_for('tasks.view_tasks', group_id=group.id) }}" class="feature-link">
-<i class="ph ph-check-circle"></i> Tasks
-</a>
-
-<a href="{{ url_for('polls.view_polls', group_id=group.id) }}" class="feature-link">
-<i class="ph ph-chart-bar"></i> Polls
-</a>
-
-<a class="feature-link active">
-<i class="ph-fill ph-receipt"></i> Money
-</a>
-
-<a href="{{ url_for('location.location_page', group_id=group.id) }}" class="feature-link">
-<i class="ph ph-map-pin"></i> Map
-</a>
-
-<a href="{{ url_for('groups.group_detail', group_id=group.id) }}" class="feature-link">
-<i class="ph ph-info"></i> Group Details
-</a>
-
-</div>
+            <div class="nav-links">
+                <a href="{{ url_for('profile.view_profile') }}" class="nav-link">
+                    Profile
+                </a>
+                <a href="{{ url_for('groups.create_group') }}" class="nav-link">
+                    Create Group
+                </a>
+                <a href="{{ url_for('groups.join_group') }}" class="nav-link">
+                    Join Group
+                </a>
+                <a href="{{ url_for('auth.logout') }}" class="nav-link" style="margin-left: 0.5rem;">
+                    Logout
+                </a>
+            </div>
+        </div>
+    </nav>
 
 
-<!-- BALANCE SUMMARY -->
+    <main class="container workspace-main">
 
-<div class="balance-card">
+        <!-- NAVIGATION -->
+        <div class="feature-nav nav-stretch">
 
-<div style="
+            <a href="{{ url_for('tasks.view_tasks', group_id=group.id) }}" class="feature-link">
+                <i class="ph ph-check-circle"></i> Tasks
+            </a>
+
+            <a href="{{ url_for('polls.view_polls', group_id=group.id) }}" class="feature-link">
+                <i class="ph ph-chart-bar"></i> Polls
+            </a>
+
+            <a class="feature-link active">
+                <i class="ph-fill ph-receipt"></i> Money
+            </a>
+
+            <a href="{{ url_for('location.location_page', group_id=group.id) }}" class="feature-link">
+                <i class="ph ph-map-pin"></i> Map
+            </a>
+
+            <a href="{{ url_for('groups.group_detail', group_id=group.id) }}" class="feature-link">
+                <i class="ph ph-info"></i> Group Details
+            </a>
+
+        </div>
+
+
+        <!-- BALANCE SUMMARY -->
+
+        <div class="balance-card">
+
+            <div style="
 display:flex;
 justify-content:space-between;
 width:100%;
@@ -501,123 +508,121 @@ max-width:420px;
 align-items:center;
 ">
 
-<div style="text-align:left">
-<h2 style="margin:0">₹{{ "%.2f"|format(owed_by_you) }}</h2>
-<p style="margin:0;color:var(--text-muted);font-size:0.9rem">
-Owed by you
-</p>
-</div>
+                <div style="text-align:left">
+                    <h2 style="margin:0">₹{{ "%.2f"|format(owed_by_you) }}</h2>
+                    <p style="margin:0;color:var(--text-muted);font-size:0.9rem">
+                        Owed by you
+                    </p>
+                </div>
 
-<div style="width:1px;height:40px;background:#e5e7eb"></div>
+                <div style="width:1px;height:40px;background:#e5e7eb"></div>
 
-<div style="text-align:right">
-<h2 style="margin:0;color:var(--positive-color)">
-₹{{ "%.2f"|format(owed_to_you) }}
-</h2>
-<p style="margin:0;color:var(--text-muted);font-size:0.9rem">
-Owed to you
-</p>
-</div>
+                <div style="text-align:right">
+                    <h2 style="margin:0;color:var(--positive-color)">
+                        ₹{{ "%.2f"|format(owed_to_you) }}
+                    </h2>
+                    <p style="margin:0;color:var(--text-muted);font-size:0.9rem">
+                        Owed to you
+                    </p>
+                </div>
 
-</div>
+            </div>
 
-</div>
+        </div>
 
-<!-- WHO OWES WHO -->
+        <!-- WHO OWES WHO -->
 
-<div class="activity-feed">
+        <div class="activity-feed">
 
-<h3 class="feed-header">
-<i class="ph ph-users-three"></i>
-Who owes who
-</h3>
+            <h3 class="feed-header">
+                <i class="ph ph-users-three"></i>
+                Who owes who
+            </h3>
 
-{% for user_id, amount in balances.items() %}
+            {% for user_id, amount in balances.items() %}
 
-{% if amount < 0 %}
+            {% if amount < 0 %} <div class="expense-item">
 
-<div class="expense-item">
+                <div class="expense-details">
 
-<div class="expense-details">
+                    <div class="avatar">
+                        {{ user_map[user_id][0]|upper }}
+                    </div>
 
-<div class="avatar">
-{{ user_map[user_id][0]|upper }}
-</div>
+                    <div class="expense-text">
+                        <h4>{{ user_map[user_id] }}</h4>
+                        <p class="expense-meta">
+                            owes you
+                        </p>
+                    </div>
 
-<div class="expense-text">
-<h4>{{ user_map[user_id] }}</h4>
-<p class="expense-meta">
-owes you
-</p>
-</div>
+                </div>
 
-</div>
+                <div class="expense-amount" style="color:var(--positive-color)">
+                    ₹{{ "%.2f"|format(-amount) }}
+                </div>
 
-<div class="expense-amount" style="color:var(--positive-color)">
-₹{{ "%.2f"|format(-amount) }}
-</div>
+        </div>
 
-</div>
+        {% endif %}
 
-{% endif %}
+        {% endfor %}
 
-{% endfor %}
-
-</div>
+        </div>
 
 
-<!-- ADD EXPENSE -->
-<div>
+        <!-- ADD EXPENSE -->
+        <div>
 
-<div class="expense-form-card">
+            <div class="expense-form-card">
 
-<h3><i class="ph ph-plus-circle"></i> Record Expense</h3>
+                <h3><i class="ph ph-plus-circle"></i> Record Expense</h3>
 
-<form method="POST">
+                <form method="POST">
 
-<div class="input-group">
-<input name="title" placeholder="What was this for? (e.g. Dinner)" required>
-</div>
-
-
-<div class="input-group amount-input-wrapper">
-<input name="amount" type="number" step="0.01" placeholder="0.00" required>
-</div>
+                    <div class="input-group">
+                        <input name="title" placeholder="What was this for? (e.g. Dinner)" required>
+                    </div>
 
 
-<!-- WHO PAID -->
+                    <div class="input-group amount-input-wrapper">
+                        <input name="amount" type="number" step="0.01" placeholder="0.00" required>
+                    </div>
 
-<div class="input-group">
 
-<label style="font-size:0.85rem;font-weight:600;color:#4b5563">
-Who paid?
-</label>
+                    <!-- WHO PAID -->
 
-<select name="paid_by"
-style="width:100%;padding:0.75rem;border-radius:8px;border:1px solid var(--input-border);background:var(--input-bg)"
-required>
+                    <div class="input-group">
 
-{% for m in members %}
-<option value="{{ m.user_id }}">
-{{ user_map[m.user_id] }}
-</option>
-{% endfor %}
+                        <label style="font-size:0.85rem;font-weight:600;color:#4b5563">
+                            Who paid?
+                        </label>
 
-</select>
+                        <select name="paid_by"
+                            style="width:100%;padding:0.75rem;border-radius:8px;border:1px solid var(--input-border);background:var(--input-bg)"
+                            required>
 
-</div>
+                            {% for m in members %}
+                            <option value="{{ m.user_id }}">
+                                {{ user_map[m.user_id] }}
+                            </option>
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
 
 
 
-<!-- SPLIT BETWEEN -->
+                    <!-- SPLIT BETWEEN -->
 
-<div class="input-group">
+                    <div class="input-group">
 
-<label style="font-size:0.85rem;font-weight:600;color:#4b5563">
-Split between
-</label>
+                        <label style="font-size:0.85rem;font-weight:600;color:#4b5563">
+                            Split between
+                        </label>
 
-<div style="
+                        <div style="
 margin-top:0.5rem;
 border:1px solid var(--border-light);
 border-radius:8px;
@@ -625,105 +630,100 @@ padding:10px;
 background:#fff;
 ">
 
-{% for m in members %}
+                            {% for m in members %}
 
-<div style="
+                            <div style="
 display:flex;
 align-items:center;
 gap:10px;
 margin-bottom:6px;
 ">
 
-<input
-type="checkbox"
-name="participants"
-value="{{ m.user_id }}"
-checked
-style="width:16px;height:16px;"
->
+                                <input type="checkbox" name="participants" value="{{ m.user_id }}" checked
+                                    style="width:16px;height:16px;">
 
-<span style="font-size:0.9rem;">
-{{ user_map[m.user_id] }}
-</span>
+                                <span style="font-size:0.9rem;">
+                                    {{ user_map[m.user_id] }}
+                                </span>
 
-</div>
+                            </div>
 
-{% endfor %}
+                            {% endfor %}
 
-</div>
+                        </div>
 
-</div>
+                    </div>
 
-<button type="submit" class="btn-submit">
-Save Expense
-</button>
+                    <button type="submit" class="btn-submit">
+                        Save Expense
+                    </button>
 
-</form>
+                </form>
 
-</div>
-</div>
+            </div>
+        </div>
 
 
-<!-- RECENT ACTIVITY -->
+        <!-- RECENT ACTIVITY -->
 
-<div>
+        <div>
 
-<div class="activity-feed">
+            <div class="activity-feed">
 
-<h3 class="feed-header">
-<i class="ph ph-clock-counter-clockwise"></i>
-Recent Activity
-</h3>
+                <h3 class="feed-header">
+                    <i class="ph ph-clock-counter-clockwise"></i>
+                    Recent Activity
+                </h3>
 
-{% if expenses %}
+                {% if expenses %}
 
-{% for e in expenses %}
+                {% for e in expenses %}
 
-<div class="expense-item">
+                <div class="expense-item">
 
-<div class="expense-details">
+                    <div class="expense-details">
 
-<div class="expense-text">
-<h4>{{ e.title }}</h4>
-<p class="expense-meta">
-{{ user_map[e.paid_by] }} paid ₹{{ "%.2f"|format(e.amount) }} 
-</p>
-</div>
+                        <div class="expense-text">
+                            <h4>{{ e.title }}</h4>
+                            <p class="expense-meta">
+                                {{ user_map[e.paid_by] }} paid ₹{{ "%.2f"|format(e.amount) }}
+                            </p>
+                        </div>
 
-</div>
+                    </div>
 
-<div class="expense-amount">
-₹{{ "%.2f"|format(e.amount) }}
-</div>
+                    <div class="expense-amount">
+                        ₹{{ "%.2f"|format(e.amount) }}
+                    </div>
 
-</div>
+                </div>
 
-{% endfor %}
+                {% endfor %}
 
-{% else %}
+                {% else %}
 
-<div class="empty-state">
+                <div class="empty-state">
 
-<i class="ph ph-wallet"
-style="font-size:2.5rem;margin-bottom:1rem;color:#d1d5db"></i>
+                    <i class="ph ph-wallet" style="font-size:2.5rem;margin-bottom:1rem;color:#d1d5db"></i>
 
-<p style="margin:0;font-size:1.1rem;font-weight:500;color:#111827">
-No expenses tracked yet
-</p>
+                    <p style="margin:0;font-size:1.1rem;font-weight:500;color:#111827">
+                        No expenses tracked yet
+                    </p>
 
-<p style="margin:0.5rem 0 0 0;font-size:0.95rem">
-Add a receipt to start splitting costs.
-</p>
+                    <p style="margin:0.5rem 0 0 0;font-size:0.95rem">
+                        Add a receipt to start splitting costs.
+                    </p>
 
-</div>
+                </div>
 
-{% endif %}
+                {% endif %}
 
-</div>
-</div>
+            </div>
+        </div>
 
 
-</main>
+    </main>
 
 </body>
+
 </html>

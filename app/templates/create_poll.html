@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FunCollab - Create Poll</title>
+    <title>EasyCollab - Create Poll</title>
 
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,16 +17,16 @@
     <style>
         /* Modern SaaS Dashboard Styling Overrides */
         :root {
-            --bg-color: #fbfcff;
-            --text-main: #111827;
-            --text-muted: #4b5563;
-            --border-light: #e5e7eb;
-            --accent-dark: #000000;
-            --accent-hover: #1f2937;
+            --bg-color: #F6F8F5;
+            --text-main: #1F2937;
+            --text-muted: #6B7280;
+            --border-light: #D8E2D1;
+            --accent-dark: #9CAF88;
+            --accent-hover: #8A9D76;
             --card-surface: #ffffff;
-            --input-bg: #f9fafb;
-            --input-border: #d1d5db;
-            --input-focus-border: #9ca3af;
+            --input-bg: #F6F8F5;
+            --input-border: #D8E2D1;
+            --input-focus-border: #9CAF88;
         }
 
         body {
@@ -39,7 +39,7 @@
             min-height: 100vh;
             line-height: 1.5;
             overflow-x: hidden;
-            background-image: radial-gradient(circle at top center, #f3f4f6 0%, transparent 100%);
+            background-image: radial-gradient(circle at top center, rgba(156, 175, 136, 0.3) 0%, transparent 100%);
         }
 
         .container {
@@ -57,8 +57,8 @@
             z-index: 50;
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            background: rgba(251, 252, 255, 0.75);
-            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+            background: rgba(246, 248, 245, 0.75);
+            border-bottom: 1px solid rgba(216, 226, 209, 0.5);
         }
 
         .navbar .container {
@@ -96,16 +96,16 @@
             gap: 0.4rem;
             font-size: 0.85rem;
             font-weight: 500;
-            color: #4b5563;
-            background: #f3f4f6;
+            color: #6B7280;
+            background: #F6F8F5;
             padding: 0.4rem 0.75rem;
             border-radius: 6px;
-            border: 1px solid #e5e7eb;
+            border: 1px solid #D8E2D1;
         }
 
         .nav-link {
             text-decoration: none;
-            color: #6b7280;
+            color: #6B7280;
             font-weight: 500;
             font-size: 0.95rem;
             transition: color 0.2s ease;
@@ -121,7 +121,7 @@
             display: flex;
             gap: 0.5rem;
             margin: 2rem 0 3rem 0;
-            border-bottom: 1px solid #e5e7eb;
+            border-bottom: 1px solid #D8E2D1;
             padding-bottom: 0.5rem;
             flex-wrap: wrap;
         }
@@ -130,7 +130,7 @@
             padding: 0.5rem 1rem;
             font-weight: 500;
             font-size: 0.95rem;
-            color: #6b7280;
+            color: #6B7280;
             text-decoration: none;
             border-radius: 8px;
             transition: all 0.2s ease;
@@ -140,13 +140,13 @@
         }
 
         .feature-link:hover {
-            background: #f3f4f6;
-            color: #111827;
+            background: #F6F8F5;
+            color: #1F2937;
         }
 
         .feature-link.active {
             color: var(--accent-dark);
-            background: #f3f4f6;
+            background: #F6F8F5;
             font-weight: 600;
             position: relative;
         }
@@ -166,7 +166,7 @@
         /* Form Card Container */
         .settings-card {
             background: #ffffff;
-            border: 1px solid #e5e7eb;
+            border: 1px solid #D8E2D1;
             border-radius: 16px;
             padding: 2.5rem 2.5rem;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
@@ -177,7 +177,7 @@
         .settings-card h2 {
             font-size: 1.75rem;
             font-weight: 800;
-            color: #111827;
+            color: #1F2937;
             margin: 0 0 2rem 0;
             letter-spacing: -0.02em;
             display: flex;
@@ -197,7 +197,7 @@
             font-family: 'Inter', sans-serif;
             font-size: 0.95rem;
             font-weight: 600;
-            color: #374151;
+            color: #1F2937;
             display: flex;
             align-items: center;
             gap: 0.4rem;
@@ -209,9 +209,9 @@
             padding: 0.75rem 1rem;
             font-family: 'Inter', sans-serif;
             font-size: 1rem;
-            color: #111827;
-            background-color: #f9fafb;
-            border: 1px solid #d1d5db;
+            color: #1F2937;
+            background-color: #F6F8F5;
+            border: 1px solid #D8E2D1;
             border-radius: 8px;
             box-sizing: border-box;
             transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
@@ -219,9 +219,9 @@
         }
 
         .form-input:focus {
-            border-color: #9ca3af;
+            border-color: var(--input-focus-border);
             background-color: #ffffff;
-            box-shadow: 0 0 0 3px rgba(209, 213, 219, 0.3);
+            box-shadow: 0 0 0 3px rgba(156, 175, 136, 0.3);
         }
 
         /* Options Dynamic List Styling */
@@ -233,8 +233,8 @@
 
         .btn-add-option {
             background-color: transparent;
-            color: #6b7280;
-            border: 1px dashed #d1d5db;
+            color: #6B7280;
+            border: 1px dashed #D8E2D1;
             padding: 0.75rem;
             border-radius: 8px;
             font-family: 'Inter', sans-serif;
@@ -251,9 +251,9 @@
         }
 
         .btn-add-option:hover {
-            background-color: #f9fafb;
-            color: #374151;
-            border-color: #9ca3af;
+            background-color: #F6F8F5;
+            color: #1F2937;
+            border-color: #9CAF88;
         }
 
         /* Action Buttons Area */
@@ -270,8 +270,8 @@
             align-items: center;
             padding: 0.85rem;
             background-color: #ffffff;
-            color: #4b5563;
-            border: 1px solid #d1d5db;
+            color: #6B7280;
+            border: 1px solid #D8E2D1;
             border-radius: 8px;
             font-family: 'Inter', sans-serif;
             font-weight: 600;
@@ -282,9 +282,9 @@
         }
 
         .btn-cancel:hover {
-            background-color: #f9fafb;
-            color: #111827;
-            border-color: #9ca3af;
+            background-color: #F6F8F5;
+            color: #1F2937;
+            border-color: #9CAF88;
         }
 
         .btn-create {
@@ -294,7 +294,7 @@
             align-items: center;
             gap: 0.5rem;
             padding: 0.85rem;
-            background-color: #000000;
+            background-color: var(--accent-dark);
             color: #ffffff;
             border: 1px solid transparent;
             border-radius: 8px;
@@ -307,7 +307,7 @@
         }
 
         .btn-create:hover {
-            background-color: #1f2937;
+            background-color: var(--accent-hover);
             transform: translateY(-1px);
             box-shadow: 0 8px 12px -2px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
         }
@@ -320,7 +320,7 @@
         <div class="container">
             <a href="{{ url_for('groups.dashboard') }}" class="logo">
                 <i class="ph-fill ph-circles-three-plus"></i>
-                FunCollab
+                EasyCollab
             </a>
             <div class="nav-links">
                 <div class="group-badge" title="Current Workspace">
@@ -352,7 +352,7 @@
 
         <div class="settings-card">
             <h2>
-                <i class="ph-duotone ph-list-numbers" style="color: #6366f1;"></i>
+                <i class="ph-duotone ph-list-numbers" style="color: #9CAF88;"></i>
                 New Poll
             </h2>
 

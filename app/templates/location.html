@@ -19,7 +19,7 @@
         gap: 1.5rem;
         background: #ffffff;
         padding: 1.5rem 2rem;
-        border: 1px solid #e5e7eb;
+        border: 1px solid #D8E2D1;
         border-radius: 12px;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -2px rgba(0, 0, 0, 0.02);
     }
@@ -35,7 +35,7 @@
         font-size: 1.5rem;
         font-weight: 700;
         letter-spacing: -0.01em;
-        color: #111827;
+        color: #1F2937;
         margin: 0;
         display: flex;
         align-items: center;
@@ -45,12 +45,12 @@
     .location-title p {
         margin: 0;
         font-size: 0.95rem;
-        color: #6b7280;
+        color: #6B7280;
     }
 
     /* Live Broadcasting Button */
     .btn-live {
-        background-color: #000000;
+        background-color: #9CAF88;
         color: #ffffff;
         border: 1px solid transparent;
         padding: 0.85rem 1.5rem;
@@ -67,7 +67,7 @@
     }
 
     .btn-live:hover {
-        background-color: #1f2937;
+        background-color: #8A9D76;
         transform: translateY(-1px);
         box-shadow: 0 6px 10px -1px rgba(0, 0, 0, 0.1);
     }
@@ -99,7 +99,7 @@
     /* Slick Map Wrapper */
     .map-container {
         background: #ffffff;
-        border: 1px solid #e5e7eb;
+        border: 1px solid #D8E2D1;
         border-radius: 12px;
         padding: 0.5rem;
         box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
@@ -114,7 +114,7 @@
         font-family: 'Inter', sans-serif;
     }
 
-    
+
 
     /* Elegant leaflet popup styling override */
     .leaflet-popup-content-wrapper {
@@ -137,7 +137,7 @@
         align-items: center;
         gap: 0.75rem;
         font-weight: 600;
-        color: #111827;
+        color: #1F2937;
         font-size: 0.95rem;
     }
 
@@ -147,19 +147,20 @@
         justify-content: center;
         width: 32px;
         height: 32px;
-        background: #f3f4f6;
+        background: #F6F8F5;
         border-radius: 50%;
-        color: #4b5563;
+        color: #6B7280;
+        border: 1px solid #D8E2D1;
     }
 
     .leaflet-container a.leaflet-popup-close-button {
-        color: #9ca3af;
+        color: #6B7280;
         padding: 8px 8px 0 0;
         transition: color 0.2s ease;
     }
 
     .leaflet-container a.leaflet-popup-close-button:hover {
-        color: #111827;
+        color: #1F2937;
         background: transparent;
     }
 
@@ -169,47 +170,48 @@
         backdrop-filter: blur(4px);
         border-top-left-radius: 6px;
         padding: 0.2rem 0.5rem !important;
-        color: #6b7280 !important;
+        color: #6B7280 !important;
     }
 
     .leaflet-control-attribution a {
-        color: #4b5563 !important;
+        color: #6B7280 !important;
         font-weight: 500;
     }
-    .user-marker{
-        background:none;
-        border:none;
+
+    .user-marker {
+        background: none;
+        border: none;
     }
 
-    .marker-wrapper{
-        width:48px;
-        height:48px;
-        border-radius:50%;
-        overflow:hidden;
-        border:3px solid white;
-        box-shadow:0 4px 10px rgba(0,0,0,0.3);
+    .marker-wrapper {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 3px solid white;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     }
 
-    .marker-wrapper img{
-        width:100%;
-        height:100%;
-        object-fit:cover;
+    .marker-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 
-.avatar-marker{
-    width:44px;
-    height:44px;
-    border-radius:50%;
-    overflow:hidden;
-    border:3px solid white;
-    box-shadow:0 4px 12px rgba(0,0,0,0.25);
-}
+    .avatar-marker {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 3px solid white;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
 
-.avatar-marker img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-}
+    .avatar-marker img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 </style>
 
 <div class="location-header">
@@ -224,20 +226,25 @@
 </div>
 
 <!-- Feature Navigation -->
-<div class="feature-nav" style="margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #e5e7eb;">
-    <a href="{{ url_for('tasks.view_tasks', group_id=group_id) }}" class="feature-link" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; font-size: 0.95rem; font-weight: 500; color: #6b7280; text-decoration: none; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; transition: all 0.2s ease;">
+<div class="feature-nav" style="margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #D8E2D1;">
+    <a href="{{ url_for('tasks.view_tasks', group_id=group_id) }}" class="feature-link"
+        style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; font-size: 0.95rem; font-weight: 500; color: #6B7280; text-decoration: none; background: #ffffff; border: 1px solid #D8E2D1; border-radius: 8px; transition: all 0.2s ease;">
         <i class="ph ph-check-circle"></i> Tasks
     </a>
-    <a href="{{ url_for('polls.view_polls', group_id=group_id) }}" class="feature-link" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; font-size: 0.95rem; font-weight: 500; color: #6b7280; text-decoration: none; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; transition: all 0.2s ease;">
+    <a href="{{ url_for('polls.view_polls', group_id=group_id) }}" class="feature-link"
+        style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; font-size: 0.95rem; font-weight: 500; color: #6B7280; text-decoration: none; background: #ffffff; border: 1px solid #D8E2D1; border-radius: 8px; transition: all 0.2s ease;">
         <i class="ph ph-chart-bar"></i> Polls
     </a>
-    <a href="{{ url_for('expenses.expenses_home', group_id=group_id) }}" class="feature-link" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; font-size: 0.95rem; font-weight: 500; color: #6b7280; text-decoration: none; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; transition: all 0.2s ease;">
+    <a href="{{ url_for('expenses.expenses_home', group_id=group_id) }}" class="feature-link"
+        style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; font-size: 0.95rem; font-weight: 500; color: #6B7280; text-decoration: none; background: #ffffff; border: 1px solid #D8E2D1; border-radius: 8px; transition: all 0.2s ease;">
         <i class="ph ph-receipt"></i> Money
     </a>
-    <a class="feature-link active" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; font-size: 0.95rem; font-weight: 500; color: #ffffff; text-decoration: none; background: #000000; border: 1px solid #000000; border-radius: 8px;">
+    <a class="feature-link active"
+        style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; font-size: 0.95rem; font-weight: 500; color: #ffffff; text-decoration: none; background: #9CAF88; border: 1px solid #9CAF88; border-radius: 8px;">
         <i class="ph-fill ph-map-pin"></i> Map
     </a>
-    <a href="{{ url_for('groups.group_detail', group_id=group_id) }}" class="feature-link" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; font-size: 0.95rem; font-weight: 500; color: #6b7280; text-decoration: none; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; transition: all 0.2s ease;">
+    <a href="{{ url_for('groups.group_detail', group_id=group_id) }}" class="feature-link"
+        style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; font-size: 0.95rem; font-weight: 500; color: #6B7280; text-decoration: none; background: #ffffff; border: 1px solid #D8E2D1; border-radius: 8px; transition: all 0.2s ease;">
         <i class="ph ph-info"></i> Group Details
     </a>
 </div>
@@ -251,39 +258,39 @@
 <script>
     var groupId = {{ group_id }};
 
- var map = L.map('map', {
-    zoomControl: false
-});
+    var map = L.map('map', {
+        zoomControl: false
+    });
 
-L.control.zoom({
-    position: 'bottomright'
-}).addTo(map);
+    L.control.zoom({
+        position: 'bottomright'
+    }).addTo(map);
 
-// Base map
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19
-}).addTo(map);
+    // Base map
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19
+    }).addTo(map);
 
-// Default center (fallback)
-map.setView([20.5937, 78.9629], 5);
+    // Default center (fallback)
+    map.setView([20.5937, 78.9629], 5);
 
-// Center on user location if available
-navigator.geolocation.getCurrentPosition(function(pos){
-    map.setView(
-        [pos.coords.latitude, pos.coords.longitude],
-        15
-    );
-});
+    // Center on user location if available
+    navigator.geolocation.getCurrentPosition(function (pos) {
+        map.setView(
+            [pos.coords.latitude, pos.coords.longitude],
+            15
+        );
+    });
 
-// Force Leaflet to recalc size
-setTimeout(function(){
-    map.invalidateSize();
-},300);
+    // Force Leaflet to recalc size
+    setTimeout(function () {
+        map.invalidateSize();
+    }, 300);
 
     var markers = [];
     var isBroadcasting = false;
     var watchId = null; // Store watch position ID if continuous tracking is needed
-    
+
     var firstLoad = true;   // MOVE IT HERE
 
     function startLiveTracking() {
@@ -342,20 +349,20 @@ setTimeout(function(){
         });
     }
 
-    function createUserMarker(lat, lng, username, profilePic){
+    function createUserMarker(lat, lng, username, profilePic) {
 
-    const icon = L.divIcon({
-        className: "user-marker",
-        html:
-            '<div class="avatar-marker">' +
-            '<img src="' + (profilePic || "/static/profile_pics/default.png") + '">' +
-            '</div>',
-        iconSize: [44,44],
-        iconAnchor: [22,22]
-    });
+        const icon = L.divIcon({
+            className: "user-marker",
+            html:
+                '<div class="avatar-marker">' +
+                '<img src="' + (profilePic || "/static/profile_pics/default.png") + '">' +
+                '</div>',
+            iconSize: [44, 44],
+            iconAnchor: [22, 22]
+        });
 
-    return L.marker([lat,lng],{icon:icon});
-}
+        return L.marker([lat, lng], { icon: icon });
+    }
 
     function loadLocations() {
         fetch(`/location/api/${groupId}`)
@@ -374,9 +381,9 @@ setTimeout(function(){
                 // Custom marker icon creation could go here, but default is fine
                 // given leaflet's reliable marker PNGs. We style the popup instead.
 
-               data.forEach(loc => {
+                data.forEach(loc => {
 
-    var popupHTML = `
+                    var popupHTML = `
         <div class="user-popup-content">
             <div class="user-popup-icon">
                 <i class="ph-fill ph-user"></i>
@@ -386,23 +393,23 @@ setTimeout(function(){
     `;
 
                     var marker = createUserMarker(
-    loc.latitude,
-    loc.longitude,
-    loc.username,
-    loc.profile_picture
-)
+                        loc.latitude,
+                        loc.longitude,
+                        loc.username,
+                        loc.profile_picture
+                    )
                         .addTo(map)
                         .bindPopup(popupHTML);
 
                     markers.push(marker);
                     bounds.push([loc.latitude, loc.longitude]);
                 });
-            
 
-                if(firstLoad && bounds.length > 0){
-    map.fitBounds(bounds,{padding:[70,70],maxZoom:16});
-    firstLoad = false;
-}
+
+                if (firstLoad && bounds.length > 0) {
+                    map.fitBounds(bounds, { padding: [70, 70], maxZoom: 16 });
+                    firstLoad = false;
+                }
             });
     }
 

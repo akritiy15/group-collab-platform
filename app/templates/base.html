@@ -1,52 +1,124 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>Group Collaboration App</title>
+    <title>EasyCollab</title>
+
+    <!-- Google Fonts: Inter & Fredoka One -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
     <style>
         body {
-            font-family: Arial;
+            font-family: 'Inter', sans-serif;
+            background-color: #F6F8F5;
+            color: #1F2937;
             margin: 0;
-        }
-
-        .navbar {
-            background: #222;
-            padding: 12px;
-        }
-
-        .navbar a {
-            color: white;
-            margin-right: 20px;
-            text-decoration: none;
-            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            line-height: 1.5;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at top center, rgba(156, 175, 136, 0.3) 0%, transparent 100%);
         }
 
         .container {
-            padding: 20px;
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            box-sizing: border-box;
+        }
+
+        /* Navbar Refined */
+        .navbar {
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            background: rgba(246, 248, 245, 0.75);
+            border-bottom: 1px solid rgba(216, 226, 209, 0.5);
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Fredoka One', cursive;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: #1F2937;
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            color: #9CAF88;
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #6B7280;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: #1F2937;
         }
     </style>
 </head>
 
 <body>
 
-<div class="navbar">
+    <nav class="navbar">
+        <div class="container">
+            <a href="{{ url_for('groups.dashboard') }}" class="logo">
+                <i class="ph-fill ph-circles-three-plus"></i>
+                EasyCollab
+            </a>
 
-    <a href="{{ url_for('groups.dashboard') }}">Dashboard</a>
+            <div class="nav-links">
+                <a href="{{ url_for('profile.view_profile') }}" class="nav-link">
+                    Profile
+                </a>
+                <a href="{{ url_for('groups.create_group') }}" class="nav-link">
+                    Create Group
+                </a>
+                <a href="{{ url_for('groups.join_group') }}" class="nav-link">
+                    Join Group
+                </a>
+                <a href="{{ url_for('auth.logout') }}" class="nav-link" style="margin-left: 0.5rem;">
+                    Logout
+                </a>
+            </div>
+        </div>
+    </nav>
 
-    <a href="{{ url_for('profile.view_profile') }}">Profile</a>
-
-    <a href="{{ url_for('groups.create_group') }}">Create Group</a>
-
-    <a href="{{ url_for('groups.join_group') }}">Join Group</a>
-    <a href="{{ url_for('groups.dashboard') }}">Requests</a>
-
-    <a href="{{ url_for('auth.logout') }}">Logout</a>
-
-</div>
-
-<div class="container">
-    {% block content %}{% endblock %}
-</div>
+    <div class="container main-content-container">
+        {% block content %}{% endblock %}
+    </div>
 
 </body>
+
 </html>

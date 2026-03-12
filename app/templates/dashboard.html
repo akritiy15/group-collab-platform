@@ -2,363 +2,379 @@
 
 {% block content %}
 
+<!-- Google Fonts: Inter -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- Phosphor Icons -->
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+
 <style>
-/* Modern SaaS Dashboard Styling for Dashboard view */
-.dashboard-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid var(--border-light, #e5e7eb);
-    flex-wrap: wrap;
-    gap: 1rem;
-}
+    body {
+        font-family: 'Inter', sans-serif !important;
+        background-color: #F6F8F5 !important;
+        background-image: radial-gradient(circle at top center, rgba(156, 175, 136, 0.3) 0%, transparent 100%) !important;
+        color: #1F2937 !important;
+    }
 
-.dashboard-title {
-    margin: 0;
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: var(--text-main, #111827);
-    letter-spacing: -0.02em;
-}
+    /* Modern SaaS Dashboard Styling for Dashboard view */
 
-.dashboard-actions {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
+    .nav-link {
+        text-decoration: none;
+        color: var(--text-muted, #6B7280);
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: color 0.2s ease;
+    }
 
-.btn-dashboard {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.625rem 1.25rem;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 500;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: all 0.2s ease;
-    cursor: pointer;
-}
+    .nav-link:hover {
+        color: var(--text-main, #1F2937);
+    }
 
-.btn-primary {
-    background-color: var(--accent-dark, #000000);
-    color: #ffffff;
-    border: 1px solid transparent;
-}
+    /* Profile Header Block */
+    .profile-header {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
 
-.btn-primary:hover {
-    background-color: var(--accent-hover, #1f2937);
-    transform: translateY(-1px);
-}
+    .profile-header-img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #ffffff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        background-color: #F6F8F5;
+    }
 
-.btn-secondary {
-    background-color: #ffffff;
-    color: var(--text-main, #111827);
-    border: 1px solid var(--border-light, #e5e7eb);
-}
+    .profile-header-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
 
-.btn-secondary:hover {
-    background-color: var(--input-bg, #f9fafb);
-}
+    .profile-header-name {
+        margin: 0;
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: var(--text-main, #1F2937);
+        letter-spacing: -0.02em;
+    }
 
-/* Section Titles */
-.section-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--text-muted, #4b5563);
-    margin-bottom: 1.5rem;
-}
+    .profile-header-bio {
+        margin: 0;
+        color: var(--text-muted, #6B7280);
+        font-size: 1rem;
+    }
 
-/* Grid Layout */
-.group-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-}
+    .btn-dashboard {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.625rem 1.25rem;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.95rem;
+        font-weight: 500;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        cursor: pointer;
+    }
 
-/* Card Styling */
-.group-card {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 1.5rem;
-    transition: all 0.2s ease;
-}
+    .btn-primary {
+        background-color: var(--accent-dark, #9CAF88);
+        color: #ffffff;
+        border: 1px solid transparent;
+    }
 
-.group-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 15px rgba(0,0,0,0.05);
-}
+    .btn-primary:hover {
+        background-color: var(--accent-hover, #8A9D76);
+        transform: translateY(-1px);
+    }
 
-.group-header {
-    margin-bottom: 1rem;
-}
+    .btn-secondary {
+        background-color: #ffffff;
+        color: var(--text-main, #1F2937);
+        border: 1px solid var(--border-light, #D8E2D1);
+    }
 
-.group-card h3 {
-    margin: 0 0 0.5rem 0;
-    font-size: 1.125rem;
-}
+    .btn-secondary:hover {
+        background-color: var(--input-bg, #F6F8F5);
+    }
 
-.code {
-    font-size: 0.875rem;
-    color: #6b7280;
-    background: #f3f4f6;
-    padding: 0.25rem 0.6rem;
-    border-radius: 6px;
-    display: inline-block;
-}
+    /* Section Titles */
+    .section-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--text-muted, #6B7280);
+        margin-bottom: 1.5rem;
+    }
 
-/* Card Actions */
-.actions {
-    margin-top: auto;
-    padding-top: 1.25rem;
-    border-top: 1px solid #f3f4f6;
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
+    /* Grid Layout */
+    .group-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
 
-.actions a {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: #4b5563;
-    text-decoration: none;
-}
+    /* Card Styling */
+    .group-card {
+        background: #ffffff;
+        border: 1px solid #D8E2D1;
+        border-radius: 12px;
+        padding: 1.5rem;
+        transition: all 0.2s ease;
+    }
 
-.actions a:hover {
-    color: #000;
-}
+    .group-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.05);
+    }
 
-/* Member Avatars */
-.members-section {
-    margin: 1rem 0;
-    padding: 1rem 0;
-    border-top: 1px solid #f3f4f6;
-    border-bottom: 1px solid #f3f4f6;
-}
+    .group-header {
+        margin-bottom: 1rem;
+    }
 
-.members-title {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #9ca3af;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 0.75rem;
-}
+    .group-card h3 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.125rem;
+    }
 
-.members-list {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    align-items: center;
-}
+    .code {
+        font-size: 0.875rem;
+        color: #6B7280;
+        background: #F6F8F5;
+        padding: 0.25rem 0.6rem;
+        border-radius: 6px;
+        display: inline-block;
+    }
 
-.member-avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: #e5e7eb;
-    overflow: hidden;
-    border: 1px solid #d1d5db;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #6b7280;
-}
+    /* Card Actions */
+    .actions {
+        margin-top: auto;
+        padding-top: 1.25rem;
+        border-top: 1px solid #D8E2D1;
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
 
-.member-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
+    .actions a {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #4b5563;
+        text-decoration: none;
+    }
 
-/* Empty State */
-.empty-state {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 4rem 2rem;
-    background: #ffffff;
-    border: 1px dashed #e5e7eb;
-    border-radius: 12px;
-}
+    .actions a:hover {
+        color: #9CAF88;
+    }
 
-/* Stats Grid */
-.stats-grid {
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-    gap:1rem;
-    margin-bottom:2rem;
-}
+    /* Member Avatars */
+    .members-section {
+        margin: 1rem 0;
+        padding: 1rem 0;
+        border-top: 1px solid #D8E2D1;
+        border-bottom: 1px solid #D8E2D1;
+    }
 
-/* Friend Request Row */
-.request-row {
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:0.8rem;
-}
+    .members-title {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #6B7280;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.75rem;
+    }
+
+    .members-list {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .member-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: #F6F8F5;
+        overflow: hidden;
+        border: 1px solid #D8E2D1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #6B7280;
+    }
+
+    .member-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* Empty State */
+    .empty-state {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 4rem 2rem;
+        background: #ffffff;
+        border: 1px dashed #D8E2D1;
+        border-radius: 12px;
+    }
+
+    /* Friend Request Row */
 </style>
 
-
-<div class="dashboard-header">
-    <h2 class="dashboard-title">Welcome, {{ user.username }}</h2>
-
-    <div class="dashboard-actions">
-        <a href="{{ url_for('groups.create_group') }}" class="btn-dashboard btn-primary">
-            <i class="ph ph-plus-circle"></i> Create Group
-        </a>
-        <a href="{{ url_for('groups.join_group') }}" class="btn-dashboard btn-secondary">
-            <i class="ph ph-link"></i> Join Group
-        </a>
-    </div>
-</div>
-
-
-<!-- Quick Stats -->
-<div class="stats-grid">
-
-    <div class="group-card">
-        <h3>{{ groups|length }}</h3>
-        <p>Workspaces</p>
-    </div>
-
-    <div class="group-card">
-        <h3>{{ friends_count }}</h3>
-        <p>Friends</p>
-    </div>
-
-</div>
-
-<div class="group-card" style="margin-bottom:2rem;">
-<h3 class="section-title">Find Friends</h3>
-
-<form action="{{ url_for('groups.search_users') }}" method="POST"
-style="display:flex; gap:1rem;">
-
-<input type="text"
-       name="username"
-       placeholder="Search by username"
-       style="flex:1; padding:0.6rem; border:1px solid #e5e7eb; border-radius:6px;"
-       required>
-
-<button class="btn-dashboard btn-primary">
-Search
-</button>
-
-</form>
-</div>
-<!-- Friend Requests -->
-{% if friend_requests %}
-<div class="group-card" style="margin-bottom:2rem;">
-    <h3 class="section-title">Friend Requests</h3>
-
-    {% for req in friend_requests %}
-    <div class="request-row">
-
-        <span>
-            <i class="ph ph-user"></i>
-            User {{ req.sender_id }}
-        </span>
-
-        <div style="display:flex; gap:0.5rem;">
-            <a href="{{ url_for('friends.accept_request', request_id=req.id) }}"
-               class="btn-dashboard btn-primary">
-                Accept
-            </a>
-
-            <a href="{{ url_for('friends.reject_request', request_id=req.id) }}"
-               class="btn-dashboard btn-secondary">
-                Decline
-            </a>
-        </div>
-
-    </div>
-    {% endfor %}
-</div>
-{% endif %}
-
-
-<h3 class="section-title">Your Workspaces</h3>
-
-<div class="group-grid">
-
-{% if groups %}
-
-    {% for group in groups %}
-
-    <div class="group-card">
-        <a href="{{ url_for('tasks.view_tasks', group_id=group.id) }}" style="text-decoration: none; color: inherit;">
-            <div class="group-header" style="cursor: pointer;">
-                <h3>{{ group.name }}</h3>
-
-                {% if group.invite_code %}
-                <p class="code">
-                    <i class="ph ph-key"></i> {{ group.invite_code }}
-                </p>
-                {% endif %}
-            </div>
-        </a>
-
-        <!-- Members Section -->
-        {% if group_members[group.id] %}
-        <div class="members-section">
-            <div class="members-title">Members ({{ group_members[group.id]|length }})</div>
-            <div class="members-list">
-                {% for member in group_members[group.id] %}
-                <div class="member-avatar" title="{{ member.username }}">
-                    {% if member.profile_picture and member.profile_picture != 'default.png' %}
-                        <img src="{{ url_for('static', filename='profile_pics/' + member.profile_picture) }}" alt="{{ member.username }}">
-                    {% else %}
-                        {{ member.username[0].upper() }}
-                    {% endif %}
-                </div>
-                {% endfor %}
-            </div>
+<div>
+    <!-- Profile Header Block -->
+    <div class="profile-header">
+        {% if user.profile_picture and user.profile_picture != 'default.png' %}
+        <img src="{{ url_for('static', filename='profile_pics/' + user.profile_picture) }}" alt="Profile Picture"
+            class="profile-header-img">
+        {% else %}
+        <div class="profile-header-img"
+            style="display:flex; align-items:center; justify-content:center; font-size: 2.5rem; color: #6B7280; font-weight: 600;">
+            {{ user.username[0].upper() }}
         </div>
         {% endif %}
-
-        <div class="actions">
-
-            <a href="{{ url_for('tasks.view_tasks', group_id=group.id) }}">
-                <i class="ph-fill ph-check-circle"></i> Tasks
-            </a>
-
-            <a href="{{ url_for('polls.view_polls', group_id=group.id) }}">
-                <i class="ph-fill ph-chart-bar"></i> Polls
-            </a>
-
-            <a href="{{ url_for('expenses.expenses_home', group_id=group.id) }}">
-                <i class="ph-fill ph-receipt"></i> Expenses
-            </a>
-
-            <a href="{{ url_for('location.location_page', group_id=group.id) }}">
-                <i class="ph-fill ph-map-pin"></i> Map
-            </a>
-
-            <a href="{{ url_for('groups.group_detail', group_id=group.id) }}">
-                <i class="ph-fill ph-info"></i> Details
-            </a>
-
+        <div class="profile-header-info">
+            <h1 class="profile-header-name">{{ user.username }}</h1>
+            <p class="profile-header-bio">
+                {% if user.bio %}
+                {{ user.bio }}
+                {% else %}
+                <span style="font-style: italic;">No bio added yet.</span>
+                {% endif %}
+            </p>
         </div>
     </div>
 
-    {% endfor %}
+    <div class="group-card" style="margin-bottom:2rem;">
+        <h3 class="section-title">Find Friends</h3>
 
-{% else %}
+        <form action="{{ url_for('groups.search_users') }}" method="POST" style="display:flex; gap:1rem;">
 
-<div class="empty-state">
-    <i class="ph ph-layout" style="font-size:2.5rem;"></i>
-    <p>You haven't joined any groups yet.</p>
+            <input type="text" name="username" placeholder="Search by username"
+                style="flex:1; padding:0.6rem; border:1px solid #D8E2D1; border-radius:6px;" required>
+
+            <button class="btn-dashboard btn-primary">
+                Search
+            </button>
+
+        </form>
+    </div>
+    <!-- Friend Requests -->
+    {% if friend_requests %}
+    <div class="group-card" style="margin-bottom:2rem;">
+        <h3 class="section-title">Friend Requests</h3>
+
+        {% for req in friend_requests %}
+        <div class="request-row">
+
+            <span>
+                <i class="ph ph-user"></i>
+                User {{ req.sender_id }}
+            </span>
+
+            <div style="display:flex; gap:0.5rem;">
+                <a href="{{ url_for('friends.accept_request', request_id=req.id) }}" class="btn-dashboard btn-primary">
+                    Accept
+                </a>
+
+                <a href="{{ url_for('friends.reject_request', request_id=req.id) }}"
+                    class="btn-dashboard btn-secondary">
+                    Decline
+                </a>
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <h3 class="section-title">Your Workspaces</h3>
+
+    <div class="group-grid">
+
+        {% if groups %}
+
+        {% for group in groups %}
+
+        <div class="group-card">
+            <a href="{{ url_for('tasks.view_tasks', group_id=group.id) }}"
+                style="text-decoration: none; color: inherit;">
+                <div class="group-header" style="cursor: pointer;">
+                    <h3>{{ group.name }}</h3>
+
+                    {% if group.invite_code %}
+                    <p class="code">
+                        <i class="ph ph-key"></i> {{ group.invite_code }}
+                    </p>
+                    {% endif %}
+                </div>
+            </a>
+
+            <!-- Members Section -->
+            {% if group_members[group.id] %}
+            <div class="members-section">
+                <div class="members-title">Members ({{ group_members[group.id]|length }})</div>
+                <div class="members-list">
+                    {% for member in group_members[group.id] %}
+                    <div class="member-avatar" title="{{ member.username }}">
+                        {% if member.profile_picture and member.profile_picture != 'default.png' %}
+                        <img src="{{ url_for('static', filename='profile_pics/' + member.profile_picture) }}"
+                            alt="{{ member.username }}">
+                        {% else %}
+                        {{ member.username[0].upper() }}
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="actions">
+
+                <a href="{{ url_for('tasks.view_tasks', group_id=group.id) }}">
+                    <i class="ph-fill ph-check-circle"></i> Tasks
+                </a>
+
+                <a href="{{ url_for('polls.view_polls', group_id=group.id) }}">
+                    <i class="ph-fill ph-chart-bar"></i> Polls
+                </a>
+
+                <a href="{{ url_for('expenses.expenses_home', group_id=group.id) }}">
+                    <i class="ph-fill ph-receipt"></i> Expenses
+                </a>
+
+                <a href="{{ url_for('location.location_page', group_id=group.id) }}">
+                    <i class="ph-fill ph-map-pin"></i> Map
+                </a>
+
+                <a href="{{ url_for('groups.group_detail', group_id=group.id) }}">
+                    <i class="ph-fill ph-info"></i> Details
+                </a>
+
+            </div>
+        </div>
+
+        {% endfor %}
+
+        {% else %}
+
+        <div class="empty-state">
+            <i class="ph ph-layout" style="font-size:2.5rem;"></i>
+            <p>You haven't joined any groups yet.</p>
+        </div>
+
+        {% endif %}
+
+    </div>
 </div>
-
-{% endif %}
-
-</div>
-
 {% endblock %}

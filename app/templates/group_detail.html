@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FunCollab - {{ group.name }}</title>
+    <title>EasyCollab - {{ group.name }}</title>
 
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,16 +17,16 @@
     <style>
         /* Modern SaaS Dashboard Styling Overrides */
         :root {
-            --bg-color: #fbfcff;
-            --text-main: #111827;
-            --text-muted: #4b5563;
-            --border-light: #e5e7eb;
-            --accent-dark: #000000;
-            --accent-hover: #1f2937;
+            --bg-color: #F6F8F5;
+            --text-main: #1F2937;
+            --text-muted: #6B7280;
+            --border-light: #D8E2D1;
+            --accent-dark: #9CAF88;
+            --accent-hover: #8A9D76;
             --card-surface: #ffffff;
-            --input-bg: #f9fafb;
-            --input-border: #d1d5db;
-            --input-focus-border: #9ca3af;
+            --input-bg: #F6F8F5;
+            --input-border: #D8E2D1;
+            --input-focus-border: #9CAF88;
         }
 
         body {
@@ -39,7 +39,7 @@
             min-height: 100vh;
             line-height: 1.5;
             overflow-x: hidden;
-            background-image: radial-gradient(circle at top center, #f3f4f6 0%, transparent 100%);
+            background-image: radial-gradient(circle at top center, rgba(156, 175, 136, 0.3) 0%, transparent 100%);
         }
 
         .container {
@@ -57,8 +57,8 @@
             z-index: 50;
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            background: rgba(251, 252, 255, 0.75);
-            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+            background: rgba(246, 248, 245, 0.75);
+            border-bottom: 1px solid rgba(216, 226, 209, 0.5);
         }
 
         .navbar .container {
@@ -96,11 +96,11 @@
             gap: 0.4rem;
             font-size: 0.85rem;
             font-weight: 500;
-            color: #4b5563;
-            background: #f3f4f6;
+            color: #6B7280;
+            background: #F6F8F5;
             padding: 0.4rem 0.8rem;
             border-radius: 20px;
-            border: 1px solid #e5e7eb;
+            border: 1px solid #D8E2D1;
         }
 
         .group-badge i {
@@ -125,7 +125,7 @@
             gap: 0.5rem;
             margin-bottom: 2rem;
             padding-bottom: 1rem;
-            border-bottom: 1px solid #e5e7eb;
+            border-bottom: 1px solid #D8E2D1;
         }
 
         .feature-link {
@@ -135,17 +135,17 @@
             padding: 0.75rem 1.25rem;
             font-size: 0.95rem;
             font-weight: 500;
-            color: #6b7280;
+            color: #6B7280;
             text-decoration: none;
-            background: #f9fafb;
-            border: 1px solid #e5e7eb;
+            background: #ffffff;
+            border: 1px solid #D8E2D1;
             border-radius: 8px;
             transition: all 0.2s ease;
         }
 
         .feature-link:hover {
-            background: #f3f4f6;
-            color: #374151;
+            background: #F6F8F5;
+            color: #1F2937;
             transform: translateY(-1px);
         }
 
@@ -158,7 +158,7 @@
         /* Group Profile Section */
         .group-profile {
             background: #ffffff;
-            border: 1px solid #e5e7eb;
+            border: 1px solid #D8E2D1;
             border-radius: 12px;
             padding: 2rem;
             margin-bottom: 2rem;
@@ -172,7 +172,7 @@
             width: 80px;
             height: 80px;
             border-radius: 12px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #9CAF88 0%, #D8E2D1 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -229,7 +229,7 @@
             align-items: center;
             gap: 0.5rem;
             font-size: 0.9rem;
-            color: #6b7280;
+            color: #6B7280;
         }
 
         .group-actions {
@@ -238,7 +238,9 @@
             flex-direction: column;
         }
 
-        .btn-primary, .btn-secondary, .btn-danger {
+        .btn-primary,
+        .btn-secondary,
+        .btn-danger {
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -267,11 +269,11 @@
         .btn-secondary {
             background-color: #ffffff;
             color: var(--text-main);
-            border-color: #e5e7eb;
+            border-color: #D8E2D1;
         }
 
         .btn-secondary:hover {
-            background-color: #f9fafb;
+            background-color: #F6F8F5;
             transform: translateY(-1px);
         }
 
@@ -288,7 +290,7 @@
         /* Members Section */
         .members-section {
             background: #ffffff;
-            border: 1px solid #e5e7eb;
+            border: 1px solid #D8E2D1;
             border-radius: 12px;
             padding: 2rem;
             margin-bottom: 2rem;
@@ -305,7 +307,7 @@
             margin: 0;
             font-size: 1.5rem;
             font-weight: 600;
-            color: #111827;
+            color: #1F2937;
         }
 
         .members-grid {
@@ -319,27 +321,28 @@
             align-items: center;
             gap: 1rem;
             padding: 1rem;
-            background: #f9fafb;
-            border: 1px solid #e5e7eb;
+            background: #ffffff;
+            border: 1px solid #D8E2D1;
             border-radius: 8px;
             transition: all 0.2s ease;
         }
 
         .member-card:hover {
-            background: #f3f4f6;
+            background: #F6F8F5;
         }
 
         .member-avatar {
             width: 48px;
             height: 48px;
             border-radius: 50%;
-            background: #e5e7eb;
+            background: #F6F8F5;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.25rem;
             font-weight: 600;
-            color: #6b7280;
+            color: #6B7280;
+            border: 1px solid #D8E2D1;
             overflow: hidden;
         }
 
@@ -358,8 +361,8 @@
 
         .member-role {
             font-size: 0.8rem;
-            color: #6b7280;
-            background: #e5e7eb;
+            color: #6B7280;
+            background: #F6F8F5;
             padding: 0.25rem 0.5rem;
             border-radius: 4px;
             display: inline-block;
@@ -380,7 +383,7 @@
         /* Add Members Section */
         .add-members-section {
             background: #ffffff;
-            border: 1px solid #e5e7eb;
+            border: 1px solid #D8E2D1;
             border-radius: 12px;
             padding: 2rem;
         }
@@ -397,8 +400,8 @@
             align-items: center;
             justify-content: space-between;
             padding: 1rem;
-            background: #f9fafb;
-            border: 1px solid #e5e7eb;
+            background: #ffffff;
+            border: 1px solid #D8E2D1;
             border-radius: 8px;
         }
 
@@ -412,13 +415,14 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: #e5e7eb;
+            background: #F6F8F5;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1rem;
             font-weight: 600;
-            color: #6b7280;
+            color: #6B7280;
+            border: 1px solid #D8E2D1;
             overflow: hidden;
         }
 
@@ -458,21 +462,19 @@
         <div class="container">
             <a href="{{ url_for('groups.dashboard') }}" class="logo">
                 <i class="ph-fill ph-circles-three-plus"></i>
-                FunCollab
+                EasyCollab
             </a>
 
             <div class="nav-links">
-                <!-- Restyled Information Badges -->
-                <div class="group-badge" title="Current Workspace">
-                    <i class="ph ph-users"></i>
-                    {{ group.name }}
-                </div>
-
-                <div class="group-badge code-badge" title="Workspace Join Code">
-                    <i class="ph ph-key"></i>
-                    {{ group.invite_code }}
-                </div>
-
+                <a href="{{ url_for('profile.view_profile') }}" class="nav-link">
+                    Profile
+                </a>
+                <a href="{{ url_for('groups.create_group') }}" class="nav-link">
+                    Create Group
+                </a>
+                <a href="{{ url_for('groups.join_group') }}" class="nav-link">
+                    Join Group
+                </a>
                 <a href="{{ url_for('auth.logout') }}" class="nav-link" style="margin-left: 0.5rem;">
                     Logout
                 </a>
@@ -504,9 +506,10 @@
         <div class="group-profile">
             <div class="group-avatar">
                 {% if group.profile_picture and group.profile_picture != 'default_group.png' %}
-                    <img src="{{ url_for('static', filename='group_pics/' + group.profile_picture) }}" alt="{{ group.name }}">
+                <img src="{{ url_for('static', filename='group_pics/' + group.profile_picture) }}"
+                    alt="{{ group.name }}">
                 {% else %}
-                    {{ group.name[0].upper() }}
+                {{ group.name[0].upper() }}
                 {% endif %}
                 {% if is_admin %}
                 <label for="profile-picture-input" class="group-avatar-upload" title="Update group picture">
@@ -516,8 +519,11 @@
             </div>
 
             {% if is_admin %}
-            <form id="profile-picture-form" method="POST" action="{{ url_for('groups.update_group_picture', group_id=group.id) }}" enctype="multipart/form-data" style="display: none;">
-                <input type="file" id="profile-picture-input" name="profile_picture" accept="image/*" onchange="document.getElementById('profile-picture-form').submit()">
+            <form id="profile-picture-form" method="POST"
+                action="{{ url_for('groups.update_group_picture', group_id=group.id) }}" enctype="multipart/form-data"
+                style="display: none;">
+                <input type="file" id="profile-picture-input" name="profile_picture" accept="image/*"
+                    onchange="document.getElementById('profile-picture-form').submit()">
             </form>
             {% endif %}
 
@@ -540,8 +546,11 @@
                     <i class="ph ph-arrow-left"></i> Back to Dashboard
                 </a>
                 {% if current_user.id != group.created_by %}
-                <form method="POST" action="{{ url_for('groups.remove_member', group_id=group.id, user_id=current_user.id) }}" style="display: inline;">
-                    <button type="submit" class="btn-danger" onclick="return confirm('Are you sure you want to leave this group?')">
+                <form method="POST"
+                    action="{{ url_for('groups.remove_member', group_id=group.id, user_id=current_user.id) }}"
+                    style="display: inline;">
+                    <button type="submit" class="btn-danger"
+                        onclick="return confirm('Are you sure you want to leave this group?')">
                         <i class="ph ph-sign-out"></i> Leave Group
                     </button>
                 </form>
@@ -554,7 +563,8 @@
             <div class="section-header">
                 <h2 class="section-title">Group Members</h2>
                 {% if is_admin and available_friends %}
-                <button class="btn-primary btn-small" onclick="document.getElementById('add-members-section').scrollIntoView({behavior: 'smooth'})">
+                <button class="btn-primary btn-small"
+                    onclick="document.getElementById('add-members-section').scrollIntoView({behavior: 'smooth'})">
                     <i class="ph ph-plus"></i> Add Members
                 </button>
                 {% endif %}
@@ -565,9 +575,10 @@
                 <div class="member-card">
                     <div class="member-avatar">
                         {% if member.profile_picture and member.profile_picture != 'default.png' %}
-                            <img src="{{ url_for('static', filename='profile_pics/' + member.profile_picture) }}" alt="{{ member.username }}">
+                        <img src="{{ url_for('static', filename='profile_pics/' + member.profile_picture) }}"
+                            alt="{{ member.username }}">
                         {% else %}
-                            {{ member.username[0].upper() }}
+                        {{ member.username[0].upper() }}
                         {% endif %}
                     </div>
 
@@ -582,8 +593,11 @@
 
                     {% if is_admin and member.id != current_user.id %}
                     <div class="member-actions">
-                        <form method="POST" action="{{ url_for('groups.remove_member', group_id=group.id, user_id=member.id) }}" style="display: inline;">
-                            <button type="submit" class="btn-danger btn-small" onclick="return confirm('Remove {{ member.username }} from the group?')">
+                        <form method="POST"
+                            action="{{ url_for('groups.remove_member', group_id=group.id, user_id=member.id) }}"
+                            style="display: inline;">
+                            <button type="submit" class="btn-danger btn-small"
+                                onclick="return confirm('Remove {{ member.username }} from the group?')">
                                 <i class="ph ph-trash"></i> Remove
                             </button>
                         </form>
@@ -607,15 +621,17 @@
                     <div class="friend-info">
                         <div class="friend-avatar">
                             {% if friend.profile_picture and friend.profile_picture != 'default.png' %}
-                                <img src="{{ url_for('static', filename='profile_pics/' + friend.profile_picture) }}" alt="{{ friend.username }}">
+                            <img src="{{ url_for('static', filename='profile_pics/' + friend.profile_picture) }}"
+                                alt="{{ friend.username }}">
                             {% else %}
-                                {{ friend.username[0].upper() }}
+                            {{ friend.username[0].upper() }}
                             {% endif %}
                         </div>
                         <span>{{ friend.username }}</span>
                     </div>
 
-                    <form method="POST" action="{{ url_for('groups.add_member', group_id=group.id) }}" style="display: inline;">
+                    <form method="POST" action="{{ url_for('groups.add_member', group_id=group.id) }}"
+                        style="display: inline;">
                         <input type="hidden" name="user_id" value="{{ friend.id }}">
                         <button type="submit" class="btn-primary btn-small">
                             <i class="ph ph-plus"></i> Add
@@ -631,4 +647,5 @@
     <!-- Original Flask Template JS Unchanged -->
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
+
 </html>

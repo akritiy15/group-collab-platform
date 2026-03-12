@@ -4,31 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FunCollab - Register</title>
-   
+    <title>EasyCollab - Register</title>
+
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    
+
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
     <style>
         /* Modern SaaS Dashboard Styling Overrides */
         :root {
-            --bg-color: #fbfcff;
-            --text-main: #111827;
-            --text-muted: #4b5563; /* slightly darker for better readability inside form */
-            --border-light: #e5e7eb;
-            --accent-dark: #000000;
-            --accent-hover: #1f2937;
+            --bg-color: #F6F8F5;
+            --text-main: #1F2937;
+            --text-muted: #6B7280;
+            --border-light: #D8E2D1;
+            --accent-dark: #9CAF88;
+            --accent-hover: #8A9D76;
             --card-surface: #ffffff;
-            --input-bg: #f9fafb;
-            --input-border: #d1d5db;
-            --input-focus-border: #9ca3af;
+            --input-bg: #F6F8F5;
+            --input-border: #D8E2D1;
+            --input-focus-border: #9CAF88;
         }
 
         body {
@@ -41,7 +41,7 @@
             min-height: 100vh;
             line-height: 1.5;
             overflow-x: hidden;
-            background-image: radial-gradient(circle at top center, #f3f4f6 0%, transparent 100%);
+            background-image: radial-gradient(circle at top center, rgba(156, 175, 136, 0.3) 0%, transparent 100%);
         }
 
         .container {
@@ -59,8 +59,8 @@
             z-index: 50;
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            background: rgba(251, 252, 255, 0.75);
-            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+            background: rgba(246, 248, 245, 0.75);
+            border-bottom: 1px solid rgba(216, 226, 209, 0.5);
         }
 
         .navbar .container {
@@ -93,7 +93,7 @@
 
         .nav-link {
             text-decoration: none;
-            color: #6b7280;
+            color: #6B7280;
             font-weight: 500;
             font-size: 0.95rem;
             transition: color 0.2s ease;
@@ -122,7 +122,7 @@
             transform: translate(-50%, -50%);
             width: 800px;
             height: 800px;
-            background: radial-gradient(circle, rgba(230,230,235,0.4) 0%, rgba(255,255,255,0) 70%);
+            background: radial-gradient(circle, rgba(156, 175, 136, 0.2) 0%, rgba(255, 255, 255, 0) 70%);
             filter: blur(60px);
             z-index: -1;
             pointer-events: none;
@@ -154,7 +154,7 @@
         }
 
         .auth-header p {
-            color: #6b7280;
+            color: #6B7280;
             font-size: 0.95rem;
             margin: 0;
         }
@@ -188,13 +188,13 @@
         }
 
         .input-group input::placeholder {
-            color: #9ca3af;
+            color: #6B7280;
         }
 
         .input-group input:focus {
             border-color: var(--input-focus-border);
             background-color: #ffffff;
-            box-shadow: 0 0 0 3px rgba(209, 213, 219, 0.3);
+            box-shadow: 0 0 0 3px rgba(156, 175, 136, 0.3);
         }
 
         /* Button Styling Refined */
@@ -229,7 +229,7 @@
             margin-top: 1.75rem;
             text-align: center;
             font-size: 0.9rem;
-            color: #6b7280;
+            color: #6B7280;
         }
 
         .auth-footer a {
@@ -243,7 +243,6 @@
         .auth-footer a:hover {
             border-bottom-color: var(--text-main);
         }
-
     </style>
 </head>
 
@@ -252,7 +251,7 @@
         <div class="container">
             <a href="/" class="logo">
                 <i class="ph-fill ph-circles-three-plus"></i>
-                FunCollab
+                EasyCollab
             </a>
             <div class="nav-links">
                 <a href="/login" class="nav-link">Login</a>
@@ -262,7 +261,7 @@
 
     <div class="auth-wrapper">
         <div class="ambient-glow"></div>
-        
+
         <div class="auth-card">
             <div class="auth-header">
                 <h2>Create your account</h2>
@@ -281,7 +280,8 @@
                 </div>
                 <div class="input-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Create a strong password" required>
+                    <input type="password" id="password" name="password" placeholder="Create a strong password"
+                        required>
                 </div>
 
                 <button type="submit" class="btn-block">
