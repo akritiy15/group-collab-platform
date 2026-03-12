@@ -1,11 +1,18 @@
 from flask import Flask
 from .extensions import db, login_manager
 from flask_migrate import Migrate
+import os
 
 def create_app():
     app = Flask(__name__)
-    app.config["SECRET_KEY"] = "dev-secret"
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite3"
+    app.config["SECRET_KEY"] =os.environ.get("SECRET_KEY", "dev-secret")
+    basedir=os.path.abspath(os.path.dirname(__file__))
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL","sqlite:///" + os.path.join(basedir, "site.db"))
+
+    upload_folder = os.path.join(basedir, 'static/profile_pics')
+    if not os.path.exists(upload_folder):
+        os.makedirs(upload_folder)
+    app.config['UPLOAD_FOLDER'] = upload_folder
 
     db.init_app(app)
     login_manager.init_app(app)
